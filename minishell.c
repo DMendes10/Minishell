@@ -3,133 +3,122 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 18:16:20 by diogo             #+#    #+#             */
-/*   Updated: 2025/09/12 18:14:54 by diogo            ###   ########.fr       */
+/*   Updated: 2025/09/17 19:51:40 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int ft_cd(char **env)
-// {
-//     // int i;
-//     char *h_env;
-
-//     i = 0;
-//     // while (env[i] && ft_strnstr (env[i], "HOME", 4) == NULL)
-// 	// 	i++;
-// 	// if (!env[i])
-// 		// invalid_command (cmds, cmd);
-    
-//     h_env = getenv ("HOME");
-//     chdir (h_env + 5);
-// 	// chdir (env[i] + 5);
-//     return (1);
-// }
-
-int ft_cd()
+char *get_input (char *prompt)
 {
-    // int i;
-    char *h_env;
-
-    // i = 0;
-    // while (env[i] && ft_strnstr (env[i], "HOME", 4) == NULL)
-	// 	i++;
-	// if (!env[i])
-		// invalid_command (cmds, cmd);
-    
-    h_env = getenv ("HOME");
-    if (!h_env)
-    {
-        ft_putstr_fd ("cd: HOME not set\n", 2);
-        return (1);
-    }
-    chdir (h_env);
-	// chdir (env[i] + 5);
-    return (1);
+	char *input;
+	input = readline (prompt);
+	if (input && input[0])
+		add_history (input);
+	else if (!input)
+		exit (1);
+	return (input);
 }
 
-int ft_env(char **env)
+int forked_exec (char **command, char **env)
 {
-    int i;
-    
-    i = 0;
-    while (env[i])
-    {
-        ft_putstr_fd (env[i], 1);
-        ft_putstr_fd ("\n", 1);
-        i++;
-    }
-    return (1);
+	int		exit_code;
+	pid_t	pid;
+
+	exit_code = 1;
+	pid = fork();
+	if (pid == 0)
+		child_proc(command, env);
+	exit_code = ft_wait(pid);
+	return (exit_code);
 }
 
-int ft_pwd()
+int	ft_wait(pid_t pid)
 {
-    int exit_code;
-    char *path;
+	int	status;
+	int	exit_code;
 
-    path = NULL;
-    exit_code = 1;
-    path = getcwd(NULL, 0);
-    printf ("%s\n", path);
-    return (exit_code);
+	exit_code = 0;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED (status))
+		exit_code = WEXITSTATUS (status);
+	return (exit_code);
 }
 
-int ft_echo (char **command)
+void	child_proc(char **command, char **env)
 {
-    int exit_code;
-    int i;
-    char *line;
-    
-    line = NULL;
-    i = 1;
-    exit_code = 1;
-    if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
-        i = 2;
-    while (command[i])
-    {
-        line = ft_strjoin_gnl (line, command[i]);
-        i++;
-        if (command[i])
-            line = ft_strjoin_gnl (line, " ");
-    }
-    if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
-        printf ("%s",line);
-    else
-        printf ("%s\n", line);
-    return (exit_code);
+	char	*path;
+
+	path = path_finder(command[0], env, command);
+	if (!path)
+		invalid_command (command, command[0]);
+	if (access (path, F_OK) != 0)
+		invalid_command (command, command[0]);
+	if (access (path, X_OK) != 0)
+		no_perms_command (command, command[0]);
+	if (execve(path, command, env) == -1)
+	{
+		free_array (command);
+		return_error(command[0]);
+	}
 }
 
-int main (int ac, char **av, char **env)
+char	*path_finder(char *cmd, char **env, char **cmds)
 {
-    char *prompt;
-    char *path;
-    char **command;
-    (void) ac;
-    (void) av;
-    (void) env;
-    prompt = NULL;
-    path = NULL;
-    command = NULL;
-    while(1)
-    {
-        path = getcwd(NULL, 0);
-        path = ft_strjoin_gnl (path, "$ ");
-        prompt = readline (path);
-        if (!prompt)
-        {
-            printf ("exit \n");
-            exit (1);
-        }
-        command = ft_split_pipex (prompt, ' ');
+	char	**paths;
+	int		i;
+
+	i = 0;
+	if (ft_strchr (cmd, '/') != NULL)
+		return (cmd);
+	if (!env[0])
+		invalid_command (cmds, cmd);
+	while (env[i] && ft_strnstr (env[i], "PATH", 4) == NULL)
+		i++;
+	if (!env[i])
+		invalid_command (cmds, cmd);
+	paths = ft_split (env[i] + 5, ':');
+	return (path_check (cmd, paths));
+}
+
+char	*path_check(char *cmd, char **paths)
+{
+	int		i;
+	char	*temp;
+	char	*new_path;
+
+	i = 0;
+	while (paths[i])
+	{
+		temp = ft_strjoin (paths[i], "/");
+		new_path = ft_strjoin (temp, cmd);
+		free (temp);
+		if (access (new_path, X_OK) == 0)
+		{
+			free_array (paths);
+			return (new_path);
+		}
+		free (new_path);
+		i++;
+	}
+	free_array (paths);
+	return (NULL);
+}
+
+int	cmd_exec (char *input, char **env)
+{
+	char **command;
+	
+	command = ft_split_pipex (input, ' ');
         if (ft_strncmp (command[0], "echo", 100) == 0)
             ft_echo(command);
         else if (ft_strncmp (command[0], "exit", 100) == 0)
             exit (0);
         else if (ft_strncmp (command[0], "cd", 100) == 0)
-            ft_cd();
+            ft_cd(command);
         else if (ft_strncmp (command[0], "pwd", 100) == 0)
             ft_pwd();
         // else if (ft_strncmp (command[0], "export", 100) == 0)
@@ -138,6 +127,30 @@ int main (int ac, char **av, char **env)
         //     ft_unset();
         else if (ft_strncmp (command[0], "env", 100) == 0)
             ft_env(env);
-        // printf ("%s",prompt);
-    }
+		else
+			return (forked_exec (command, env));
+		return (0);
+}
+
+int main (int ac, char **av, char **env)
+{
+	char *input;
+	char *prompt;
+	char **command;
+	(void) ac;
+	(void) av;
+	input = NULL;
+	prompt = NULL;
+	command = NULL;
+	while(1)
+	{
+		prompt = getcwd(NULL, 0);
+		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
+		input = get_input (prompt);
+		if (input && input[0])
+		{
+			// parsing, trabalha Maia
+			cmd_exec (input, env);
+		}
+	}
 }

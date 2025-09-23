@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: diogo <diogo@student.42.fr>                +#+  +:+       +#+         #
+#    By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/10 16:14:27 by diogo             #+#    #+#              #
-#    Updated: 2025/09/10 20:35:13 by diogo            ###   ########.fr        #
+#    Updated: 2025/09/17 19:14:33 by diomende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = src
 LIBFT_DIR = $(SRC_DIR)/Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRCS = minishell.c split_pipex.c
+SRCS = minishell.c split_pipex.c error.c built_ins.c
 
 OBJS = $(SRCS:.c=.o)
 

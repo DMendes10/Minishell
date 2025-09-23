@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:10:01 by diogo             #+#    #+#             */
-/*   Updated: 2025/09/12 18:11:38 by diogo            ###   ########.fr       */
+/*   Updated: 2025/09/17 19:21:51 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -30,7 +31,9 @@ typedef struct s_commands
 
 typedef struct s_data
 {
-	// int        exit_code;
+	int ac;
+	char **av;
+	char **env;
     t_commands commands;
 }t_data;
 
@@ -41,7 +44,7 @@ void	exec_cmd(char *av, char *envp[]);
 char	*path_finder(char *cmd, char *envp[], char **cmds);
 char	*path_check(char *cmd, char **paths);
 void	free_array(char **s);
-int		ft_wait(pid_t *proc_id);
+int		ft_wait(pid_t pid);
 void	close_files(int *fd, int file);
 void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
@@ -53,12 +56,18 @@ char	**ft_minisplit(char **a, char const *s, char c);
 char	**ft_split_pipex(char const *s, char c);
 int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
-int     ft_echo (char **command);
-int ft_pwd();
-int ft_env(char **env);
-int ft_cd ();
-
-
-
+int		ft_echo (char **command);
+int		ft_pwd();
+int		ft_env(char **env);
+int		ft_cd (char **command);
+char	*get_input (char *prompt);
+int		cmd_exec (char *input, char **env);
+void	return_error(char *error);
+void	invalid_command(char **array, char *cmd);
+void	no_perms_command(char **array, char *cmd);
+char	*path_check(char *cmd, char **paths);
+char	*path_finder(char *cmd, char **env, char **cmds);
+void	child_proc(char **command, char **env);
+int		forked_exec (char **command, char **env);
 
 #endif
