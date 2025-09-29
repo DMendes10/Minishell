@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:13:18 by diomende          #+#    #+#             */
-/*   Updated: 2025/09/23 18:23:52 by diomende         ###   ########.fr       */
+/*   Updated: 2025/09/29 16:37:35 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int ft_env(char **env)
 		ft_putstr_fd ("\n", 1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int ft_pwd()
@@ -57,7 +57,7 @@ int ft_pwd()
 	char *path;
 
 	path = NULL;
-	exit_code = 1;
+	exit_code = 0;
 	path = getcwd(NULL, 0);
 	if (!path)
 		printf ("%s\n", getenv ("PWD"));
@@ -74,7 +74,7 @@ int ft_echo (char **command)
 		
 	line = NULL;
 	i = 1;
-	exit_code = 1;
+	exit_code = 0;
 	if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
 		i = 2;
 	while (command[i])
