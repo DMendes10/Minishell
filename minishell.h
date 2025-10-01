@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joao-maia <joao-maia@student.42.fr>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/10 16:10:01 by diogo             #+#    #+#             */
-/*   Updated: 2025/09/25 16:09:13 by joao-maia        ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -25,19 +15,26 @@
 
 typedef struct s_cmdlist
 {
-	char				*command;
-	char				*input;
-	char				*output;
-    struct s_command	*next;
+	char				**command;
+	t_list				*input;
+	t_list				*output;
+	struct s_cmdlist	*next;
 }t_cmdlist;
 
-typedef struct s_data
+typedef struct s_list
 {
-	int ac;
-	char **av;
-	char **env;
-    t_commands commands;
-}t_data;
+	char	*token;
+	char	*file;
+}t_list;
+
+
+
+// typedef struct s_command
+// {
+// 	int ac;
+// 	char **av;
+// 	char **env;
+// }t_command;
 
 void	return_error(char *error);
 void	child_proc1(char **av, char *envp[], int pipefd[]);
