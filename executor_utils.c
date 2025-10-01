@@ -1,29 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/25 14:51:57 by diomende          #+#    #+#             */
-/*   Updated: 2025/10/01 15:09:05 by diomende         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
-int	executor (char **commands, char **env)
+int	executor (char **env, t_cmdlist *commands)
 {
-	pid_t pid;
-	int	last_fd;
-	int	fdout;
-	int pipefd[2];
-	t_cmdlst	*ptr;
+	pid_t pid[commands->cmd_count];
+	t_edata	*data;
 
+	exec_init (data)
+	i = 0;
 	last_fd = dup(STDIN_FILENO);
 	if (last_fd == -1)
 		return_error();
-	ptr = cmdlst;
+	ptr = commands;
 	while (ptr)
 	{
 		if (ptr->next)
@@ -31,52 +19,23 @@ int	executor (char **commands, char **env)
 			if (pipe (pipefd) == -1)
 				return_error();
 		}
-		pid
-
-
-
-
-		
-		dup2 (fdin, 0);
-		close (fdin);
-		if (ptr->idx == 1)
+		pid[i] = fork();
+		if (pid[i] == -1)
+			return_error();
+		if (pid == 0)
+			child_process ();
+		close (last_fd);
+		if (ptr->next)
 		{
-			if (ptr->infile)
-				fdin = open (ptr->infile, O_RDONLY);
-			else
-				fdin = dup(intmp);
-			if (ptr->next)
-			{
-				pipe(pipefd);
-				fdout = pipefd[1];
-			}
-			else
-				fdout = dup(outtemp);
-			if (ptr->outfile)
-				fdout = open (ptr->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2 (fdout, 1);
-			close (fdout);
-		}
-		else if (ptr->idx < ptr->idxmax)
-		{
-			if (ptr->infile)
-				fdin = open (ptr->infile, O_RDONLY);
-			else
-				fdin = pipefd[0];
 			close (pipefd[1]);
-			if (ptr->next)
-				fdout = pipefd[1];
-			else
-				fdout = dup(outtemp);
-			if (ptr->outfile)
-				fdout = open (ptr->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2 (fdout, 1);
-			close (fdout);
+			last_fd = pipefd[0];
 		}
-		
-		if (exec_builtin (ptr->cmd, env) == -1)
-			forked_exec()
+		ptr = ptr->next;
+		i++;
 	}
+	exit_code = ft_wait (pid);
+	close(last_fd);
+	return (exit_code);
 }
 
 int exec_built (t_cmds *cmdlst, char **env)
@@ -97,4 +56,17 @@ int exec_built (t_cmds *cmdlst, char **env)
             ft_env(env);
 		else
 			return (-1);
+}
+
+int	ft_wait(pid_t *proc_id)
+{
+	int	status;
+	int	exit_code;
+
+	exit_code = 0;
+	waitpid(proc_id[1], &status, 0);
+	if (WIFEXITED (status))
+		exit_code = WEXITSTATUS (status);
+	waitpid(proc_id[0], NULL, 0);
+	return (exit_code);
 }

@@ -20,13 +20,16 @@ typedef struct s_cmdlist
     struct s_command	*next;
 }t_cmdlist;
 
-typedef struct s_data
+typedef struct s_edata
 {
-	int ac;
-	char **av;
-	char **env;
-    t_commands commands;
-}t_data;
+	int last_fd;
+	int fdout;
+	int fdin;
+	int pipefd[2];
+	int i;
+	int exit_code;
+	t_cmdlist	*ptr;
+}t_edata;
 
 void	return_error(char *error);
 void	child_proc1(char **av, char *envp[], int pipefd[]);
