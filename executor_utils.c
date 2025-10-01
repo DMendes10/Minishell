@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:51:57 by diomende          #+#    #+#             */
-/*   Updated: 2025/09/29 18:23:39 by diomende         ###   ########.fr       */
+/*   Updated: 2025/10/01 15:09:05 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,29 @@
 
 int	executor (char **commands, char **env)
 {
-	int	intmp;
-	int	outtemp;
-	int	fdin;
+	pid_t pid;
+	int	last_fd;
 	int	fdout;
-	int pipefd[2][2];
+	int pipefd[2];
 	t_cmdlst	*ptr;
 
-	intmp = dup(0);
-	outtemp = dup(1);
+	last_fd = dup(STDIN_FILENO);
+	if (last_fd == -1)
+		return_error();
 	ptr = cmdlst;
-	while (ptr->next)
+	while (ptr)
 	{
+		if (ptr->next)
+		{
+			if (pipe (pipefd) == -1)
+				return_error();
+		}
+		pid
+
+
+
+
+		
 		dup2 (fdin, 0);
 		close (fdin);
 		if (ptr->idx == 1)
