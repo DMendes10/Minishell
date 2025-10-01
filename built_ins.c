@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:13:18 by diomende          #+#    #+#             */
-/*   Updated: 2025/09/17 19:51:12 by diomende         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:23:52 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int ft_cd(char **command)
 int ft_env(char **env)
 {
 	int i;
-		
+
 	i = 0;
 	while (env[i])
 	{
@@ -59,7 +59,10 @@ int ft_pwd()
 	path = NULL;
 	exit_code = 1;
 	path = getcwd(NULL, 0);
-	printf ("%s\n", path);
+	if (!path)
+		printf ("%s\n", getenv ("PWD"));
+	else
+		printf ("%s\n", path);
 	return (exit_code);
 }
 
