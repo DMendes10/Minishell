@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:51:57 by diomende          #+#    #+#             */
-/*   Updated: 2025/09/25 18:32:21 by diomende         ###   ########.fr       */
+/*   Updated: 2025/10/01 15:09:05 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,29 @@
 
 int	executor (char **commands, char **env)
 {
-	int	intmp;
-	int	outtemp;
-	int	fdin;
+	pid_t pid;
+	int	last_fd;
 	int	fdout;
 	int pipefd[2];
 	t_cmdlst	*ptr;
 
-	intmp = dup(0);
-	outtemp = dup(1);
+	last_fd = dup(STDIN_FILENO);
+	if (last_fd == -1)
+		return_error();
 	ptr = cmdlst;
-	while (ptr->next)
+	while (ptr)
 	{
+		if (ptr->next)
+		{
+			if (pipe (pipefd) == -1)
+				return_error();
+		}
+		pid
+
+
+
+
+		
 		dup2 (fdin, 0);
 		close (fdin);
 		if (ptr->idx == 1)
@@ -34,7 +45,7 @@ int	executor (char **commands, char **env)
 				fdin = open (ptr->infile, O_RDONLY);
 			else
 				fdin = dup(intmp);
-			if (!ptr->next)
+			if (ptr->next)
 			{
 				pipe(pipefd);
 				fdout = pipefd[1];
@@ -46,14 +57,32 @@ int	executor (char **commands, char **env)
 			dup2 (fdout, 1);
 			close (fdout);
 		}
-		if (exec_builtin (ptr->cmd) == -1)
+		else if (ptr->idx < ptr->idxmax)
+		{
+			if (ptr->infile)
+				fdin = open (ptr->infile, O_RDONLY);
+			else
+				fdin = pipefd[0];
+			close (pipefd[1]);
+			if (ptr->next)
+				fdout = pipefd[1];
+			else
+				fdout = dup(outtemp);
+			if (ptr->outfile)
+				fdout = open (ptr->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			dup2 (fdout, 1);
+			close (fdout);
+		}
+		
+		if (exec_builtin (ptr->cmd, env) == -1)
 			forked_exec()
 	}
-		
-	
-	command = ft_split_pipex (input, ' ');
-        if (ft_strncmp (command[0], "echo", 100) == 0)
-            ft_echo(command);
+}
+
+int exec_built (t_cmds *cmdlst, char **env)
+{
+	if (ft_strncmp (command[0], "echo", 100) == 0)
+            return(ft_echo(command));
         else if (ft_strncmp (command[0], "exit", 100) == 0)
             exit (0);
         else if (ft_strncmp (command[0], "cd", 100) == 0)
@@ -67,8 +96,5 @@ int	executor (char **commands, char **env)
         else if (ft_strncmp (command[0], "env", 100) == 0)
             ft_env(env);
 		else
-			return (forked_exec (command, env));
-		return (0);
+			return (-1);
 }
-
-int exec_built ()
