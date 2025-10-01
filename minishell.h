@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joao-maia <joao-maia@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:10:01 by diogo             #+#    #+#             */
-/*   Updated: 2025/09/17 19:21:51 by diomende         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:09:13 by joao-maia        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@
 # include <readline/history.h>
 # include "src/Libft/libft.h"
 
-typedef struct s_commands
+typedef struct s_cmdlist
 {
-	char                *command;
+	char				*command;
+	char				*input;
+	char				*output;
     struct s_command	*next;
-}t_commands;
+}t_cmdlist;
 
 typedef struct s_data
 {
