@@ -1,41 +1,56 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
-void	child_process( int last_fd, int fdin, int fdout, int pipefd[], t_cmdlist *ptr)
+void	child_process(t_edata *data)
 {
+	char **paths;
 	char *path;
 
-	if (dup2(last_fd, STDIN_FILENO) == -1)
+	if (dup2(data->last_fd, STDIN_FILENO) == -1)
 		return_error();
-	close (last_fd);
-	if (ptr->input)
-		input_redirect (ptr->input, fdin);
-	if (ptr->next)
+	close (data->last_fd);
+	if (data->ptr->input)
+		input_redirect (data);
+	if (data->ptr->next)
 	{
-		if (dup2(pipefd[1], STDOUT_FILENO))
+		if (dup2(data->pipefd[1], STDOUT_FILENO))
 			return_error();
-		close (pipefd[0]);
-		close (pipefd[1]);
+		close (data->pipefd[0]);
+		close (data->pipefd[1]);
 	}
-	else if (ptr->output)
-		output_redirect (ptr->output, fdout);
-	path = getenv("PATH");
-	if (execve (path, ptr->command, env) == -1)
+	else if (data->ptr->output)
+		output_redirect (data->ptr->output, data->fdout);
+	paths = ft_split (getenv("PATH"), ':');
+	path = path_finder(data->ptr->command, paths);
+	path_checker(path, data);
+	free_array (paths);
+	if (execve (path, data->ptr->command, env) == -1)
 		return_error();
 }
 
-void	input_redirect (char *input, int fdin)
+void	input_redirect (t_edata *data)
 {
-	fdin = open(input, O_RDONLY);
-	if (fdin == -1)
-		return_error();
-	if (dup2 (fdin, STDIN_FILENO) == -1)
-		return_error();
-	close (fdin);
+	int i;
+
+	while (data->ptr->input->file[i])
+	{
+		if (data->ptr->input->token[i] == '<')
+		{
+			data->fdin = open(data->ptr->input->file[i], O_RDONLY);
+			if (data->fdin == -1)
+				return_error();
+			if (dup2 (data->fdin, STDIN_FILENO) == -1)
+				return_error();
+			i++;
+		}
+	}
+	close (data->fdin);
 }
 
 void	output_redirect (char *output, int fdout)
 {
+	int	i;
+
 	fdout = open (output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fdout == -1)
 		return_error();
@@ -46,7 +61,24 @@ void	output_redirect (char *output, int fdout)
 
 void	exec_init (t_edata *data)
 {
-	data = malloc (sizeof(t_data));
-	data = ft_memset (data, 0, sizeof (t_data));
-	
+	data = malloc (sizeof(t_edata));
+	data = ft_memset (data, 0, sizeof (t_edata));
+}
+
+void	io_operator(t_edata *data, pid_t pid[])
+{
+	if (data->ptr->next)
+		{
+			if (pipe (data->pipefd) == -1)
+				return_error();
+		}
+		pid[data->i] = fork();
+		if (pid[data->i] == 0)
+			child_process (data);
+		close (data->last_fd);
+		if (data->ptr->next)
+		{
+			close (data->pipefd[1]);
+			data->last_fd = data->pipefd[0];
+		}
 }

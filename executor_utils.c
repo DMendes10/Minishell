@@ -1,41 +1,25 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
-int	executor (char **env, t_cmdlist *commands)
+int	executor (char **env, t_cmdlist *commands, int cmd_count)
 {
-	pid_t pid[commands->cmd_count];
+	pid_t pid[cmd_count];
 	t_edata	*data;
 
-	exec_init (data)
-	i = 0;
-	last_fd = dup(STDIN_FILENO);
-	if (last_fd == -1)
+	exec_init (data);
+	data->last_fd = dup(STDIN_FILENO);
+	if (data->last_fd == -1)
 		return_error();
-	ptr = commands;
-	while (ptr)
+	data->ptr = commands;
+	while (data->ptr)
 	{
-		if (ptr->next)
-		{
-			if (pipe (pipefd) == -1)
-				return_error();
-		}
-		pid[i] = fork();
-		if (pid[i] == -1)
-			return_error();
-		if (pid == 0)
-			child_process ();
-		close (last_fd);
-		if (ptr->next)
-		{
-			close (pipefd[1]);
-			last_fd = pipefd[0];
-		}
-		ptr = ptr->next;
-		i++;
+		io_operator(data, pid);
+		data->ptr = data->ptr->next;
+		data->i++;
 	}
-	exit_code = ft_wait (pid);
-	close(last_fd);
-	return (exit_code);
+	data->exit_code = ft_wait (pid);
+	close(data->last_fd);
+	return (data->exit_code);
 }
 
 int exec_built (t_cmds *cmdlst, char **env)

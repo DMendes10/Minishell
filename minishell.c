@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 char *get_input (char *prompt)
 {
@@ -37,62 +37,43 @@ int	ft_wait(pid_t pid)
 	return (exit_code);
 }
 
-void	child_proc(char **command, char **env)
+void	path_checker(char *path, t_edata *data)
 {
-	char	*path;
+	char **split_cmd;
 
-	path = path_finder(command[0], env, command);
+	split_cmd = ft_split(split_cmd, ' ');
 	if (!path)
-		invalid_command (command, command[0]);
+		invalid_command (split_cmd, split_cmd[0]);
 	if (access (path, F_OK) != 0)
-		invalid_command (command, command[0]);
+		invalid_command (split_cmd, split_cmd[0]);
 	if (access (path, X_OK) != 0)
-		no_perms_command (command, command[0]);
-	if (execve(path, command, env) == -1)
-	{
-		free_array (command);
-		return_error(command[0]);
-	}
+		no_perms_command (split_cmd, split_cmd[0]);
 }
 
-char	*path_finder(char *cmd, char **env, char **cmds)
-{
-	char	**paths;
-	int		i;
-
-	i = 0;
-	if (ft_strchr (cmd, '/') != NULL)
-		return (cmd);
-	if (!env[0])
-		invalid_command (cmds, cmd);
-	while (env[i] && ft_strnstr (env[i], "PATH", 4) == NULL)
-		i++;
-	if (!env[i])
-		invalid_command (cmds, cmd);
-	paths = ft_split (env[i] + 5, ':');
-	return (path_check (cmd, paths));
-}
-
-char	*path_check(char *cmd, char **paths)
+char	*path_finder(char *cmd, char **paths)
 {
 	int		i;
 	char	*temp;
 	char	*new_path;
+	char	**split_cmd;
 
 	i = 0;
+	split_cmd = ft_split (cmd, ' ');
 	while (paths[i])
 	{
 		temp = ft_strjoin (paths[i], "/");
-		new_path = ft_strjoin (temp, cmd);
+		new_path = ft_strjoin (temp, split_cmd[0]);
 		free (temp);
 		if (access (new_path, X_OK) == 0)
 		{
 			free_array (paths);
+			free_array (split_cmd);
 			return (new_path);
 		}
 		free (new_path);
 		i++;
 	}
+	free_array (split_cmd);
 	free_array (paths);
 	return (NULL);
 }

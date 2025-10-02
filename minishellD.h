@@ -35,8 +35,7 @@ void	return_error(char *error);
 void	child_proc1(char **av, char *envp[], int pipefd[]);
 void	child_proc2(char **av, char *envp[], int pipefd[]);
 void	exec_cmd(char *av, char *envp[]);
-char	*path_finder(char *cmd, char *envp[], char **cmds);
-char	*path_check(char *cmd, char **paths);
+char	*path_finder(char *cmd, char **paths);
 void	free_array(char **s);
 int		ft_wait(pid_t pid);
 void	close_files(int *fd, int file);
@@ -59,9 +58,7 @@ int		cmd_exec (char *input, char **env);
 void	return_error(char *error);
 void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
-char	*path_check(char *cmd, char **paths);
-char	*path_finder(char *cmd, char **env, char **cmds);
-void	child_proc(char **command, char **env);
+void	path_checker(char *path, t_edata *data);
 int		forked_exec (char **command, char **env);
 
 #endif
