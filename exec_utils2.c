@@ -51,12 +51,27 @@ void	output_redirect (char *output, int fdout)
 {
 	int	i;
 
-	fdout = open (output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fdout == -1)
-		return_error();
-	if (dup2 (fdout, STDOUT_FILENO) == -1)
-		return_error();
-	close (fdout);
+	while (data->ptr->output->file[i])
+	{
+		if (data->ptr->output->token[i] == '>')
+		{
+			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (data->fdout == -1)
+				return_error();
+			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
+				return_error();
+			i++;
+		}
+		else
+		{
+			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (data->fdout == -1)
+				return_error();
+			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
+				return_error();
+			i++;
+		}
+	}
 }
 
 void	exec_init (t_edata *data)
