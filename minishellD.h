@@ -11,6 +11,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "src/Libft/libft.h"
+typedef struct s_envlst t_envlst;
+
 
 typedef struct s_cmdlist
 {

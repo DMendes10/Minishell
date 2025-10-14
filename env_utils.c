@@ -32,9 +32,9 @@ t_envlst	*ft_envlstnew(char *env)
 	return (node);
 }
 
-void	ft_envlst_add_back(t_list **lst, t_list *new)
+void	ft_envlst_add_back(t_envlst **lst, t_envlst *new)
 {
-	t_list	*last;
+	t_envlst	*last;
 
 	if (!new || !lst)
 		return ;
@@ -68,4 +68,19 @@ t_envlst	*env_populator (char **env)
 		i++;
 	}
 	return (list);
+}
+
+int main (int ac, char **av, char **env)
+{
+	int i = ac;
+	char **pu = av;
+	t_envlst *list;
+
+	list = env_populator(env);
+
+	while (list)
+	{
+		printf("%s", list->var);
+		list = list->next;
+	}
 }
