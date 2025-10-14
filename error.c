@@ -31,5 +31,5 @@ void	no_perms_command(char **array, char *cmd)
 	exit (126);
 }
 
-int main 
+// int main 
 

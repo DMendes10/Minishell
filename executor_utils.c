@@ -22,22 +22,22 @@ int	executor (char **env, t_cmdlist *commands, int cmd_count)
 	return (data->exit_code);
 }
 
-int exec_built (t_cmds *cmdlst, char **env)
+int exec_built (t_cmdlist *cmdlst, t_envlst *envlst)
 {
-	if (ft_strncmp (command[0], "echo", 100) == 0)
-            return(ft_echo(command));
-        else if (ft_strncmp (command[0], "exit", 100) == 0)
+	if (ft_strncmp (cmdlst->command[0], "echo", 5) == 0)
+            return(ft_echo(cmdlst->command));
+        else if (ft_strncmp (cmdlst->command[0], "exit", 5) == 0)
             exit (0);
-        else if (ft_strncmp (command[0], "cd", 100) == 0)
-            ft_cd(command);
-        else if (ft_strncmp (command[0], "pwd", 100) == 0)
-            ft_pwd();
+        else if (ft_strncmp (cmdlst->command[0], "cd", 3) == 0)
+            return (ft_cd(cmdlst->command));
+        else if (ft_strncmp (cmdlst->command[0], "pwd", 4) == 0)
+            return (ft_pwd());
         // else if (ft_strncmp (command[0], "export", 100) == 0)
         //     ft_export();
         // else if (ft_strncmp (command[0], "unset", 100) == 0)
         //     ft_unset();
-        else if (ft_strncmp (command[0], "env", 100) == 0)
-            ft_env(env);
+        else if (ft_strncmp (cmdlst->command[0], "env", 4) == 0)
+            return(ft_env(envlst));
 		else
 			return (-1);
 }

@@ -64,6 +64,8 @@ t_envlst	*env_populator (char **env)
 	while (env[i])
 	{
 		node = ft_envlstnew(env[i]);
+		// if (!node)
+		// 	return_error();
 		ft_envlst_add_back (&list, node);
 		i++;
 	}
@@ -80,7 +82,9 @@ int main (int ac, char **av, char **env)
 
 	while (list)
 	{
-		printf("%s", list->var);
+		printf("%s", list->token);
+		printf("=");
+		printf("%s\n", list->var);
 		list = list->next;
 	}
 }

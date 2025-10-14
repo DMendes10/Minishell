@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 int ft_cd(char **command)
 {
@@ -26,16 +26,16 @@ int ft_cd(char **command)
 	return (0);
 }
 
-int ft_env(char **env)
+int ft_env(t_envlst *list)
 {
-	int i;
+	t_envlst *ptr;
 
-	i = 0;
-	while (env[i])
+	ptr = list;
+	while (ptr)
 	{
-		ft_putstr_fd (env[i], 1);
-		ft_putstr_fd ("\n", 1);
-		i++;
+		if (ptr->var)
+			printf ("%s=%s\n", ptr->token, ptr->var);
+		ptr = ptr->next;
 	}
 	return (0);
 }
@@ -78,4 +78,55 @@ int ft_echo (char **command)
 	else
 		printf ("%s\n", line);
 	return (exit_code);
+}
+
+int	export(t_envlst *lst)
+{
+	char **exp;
+	int i;
+	t_envlst *ptr;
+
+	i = 0;
+	ptr = lst;
+	exp = malloc ((ft_envlst_size(lst) + 1) * sizeof(char*));
+	// if (!exp)
+	// 	return_error();
+	while (exp[i])
+	{
+		exp[i] = ft_strdup(ptr->token);
+		i++;
+		ptr->next;
+	}
+	export_sorter (exp);
+	/*
+		env to char **
+		organizar char **
+		sucess
+
+		buscar keys
+		organizar
+
+	*/
+}
+
+void	export_sorter (char **exp)
+{
+	
+}
+
+int	ft_envlst_size(t_envlst *lst)
+{
+	int	i;
+	t_envlst *ptr;
+
+	i = 0;
+	ptr = lst;
+	if (!ptr)
+		return (0);
+	while (!ptr)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
 }
