@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 void	return_error(char *error)
 {
@@ -29,6 +29,21 @@ void	no_perms_command(char **array, char *cmd)
 	ft_putstr_fd (": Permission denied \n", 2);
 	free_array (array);
 	exit (126);
+}
+
+void	free_array(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		free (s[i]);
+		i++;
+	}
+	free (s);
 }
 
 // int main 

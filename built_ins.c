@@ -80,37 +80,30 @@ int ft_echo (char **command)
 	return (exit_code);
 }
 
-int	export(t_envlst *lst)
+int	export(t_envlst *lst, t_cmdlist *cmdlst)
 {
-	char **exp;
 	int i;
-	t_envlst *ptr;
+	int exit_code;
+	int super_exit;
 
-	i = 0;
-	ptr = lst;
-	exp = malloc ((ft_envlst_size(lst) + 1) * sizeof(char*));
-	// if (!exp)
-	// 	return_error();
-	while (exp[i])
+	i = 1;
+	exit_code = 0;
+	super_exit = 0;
+	if (!cmdlst->command[1])
+		return (simple_export(lst));
+	else
 	{
-		exp[i] = ft_strdup(ptr->token);
-		i++;
-		ptr->next;
+		while (cmdlst->command[i])
+		{
+			if (cmdlst->command[i][0] == '=')
+			{
+				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+				super_exit = 1;
+				i++;
+			}
+			
+		}
 	}
-	export_sorter (exp);
-	/*
-		env to char **
-		organizar char **
-		sucess
-
-		buscar keys
-		organizar
-
-	*/
-}
-
-void	export_sorter (char **exp)
-{
 	
 }
 
