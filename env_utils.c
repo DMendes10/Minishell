@@ -26,7 +26,7 @@ t_envlst	*ft_envlstnew(char *env)
 	node = malloc(sizeof(t_envlst));
 	if (!node)
 		return (NULL);
-	node->token = ft_substr(env, 0, ft_strchar_int (env, '=') - 1);
+	node->token = ft_substr(env, 0, ft_strchar_int (env, '=') );
 	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) - 1);
 	node->next = NULL;
 	return (node);
@@ -64,10 +64,29 @@ t_envlst	*env_populator (char **env)
 	while (env[i])
 	{
 		node = ft_envlstnew(env[i]);
+		// if (!node)
+		// 	return_error();
 		ft_envlst_add_back (&list, node);
 		i++;
 	}
 	return (list);
+}
+
+int	ft_envlst_size(t_envlst *lst)
+{
+	int i;
+	t_envlst *ptr;
+
+	i = 0;
+	if (!lst)
+		return (0);
+	ptr = lst;
+	while (ptr)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
 }
 
 int main (int ac, char **av, char **env)
@@ -77,10 +96,12 @@ int main (int ac, char **av, char **env)
 	t_envlst *list;
 
 	list = env_populator(env);
-
-	while (list)
-	{
-		printf("%s", list->var);
-		list = list->next;
-	}
+	simple_export (list);
+	// while (list)
+	// {
+	// 	printf("%s", list->token);
+	// 	printf("=");
+	// 	printf("%s\n", list->var);
+	// 	list = list->next;
+	// }
 }

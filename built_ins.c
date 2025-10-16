@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 int ft_cd(char **command)
 {
@@ -26,16 +26,16 @@ int ft_cd(char **command)
 	return (0);
 }
 
-int ft_env(char **env)
+int ft_env(t_envlst *list)
 {
-	int i;
+	t_envlst *ptr;
 
-	i = 0;
-	while (env[i])
+	ptr = list;
+	while (ptr)
 	{
-		ft_putstr_fd (env[i], 1);
-		ft_putstr_fd ("\n", 1);
-		i++;
+		if (ptr->var)
+			printf ("%s=%s\n", ptr->token, ptr->var);
+		ptr = ptr->next;
 	}
 	return (0);
 }
@@ -78,4 +78,48 @@ int ft_echo (char **command)
 	else
 		printf ("%s\n", line);
 	return (exit_code);
+}
+
+int	export(t_envlst *lst, t_cmdlist *cmdlst)
+{
+	int i;
+	int exit_code;
+	int super_exit;
+
+	i = 1;
+	exit_code = 0;
+	super_exit = 0;
+	if (!cmdlst->command[1])
+		return (simple_export(lst));
+	else
+	{
+		while (cmdlst->command[i])
+		{
+			if (cmdlst->command[i][0] == '=')
+			{
+				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+				super_exit = 1;
+				i++;
+			}
+			
+		}
+	}
+	
+}
+
+int	ft_envlst_size(t_envlst *lst)
+{
+	int	i;
+	t_envlst *ptr;
+
+	i = 0;
+	ptr = lst;
+	if (!ptr)
+		return (0);
+	while (!ptr)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
 }

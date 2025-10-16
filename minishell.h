@@ -27,8 +27,6 @@ typedef struct s_list
 	char	*file;
 }t_list;
 
-
-
 // typedef struct s_command
 // {
 // 	int ac;

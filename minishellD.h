@@ -14,12 +14,18 @@
 typedef struct s_envlst t_envlst;
 
 
+typedef struct s_redir
+{
+	char	**token;
+	char	**file;
+}t_redir;
+
 typedef struct s_cmdlist
 {
 	char				**command;
-	char				*input;
-	char				*output;
-    struct s_command	*next;
+	t_redir				*input;
+	t_redir				*output;
+	struct s_command	*next;
 }t_cmdlist;
 
 typedef struct s_edata
@@ -39,6 +45,7 @@ typedef struct s_envlst
 	char		*var;
 	t_envlst	*next;
 }t_envlst;
+
 
 void	return_error(char *error);
 void	child_proc1(char **av, char *envp[], int pipefd[]);
@@ -69,5 +76,12 @@ void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
 void	path_checker(char *path, t_edata *data);
 int		forked_exec (char **command, char **env);
+int	simple_export(t_envlst *lst);
+void	export_sorter (char **exp);
+void	print_export(char **exp, t_envlst *lst);
+int	ft_envlst_size(t_envlst *lst);
+void	free_array(char **s);
+
+
 
 #endif

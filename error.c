@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 void	return_error(char *error)
 {
@@ -31,5 +31,20 @@ void	no_perms_command(char **array, char *cmd)
 	exit (126);
 }
 
-int main 
+void	free_array(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		free (s[i]);
+		i++;
+	}
+	free (s);
+}
+
+// int main 
 

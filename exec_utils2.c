@@ -18,7 +18,7 @@ void	child_process(t_edata *data)
 		close (data->pipefd[0]);
 		close (data->pipefd[1]);
 	}
-	else if (data->ptr->output)
+	if (data->ptr->output)
 		output_redirect (data->ptr->output, data->fdout);
 	paths = ft_split (getenv("PATH"), ':');
 	path = path_finder(data->ptr->command, paths);
