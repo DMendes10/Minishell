@@ -51,33 +51,4 @@ char *get_input (char *prompt)
 	return (input);
 }
 
-int	count_command(char **input)
-{
-	int	i;
-	int	j;
-	int	count;
-	int	quotes;
 
-	quotes = 0;
-	i = 0;
-	count = 0;
-	j = 0;
-	while (input[i])
-	{
-		j = 0;
-		while(input[i][j])
-		{
-			if ((input[i][j] == '|' || input[i][j] == '<' || input[i][j] == '>') && quotes_check(input[i][j], quotes))
-			{
-				if ((input[i][j] == '<' || input[i][j] == '>') && input[i][j] == input [i][j])
-				{
-					count = count + 2;
-					i++;
-				}
-				else 
-					count = count + 2;
-			i++;
-			}
-		}
-	}
-}

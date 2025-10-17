@@ -1,41 +1,55 @@
 #include "parser.h"
 
 
-static size_t	ft_count_args(char const *s, char c, int quotes)
+static char	*seperator(char *input, int pos)
 {
-	size_t	i;
-	size_t	isarg;
-	size_t	args;
+	int		i;
+	int		j;
+	char	*ret;
 
-	args = 0;
 	i = 0;
-	isarg = 0;
-	while (s[i])
-	{
-		if (s[i] != c && isarg == 0)
-		{
-			args++;
-			isarg++;
-		}
-		if (s[i] == c && isarg == 1)
-			isarg--;
-		i++;
-	}
-	return (args);
+	j = 0;
+	ret = malloc(ft_strlen(input) + 3);
+	if (!ret)
+		return(NULL);
+	while (i < pos)
+		ret[j++] = input[i++];
+	ret[j++] = SEP;
+	ret[j++] = input[i++];
+	if (input[i] == input[i - 1] && input[i] != '|')
+		ret[j++] = input[i++];
+	ret[j++] = SEP;
+	while (input[i])
+		ret[j++] = input[i++];
+	ret[j] = '\0';
+	free(input);
+	return (ret);
 }
 
-char	**lexer(char *input)
+char	*lexer(char *input)
 {
 	int		i;
 	int		quotes;
-	char	**cmdtable;
-	int		arg;
+	char	*temp;
+	char	*cmdtable;
 	
 	i = 0;
-	arg = 0;
-	while (input[i++])
+	quotes = 0;
+	temp = ft_strdup(input);
+	while (temp && temp[i])
 	{
-
+		if (temp[i] == '|' || temp[i] == '<' || temp[i] == '>')
+		{
+			temp = seperator(temp, i);
+			i = i + 2;
+		}
+		else if (temp[i] == '\'' || temp[i] == '\"')
+			quotes_check(temp[i], quotes);
+		i++;
 	}
-	
+	if (quotes)
+		free(temp);
+	cmdtable = ft_strdup(temp);
+	free(temp);
+	return (cmdtable);
 }

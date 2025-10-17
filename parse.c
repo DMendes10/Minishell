@@ -49,7 +49,7 @@ static char	**parser(char *input)
 	i = 0;
 	temp = lexer(input);
 	cmdtable = split_args(temp);
-	syntax_checker(cmdtable);
+	// syntax_checker(cmdtable);
 	free (temp);
 	return(cmdtable);
 }
@@ -80,7 +80,6 @@ int main ()
 				printf("%s\n", args[i++]);
 				fflush(stdout);
 			}
-			printf("%d", i);
 		}
 	}
 }

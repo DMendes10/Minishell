@@ -9,6 +9,9 @@
 
 char	**split_args(char *input);
 int		quotes_check(char c, int quotes);
+void	print_err(char *error, char **arg);
+void	free_args(char **args);
+char	*lexer(char *input);
 
 
 #endif
