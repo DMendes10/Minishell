@@ -13,7 +13,15 @@ void	exp_full (t_envlst *lst ,char *cmd)
 void	exp_key (t_envlst *lst ,char *cmd)
 {
 	t_envlst *node;
+	t_envlst *ptr;
 
+	ptr = lst;
+	while (ptr)
+	{
+		if (ft_strncmp(ptr->token, cmd, ft_strlen(cmd)))
+			return;
+		ptr = ptr->next;
+	}
 	node = ft_new_env_key(cmd);
 	// if (!node)
 		// 	return_error();

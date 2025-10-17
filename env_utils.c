@@ -99,7 +99,7 @@ int main (int ac, char **av, char **env)
 
 	cmds= malloc (sizeof(t_cmdlist));
 	cmds = ft_memset (cmds, 0, sizeof(t_cmdlist));
-	cmds->command = ft_split_pipex ("export Adeus= ads Addeus=oi", ' ');
+	cmds->command = ft_split_pipex ("export adeus=1 adeus Addeus=oi", ' ');
 
 	list = env_populator(env);
 	export (list, cmds);
