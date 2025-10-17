@@ -33,7 +33,7 @@ int ft_env(t_envlst *list)
 	ptr = list;
 	while (ptr)
 	{
-		if (ptr->var)
+		if (ptr->var && ptr->var[0])
 			printf ("%s=%s\n", ptr->token, ptr->var);
 		ptr = ptr->next;
 	}
@@ -82,44 +82,25 @@ int ft_echo (char **command)
 
 int	export(t_envlst *lst, t_cmdlist *cmdlst)
 {
-	int i;
-	int exit_code;
-	int super_exit;
-
-	i = 1;
-	exit_code = 0;
-	super_exit = 0;
 	if (!cmdlst->command[1])
 		return (simple_export(lst));
 	else
-	{
-		while (cmdlst->command[i])
-		{
-			if (cmdlst->command[i][0] == '=')
-			{
-				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
-				super_exit = 1;
-				i++;
-			}
-			
-		}
-	}
-	
+		return (add_export(lst, cmdlst, EXIT_CODE, SUPER_EXIT));
 }
 
-int	ft_envlst_size(t_envlst *lst)
-{
-	int	i;
-	t_envlst *ptr;
+// int	ft_envlst_size(t_envlst *lst)
+// {
+// 	int	i;
+// 	t_envlst *ptr;
 
-	i = 0;
-	ptr = lst;
-	if (!ptr)
-		return (0);
-	while (!ptr)
-	{
-		ptr = ptr->next;
-		i++;
-	}
-	return (i);
-}
+// 	i = 0;
+// 	ptr = lst;
+// 	if (!ptr)
+// 		return (0);
+// 	while (!ptr)
+// 	{
+// 		ptr = ptr->next;
+// 		i++;
+// 	}
+// 	return (i);
+// }

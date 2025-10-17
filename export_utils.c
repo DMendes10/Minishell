@@ -59,7 +59,10 @@ void	print_export(char **exp, t_envlst *lst)
 	{
 		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i])) == 0)
 		{
-			printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
+			if (ptr->var != NULL)
+				printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
+			else
+				printf("declare -x %s\n",ptr->token);
 			ptr = lst;
 			i++;
 		}
@@ -69,7 +72,28 @@ void	print_export(char **exp, t_envlst *lst)
 	}
 }
 
-int	add_export(t_envlst lst, t_cmdlist)
+int	add_export(t_envlst *lst, t_cmdlist *cmdlst, int exit_code, int super_exit)
 {
-	
+	int i;
+
+	i = 1;
+	while (cmdlst->command[i])
+	{
+		if (cmdlst->command[i][0] == '=')
+		{
+			if (super_exit == 0)
+				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+			super_exit = 1;
+			i++;
+		}
+		else
+		{
+			if (ft_strchar_int(cmdlst->command[i], '=') != -1)
+				exp_full(lst, cmdlst->command[i]);
+			else
+				exp_key (lst, cmdlst->command[i]);
+			i++;
+		}
+	}
+	return (super_exit > exit_code);
 }

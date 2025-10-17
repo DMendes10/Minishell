@@ -13,6 +13,9 @@
 # include "src/Libft/libft.h"
 typedef struct s_envlst t_envlst;
 
+# define EXIT_CODE 0
+# define SUPER_EXIT 0
+
 
 typedef struct s_redir
 {
@@ -67,7 +70,7 @@ int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 int		ft_echo (char **command);
 int		ft_pwd();
-int		ft_env(char **env);
+int		ft_env(t_envlst *list);
 int		ft_cd (char **command);
 char	*get_input (char *prompt);
 int		cmd_exec (char *input, char **env);
@@ -76,11 +79,21 @@ void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
 void	path_checker(char *path, t_edata *data);
 int		forked_exec (char **command, char **env);
-int	simple_export(t_envlst *lst);
+int		simple_export(t_envlst *lst);
 void	export_sorter (char **exp);
 void	print_export(char **exp, t_envlst *lst);
-int	ft_envlst_size(t_envlst *lst);
+int		ft_envlst_size(t_envlst *lst);
 void	free_array(char **s);
+int		ft_strchar_int(const char *s, int c);
+int		add_export(t_envlst *lst, t_cmdlist *cmdlst, int exit_code, int super_exit);
+int		export(t_envlst *lst, t_cmdlist *cmdlst);
+t_envlst	*ft_envlstnew(char *env);
+t_envlst	*ft_new_env_key(char *env);
+void	exp_key (t_envlst *lst ,char *cmd);
+void	exp_full (t_envlst *lst ,char *cmd);
+void	ft_envlst_add_back(t_envlst **lst, t_envlst *new);
+
+
 
 
 

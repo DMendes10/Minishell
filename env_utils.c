@@ -26,8 +26,8 @@ t_envlst	*ft_envlstnew(char *env)
 	node = malloc(sizeof(t_envlst));
 	if (!node)
 		return (NULL);
-	node->token = ft_substr(env, 0, ft_strchar_int (env, '=') );
-	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) - 1);
+	node->token = ft_substr(env, 0, ft_strchar_int (env, '='));
+	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) + 1);
 	node->next = NULL;
 	return (node);
 }
@@ -94,9 +94,18 @@ int main (int ac, char **av, char **env)
 	int i = ac;
 	char **pu = av;
 	t_envlst *list;
+	t_cmdlist *cmds;
+
+
+	cmds= malloc (sizeof(t_cmdlist));
+	cmds = ft_memset (cmds, 0, sizeof(t_cmdlist));
+	cmds->command = ft_split_pipex ("export Adeus= ads Addeus=oi", ' ');
 
 	list = env_populator(env);
-	simple_export (list);
+	export (list, cmds);
+	ft_env (list);
+	cmds->command = ft_split_pipex ("export", ' ');
+	export (list, cmds);
 	// while (list)
 	// {
 	// 	printf("%s", list->token);
