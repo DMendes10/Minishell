@@ -92,6 +92,8 @@ t_envlst	*ft_new_env_key(char *env);
 void	exp_key (t_envlst *lst ,char *cmd);
 void	exp_full (t_envlst *lst ,char *cmd);
 void	ft_envlst_add_back(t_envlst **lst, t_envlst *new);
+int key_check(char *key);
+char	**ft_split(char const *s, char c);
 
 
 

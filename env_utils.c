@@ -99,7 +99,7 @@ int main (int ac, char **av, char **env)
 
 	cmds= malloc (sizeof(t_cmdlist));
 	cmds = ft_memset (cmds, 0, sizeof(t_cmdlist));
-	cmds->command = ft_split_pipex ("export adeus=1 adeus Addeus=oi", ' ');
+	cmds->command = ft_split_pipex ("export adeus=1 ade,us=3 adeus Addeus=oi adeus=2", ' ');
 
 	list = env_populator(env);
 	export (list, cmds);
@@ -113,4 +113,5 @@ int main (int ac, char **av, char **env)
 	// 	printf("%s\n", list->var);
 	// 	list = list->next;
 	// }
+	// cc env_utils.c built_ins.c export_node.c export_utils.c split_pipex.c -Lsrc/Libft error.c -lft
 }
