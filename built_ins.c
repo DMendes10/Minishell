@@ -1,17 +1,12 @@
 
 #include "minishellD.h"
 
-int ft_cd(char **command)
+int ft_cd(char **command, t_envlst *lst)
 {
 	char *h_env;
 
 	if (!command [1])
-	{
-		h_env = getenv ("HOME");
-		if (!h_env)
-			return(ft_putstr_fd ("cd: HOME not set\n", 2), 1);
-		chdir (h_env);
-	}
+		return(find_home(lst));
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
@@ -19,7 +14,7 @@ int ft_cd(char **command)
 		if (access (command[1], X_OK) != 0)
 			no_perms_command (command, command[1]);
 		else
-			chdir (command[1]);
+			chdir_env_pwd(lst, command[1]);
 	}
 	else
 		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
@@ -55,28 +50,32 @@ int ft_pwd()
 	return (exit_code);
 }
 
-int ft_echo (char **command)
+int ft_echo (char **command, int exit_code, int flag, int i)
 {
-	int exit_code;
-	int i;
 	char *line;
 		
 	line = NULL;
-	i = 1;
-	exit_code = 0;
-	if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
-		i = 2;
+	if (command[i] && ft_strncmp (command[i], "-n", 2))
+	{
+		while (!valid_flag(command[i]))
+		{
+			flag++;
+			i++;
+		}
+	}
 	while (command[i])
 	{
 		line = ft_strjoin_gnl (line, command[i]);
-		i++;
-		if (command[i])
+		if (command[i++])
 			line = ft_strjoin_gnl (line, " ");
 	}
-	if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
+	if (line)
+	{
 		printf ("%s",line);
-	else
-		printf ("%s\n", line);
+		free (line);
+	}
+	if (!flag)
+		printf ("\n");
 	return (exit_code);
 }
 
@@ -88,19 +87,3 @@ int	export(t_envlst *lst, t_cmdlist *cmdlst)
 		return (add_export(lst, cmdlst, EXIT_CODE, SUPER_EXIT));
 }
 
-// int	ft_envlst_size(t_envlst *lst)
-// {
-// 	int	i;
-// 	t_envlst *ptr;
-
-// 	i = 0;
-// 	ptr = lst;
-// 	if (!ptr)
-// 		return (0);
-// 	while (!ptr)
-// 	{
-// 		ptr = ptr->next;
-// 		i++;
-// 	}
-// 	return (i);
-// }

@@ -15,6 +15,9 @@ typedef struct s_envlst t_envlst;
 
 # define EXIT_CODE 0
 # define SUPER_EXIT 0
+# define ECHO_FLAG 0
+# define ECHO_INDEX 1
+
 
 
 typedef struct s_redir
@@ -68,7 +71,7 @@ char	**ft_minisplit(char **a, char const *s, char c);
 char	**ft_split_pipex(char const *s, char c);
 int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
-int		ft_echo (char **command);
+int 	ft_echo (char **command, int exit_code, int flag, int i);
 int		ft_pwd();
 int		ft_env(t_envlst *list);
 int		ft_cd (char **command);
@@ -94,6 +97,10 @@ void	exp_full (t_envlst *lst ,char *cmd);
 void	ft_envlst_add_back(t_envlst **lst, t_envlst *new);
 int key_check(char *key);
 char	**ft_split(char const *s, char c);
+int chdir_env_pwd(t_envlst *lst, char *directory);
+int find_home(t_envlst *lst);
+int valid_flag(char *flag);
+
 
 
 
