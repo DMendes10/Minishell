@@ -74,7 +74,7 @@ size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 int 	ft_echo (char **command, int exit_code, int flag, int i);
 int		ft_pwd();
 int		ft_env(t_envlst *list);
-int		ft_cd (char **command);
+int	ft_cd(char **command, t_envlst *lst);
 char	*get_input (char *prompt);
 int		cmd_exec (char *input, char **env);
 void	return_error(char *error);
@@ -100,10 +100,7 @@ char	**ft_split(char const *s, char c);
 int chdir_env_pwd(t_envlst *lst, char *directory);
 int find_home(t_envlst *lst);
 int valid_flag(char *flag);
-
-
-
-
-
+int	ft_unset(char **cmd, t_envlst *lst);
+void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list);
 
 #endif

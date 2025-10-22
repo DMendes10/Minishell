@@ -55,7 +55,7 @@ int ft_echo (char **command, int exit_code, int flag, int i)
 	char *line;
 		
 	line = NULL;
-	if (command[i] && ft_strncmp (command[i], "-n", 2))
+	if (command[i] && !ft_strncmp (command[i], "-n", 2))
 	{
 		while (!valid_flag(command[i]))
 		{
@@ -66,7 +66,7 @@ int ft_echo (char **command, int exit_code, int flag, int i)
 	while (command[i])
 	{
 		line = ft_strjoin_gnl (line, command[i]);
-		if (command[i++])
+		if (command[1 + i++])
 			line = ft_strjoin_gnl (line, " ");
 	}
 	if (line)

@@ -100,12 +100,16 @@ int main (int ac, char **av, char **env)
 	cmds= malloc (sizeof(t_cmdlist));
 	cmds = ft_memset (cmds, 0, sizeof(t_cmdlist));
 	cmds->command = ft_split_pipex ("export adeus=1 ade,us=3 adeus Addeus=oi adeus=2", ' ');
-
 	list = env_populator(env);
 	export (list, cmds);
+	free (cmds->command);
+	cmds->command = ft_split_pipex ("unset adeus", ' ');
+	ft_unset (cmds->command, list);
 	ft_env (list);
-	cmds->command = ft_split_pipex ("export", ' ');
-	export (list, cmds);
+
+	// ft_echo (ft_split_pipex ("echo -nnnnn -n -n -n -n -na -nnnnn- ola adeus", ' '), EXIT_CODE, ECHO_FLAG, ECHO_INDEX);
+	// cmds->command = ft_split_pipex ("export", ' ');
+	// export (list, cmds);
 	// while (list)
 	// {
 	// 	printf("%s", list->token);
