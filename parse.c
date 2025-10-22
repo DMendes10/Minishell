@@ -40,7 +40,13 @@ static void	syntax_checker(char **cmdtable)
 			print_err("syntax error near unexpected token", cmdtable);
 }
 
-static char	**parser(char *input)
+static void	list_creator(t_cmdlist **s_cmdlist, char **cmdtable)
+{
+	int	i;
+	
+}
+
+static char	**parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;
@@ -74,7 +80,7 @@ int main ()
 		input = get_input (prompt);
 		if (input && input[0])
 		{
-			args = parser(input);
+			args = parser(input, &cmdlist);
 			while(args[i])
 			{	
 				printf("%s\n", args[i++]);
