@@ -13,7 +13,7 @@ void	free_args(char **args)
 
 void	print_err(char *error, char **arg)
 {
-	free_args(arg);
+	//free_args(arg);
 	ft_putstr_fd(error, 2);
 }
 

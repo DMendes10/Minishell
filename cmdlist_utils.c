@@ -1,37 +1,25 @@
 #include "parser.h"
 
-t_redir *get_redir(char **cmd, int i)
+t_cmdlist	*ft_lstlast(t_cmdlist *stack)
 {
-	t_redir	*ret;
-	int	j;
+	t_cmdlist	*ptr;
 
-	j = 0;
-	while (cmd[i][0] != '|')
-	{
-		if (cmd[i][0] != '>' || cmd[i][0] != '<')
-			i++;
-		else
-		{
-			ret = malloc(sizeof(t_redir));
-			if (!ret)
-				return (NULL);
-			ret->token[j] = ft_strdup(cmd[i]);
-			ret->file[j] = ft_strdup(cmd[i + 1]);
-			j++;
-		}
-		i++;
-	}
-	return (ret);
+	ptr = stack;
+	while (ptr->next)
+		ptr = ptr->next;
+	return (ptr);
 }
 
 static int	final_cmd_size(char **cmd, int i)
 {
 	int	count;
-	while(cmd[i][0] != '|')
+	while(cmd[i] && cmd[i][0] != '|')
 	{
 		if(cmd[i][0] == '<' || cmd[i][0] == '>')
-			i = i + 2;
-		count++;
+			i++;
+		else
+			count++;
+		i++;
 	}
 	return(count);
 }
@@ -44,13 +32,31 @@ static char	**final_cmd(char **cmd, int i)
 
 	j = 0;
 	cmd_size = final_cmd_size(cmd, i);
-	cmd = malloc(cmd_size * sizeof(char *));
-	while(cmd[i][0] != '|')
+	final_cmd = malloc(cmd_size * sizeof(char *));
+	while(cmd[i] && cmd[i][0] != '|')
 	{
 		if(cmd[i][0] == '<' || cmd[i][0] == '>')
-			i = i + 2;
-		final_cmd[j++] = ft_strdup(cmd[i++]);
+			i++;
+		else
+			final_cmd[j++] = ft_strdup(cmd[i]);
+		i++;
 	}
+	return(final_cmd);
+}
+
+void	ft_cmd_add_back(t_cmdlist **stack, t_cmdlist *node)
+{
+	t_cmdlist	*last;
+
+	if (!stack || !node)
+		return ;
+	if (*stack == NULL)
+		*stack = node;
+	else
+	{
+		last->next = node;
+	}
+	node->next = NULL;
 }
 
 t_cmdlist *new_cmd(char **cmd, int i)
@@ -60,9 +66,10 @@ t_cmdlist *new_cmd(char **cmd, int i)
 	new = malloc(sizeof(t_cmdlist));
 	if (!new)
 		return (NULL);
-	new->input = get_redir(cmd, i);
-	new->output = get_redir(cmd, i);
+	new->input = NULL;
+	new->output = NULL;
 	new->command = final_cmd(cmd, i);
+	get_redir(cmd, new, i);
 	new->next = NULL;
 	return (new);
 }

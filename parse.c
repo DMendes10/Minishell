@@ -4,7 +4,7 @@
 
 static int	redir_checker(char **cmd)
 {
-	if (!ft_strncmp(*cmd, "<", 2) || !ft_strncmp(*cmd, ">", 2) || !ft_strncmp(*cmd, "<<", 3) || \
+	if (!ft_strncmp(*cmd, "<", 2) && !ft_strncmp(*cmd, ">", 2) && !ft_strncmp(*cmd, "<<", 3) && \
 		!ft_strncmp(*cmd, ">>", 3))
 	{
 		ft_putstr_fd("syntax error near unexpected token `>'", 2);
@@ -46,7 +46,7 @@ static void	list_creator(t_cmdlist **s_cmdlist, char **cmdtable)
 	
 }
 
-static char	**parser(char *input, t_cmdlist **cmdlist)
+static void	parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;
@@ -55,9 +55,18 @@ static char	**parser(char *input, t_cmdlist **cmdlist)
 	i = 0;
 	temp = lexer(input);
 	cmdtable = split_args(temp);
-	// syntax_checker(cmdtable);
+	syntax_checker(cmdtable);
 	free (temp);
-	return(cmdtable);
+	ft_cmd_add_back(cmdlist, new_cmd(cmdtable, i));
+	while (cmdtable[i])
+	{
+		if (cmdtable[i][0] == '|')
+		{
+			i++;
+			ft_cmd_add_back(cmdlist, new_cmd(cmdtable, i));
+		}
+		i++;
+	}
 }
 
 int main ()
@@ -78,13 +87,16 @@ int main ()
 		prompt = getcwd(NULL, 0);
 		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
 		input = get_input (prompt);
+		parser(input, &cmdlist);
 		if (input && input[0])
 		{
-			args = parser(input, &cmdlist);
-			while(args[i])
+			while(cmdlist)
 			{	
-				printf("%s\n", args[i++]);
+				printf("%s\n", cmdlist->command[0]);
+				printf("%s\n", cmdlist->input[1]);
+				printf("%s\n", cmdlist->output[0]);
 				fflush(stdout);
+				cmdlist = cmdlist->next;
 			}
 		}
 	}

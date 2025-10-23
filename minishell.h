@@ -13,17 +13,13 @@
 # include <readline/history.h>
 # include "src/Libft/libft.h"
 
-typedef struct s_redir
-{
-	char	*token;
-	char	*file;
-}t_redir;
+
 
 typedef struct s_cmdlist
 {
 	char				**command;
-	t_list				*input;
-	t_list				*output;
+	char				**input;
+	char				**output;
 	struct s_cmdlist	*next;
 }t_cmdlist;
 
