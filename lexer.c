@@ -38,7 +38,7 @@ char	*lexer(char *input)
 	temp = ft_strdup(input);
 	while (temp && temp[i])
 	{
-		if (temp[i] == '|' || temp[i] == '<' || temp[i] == '>')
+		if ((temp[i] == '|' || temp[i] == '<' || temp[i] == '>')&& !quotes)
 		{
 			temp = seperator(temp, i);
 			i = i + 2;

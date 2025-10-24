@@ -91,10 +91,10 @@ int main ()
 		parser(input, &cmdlist);
 		if (input && input[0])
 		{
+			j = 0;
 			while(cmdlist)
 			{	
 				i = 0;
-				j = 0;
 				while(cmdlist->command[i])
 					printf("Command[%d]:%s\n", j, cmdlist->command[i++]);
 				i = 0;
