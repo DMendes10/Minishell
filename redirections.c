@@ -61,7 +61,6 @@ void	get_redir(char **cmd, t_cmdlist *node, int i)
 			return ;
 		populate_input(cmd, node, i);
 	}
-	write(1, "Test4", 5);
 	if(n_output)
 	{
 		node->output = malloc((n_output * 2 + 1) * sizeof(char *));
@@ -69,5 +68,4 @@ void	get_redir(char **cmd, t_cmdlist *node, int i)
 			return ; 
 		populate_output(cmd, node , i);
 	}
-	write(1, "Test5", 5);
 }

@@ -54,6 +54,7 @@ void	ft_cmd_add_back(t_cmdlist **stack, t_cmdlist *node)
 		*stack = node;
 	else
 	{
+		last = ft_lstlast(*stack);
 		last->next = node;
 	}
 	node->next = NULL;
