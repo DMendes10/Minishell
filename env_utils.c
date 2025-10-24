@@ -26,8 +26,8 @@ t_envlst	*ft_envlstnew(char *env)
 	node = malloc(sizeof(t_envlst));
 	if (!node)
 		return (NULL);
-	node->token = ft_substr(env, 0, ft_strchar_int (env, '='));
-	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) + 1);
+	node->token = ft_substr(env, 0, ft_strchar_int (env, '=') );
+	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) - 1);
 	node->next = NULL;
 	return (node);
 }
@@ -99,17 +99,23 @@ int main (int ac, char **av, char **env)
 
 	cmds= malloc (sizeof(t_cmdlist));
 	cmds = ft_memset (cmds, 0, sizeof(t_cmdlist));
-	cmds->command = ft_split_pipex ("export adeus=1 ade,us=3 adeus Addeus=oi adeus=2", ' ');
+	cmds->command = ft_split_pipex ("export a==5 1a=1 _ola ola= adeus+=1 adeus+=2 aghg++=1", ' ');
 	list = env_populator(env);
-	export (list, cmds);
-	free (cmds->command);
-	cmds->command = ft_split_pipex ("unset adeus", ' ');
-	ft_unset (cmds->command, list);
+	ft_export (list, cmds);
+	// free (cmds->command);
+	// cmds->command = ft_split_pipex ("unset adeus", ' ');
+	// ft_unset (cmds->command, list);
 	ft_env (list);
 
 	// ft_echo (ft_split_pipex ("echo -nnnnn -n -n -n -n -na -nnnnn- ola adeus", ' '), EXIT_CODE, ECHO_FLAG, ECHO_INDEX);
-	// cmds->command = ft_split_pipex ("export", ' ');
-	// export (list, cmds);
+	cmds->command = ft_split_pipex ("export", ' ');
+	ft_export (list, cmds);
+	cmds->command = ft_split_pipex ("unset SYSTEMD_EXEC_PID COLORTERM", ' ');
+	ft_unset (cmds->command, list);
+	cmds->command = ft_split_pipex ("export", ' ');
+	ft_export(list, cmds);
+	ft_env(list);
+
 	// while (list)
 	// {
 	// 	printf("%s", list->token);

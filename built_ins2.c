@@ -23,6 +23,7 @@ int	ft_unset(char **cmd, t_envlst *lst)
 			last = ptr;
 			ptr = ptr->next;
 		}
+		last = NULL;
 		i++;
 	}
 	return (0);
@@ -40,3 +41,8 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list)
 	// free(ptr->next);
 	free(ptr);
 }
+
+// int	ft_exit(char **cmd, t_envlst *lst)
+// {
+
+// }

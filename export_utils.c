@@ -8,7 +8,7 @@ int	simple_export(t_envlst *lst)
 
 	i = 0;
 	ptr = lst;
-	exp = malloc ((ft_envlst_size(lst) + 1) * sizeof(char*));
+	exp = malloc (((ft_envlst_size(lst)) + 1) * sizeof(char*));
 	// if (!exp)
 	// 	return_error();
 	while (i < ft_envlst_size(lst))
@@ -36,7 +36,7 @@ void	export_sorter (char **exp)
 		j = i + 1;
 		while (exp[j])
 		{
-			if (ft_strncmp (exp[i], exp[j], ft_strlen(exp[i])) > 0)
+			if (ft_strncmp (exp[i], exp[j], ft_strlen(exp[i]) + 1) > 0)
 			{
 				tmp = exp[i];
 				exp[i] = exp[j];
@@ -57,13 +57,13 @@ void	print_export(char **exp, t_envlst *lst)
 	ptr = lst;
 	while (exp[i])
 	{
-		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i])) == 0)
+		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i]) + 1) == 0)
 		{
 			if (ptr->var != NULL)
 				printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
 			else
 				printf("declare -x %s\n",ptr->token);
-			ptr = lst;
+			// ptr = lst;
 			i++;
 		}
 		ptr = ptr->next;

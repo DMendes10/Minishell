@@ -28,7 +28,7 @@ int ft_env(t_envlst *list)
 	ptr = list;
 	while (ptr)
 	{
-		if (ptr->var && ptr->var[0])
+		if (ptr->var)
 			printf ("%s=%s\n", ptr->token, ptr->var);
 		ptr = ptr->next;
 	}
@@ -79,7 +79,7 @@ int ft_echo (char **command, int exit_code, int flag, int i)
 	return (exit_code);
 }
 
-int	export(t_envlst *lst, t_cmdlist *cmdlst)
+int	ft_export(t_envlst *lst, t_cmdlist *cmdlst)
 {
 	if (!cmdlst->command[1])
 		return (simple_export(lst));

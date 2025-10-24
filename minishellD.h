@@ -89,7 +89,7 @@ int		ft_envlst_size(t_envlst *lst);
 void	free_array(char **s);
 int		ft_strchar_int(const char *s, int c);
 int		add_export(t_envlst *lst, t_cmdlist *cmdlst, int exit_code, int super_exit);
-int		export(t_envlst *lst, t_cmdlist *cmdlst);
+int		ft_export(t_envlst *lst, t_cmdlist *cmdlst);
 t_envlst	*ft_envlstnew(char *env);
 t_envlst	*ft_new_env_key(char *env);
 void	exp_key (t_envlst *lst ,char *cmd);
@@ -102,5 +102,9 @@ int find_home(t_envlst *lst);
 int valid_flag(char *flag);
 int	ft_unset(char **cmd, t_envlst *lst);
 void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list);
+int	change_env_var (char **cmd, t_envlst *lst);
+int	export_append (char **cmd, t_envlst *lst);
+t_envlst *export_new_env(char **env);
+
 
 #endif

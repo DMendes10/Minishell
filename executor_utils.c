@@ -29,13 +29,13 @@ int exec_built (t_cmdlist *cmdlst, t_envlst *envlst)
         else if (ft_strncmp (cmdlst->command[0], "exit", 5) == 0)
             exit (0);
         else if (ft_strncmp (cmdlst->command[0], "cd", 3) == 0)
-            return (ft_cd(cmdlst->command));
+            return (ft_cd(cmdlst->command, envlst));
         else if (ft_strncmp (cmdlst->command[0], "pwd", 4) == 0)
             return (ft_pwd());
-        // else if (ft_strncmp (command[0], "export", 100) == 0)
-        //     ft_export();
-        // else if (ft_strncmp (command[0], "unset", 100) == 0)
-        //     ft_unset();
+        else if (ft_strncmp (cmdlst->command[0], "export", 7) == 0)
+            ft_export(envlst, cmdlst->command[0]);
+        else if (ft_strncmp (cmdlst->command[0], "unset", 6) == 0)
+            ft_unset(cmdlst->command, envlst);
         else if (ft_strncmp (cmdlst->command[0], "env", 4) == 0)
             return(ft_env(envlst));
 		else
