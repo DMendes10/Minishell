@@ -80,7 +80,7 @@ void	exec_init (t_edata *data)
 	data = ft_memset (data, 0, sizeof (t_edata));
 }
 
-void	io_operator(t_edata *data, pid_t pid[])
+void	pipe_operator(t_edata *data, pid_t pid[])
 {
 	if (data->ptr->next)
 		{

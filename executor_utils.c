@@ -13,7 +13,7 @@ int	executor (char **env, t_cmdlist *commands, int cmd_count)
 	data->ptr = commands;
 	while (data->ptr)
 	{
-		io_operator(data, pid);
+		pipe_operator(data, pid);
 		data->ptr = data->ptr->next;
 		data->i++;
 	}
@@ -27,7 +27,7 @@ int exec_built (t_cmdlist *cmdlst, t_envlst *envlst)
 	if (ft_strncmp (cmdlst->command[0], "echo", 6) == 0)
             return(ft_echo(cmdlst->command, EXIT_CODE, ECHO_FLAG, ECHO_INDEX));
         else if (ft_strncmp (cmdlst->command[0], "exit", 5) == 0)
-            exit (0);
+            ft_exit (cmdlst->command, envlst);
         else if (ft_strncmp (cmdlst->command[0], "cd", 3) == 0)
             return (ft_cd(cmdlst->command, envlst));
         else if (ft_strncmp (cmdlst->command[0], "pwd", 4) == 0)

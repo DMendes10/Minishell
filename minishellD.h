@@ -11,6 +11,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "src/Libft/libft.h"
+ #include <stdbool.h>
 typedef struct s_envlst t_envlst;
 
 # define EXIT_CODE 0
@@ -105,6 +106,10 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list);
 int	change_env_var (char **cmd, t_envlst *lst);
 int	export_append (char **cmd, t_envlst *lst);
 t_envlst *export_new_env(char **env);
+bool	atoll_parser(const char *str, long long *nbr);
+int	exit_converter(long long nbr);
+int str_valid_nbr (char *str);
+void	ft_exit(char **cmd, t_envlst *lst);
 
 
 #endif
