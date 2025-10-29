@@ -38,13 +38,13 @@ char	*lexer(char *input)
 	temp = ft_strdup(input);
 	while (temp && temp[i])
 	{
-		if ((temp[i] == '|' || temp[i] == '<' || temp[i] == '>')&& !quotes)
+		if ((temp[i] == '|' || temp[i] == '<' || temp[i] == '>') && !quotes)
 		{
 			temp = seperator(temp, i);
 			i = i + 2;
 		}
 		else if (temp[i] == '\'' || temp[i] == '\"')
-			quotes_check(temp[i], quotes);
+			quotes = quotes_check(temp[i], quotes);
 		i++;
 	}
 	if (quotes)
