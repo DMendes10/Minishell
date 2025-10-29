@@ -32,45 +32,59 @@ void	input_redirect (t_edata *data)
 {
 	int i;
 
-	while (data->ptr->input->file[i])
+	i = 0;
+	while (data->ptr->input[i])
 	{
-		if (data->ptr->input->token[i] == '<')
+		if (!ft_strncmp (data->ptr->input[i], "<", 1))
 		{
-			data->fdin = open(data->ptr->input->file[i], O_RDONLY);
+			data->fdin = open(data->ptr->input[i + 1], O_RDONLY);
 			if (data->fdin == -1)
 				return_error();
 			if (dup2 (data->fdin, STDIN_FILENO) == -1)
 				return_error();
-			i++;
-		}
-	}
-	close (data->fdin);
-}
-
-void	output_redirect (char *output, int fdout)
-{
-	int	i;
-
-	while (data->ptr->output->file[i])
-	{
-		if (data->ptr->output->token[i] == '>')
-		{
-			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (data->fdout == -1)
-				return_error();
-			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
-				return_error();
-			i++;
+			i += 2;
 		}
 		else
 		{
-			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			hdoc_rdwr(data->ptr->input[i + 1]);
+			data->fdin = open("tmp_heredoc.txt", O_RDONLY);
+			if (data->fdin == -1)
+				return_error();
+			if (dup2 (data->fdin, STDIN_FILENO) == -1)
+				return_error();
+			unlink ("tmp_heredoc.txt");
+			i += 2;
+		}
+		close (data->fdin);
+	}
+}
+
+void	output_redirect (t_edata *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->ptr->output[i])
+	{
+		if (!ft_strncmp (data->ptr->output[i], ">", 1))
+		{
+			data->fdout = open (data->ptr->output[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (data->fdout == -1)
 				return_error();
 			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
 				return_error();
-			i++;
+			i += 2;
 		}
+		else
+		{
+			data->fdout = open (data->ptr->output[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (data->fdout == -1)
+				return_error();
+			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
+				return_error();
+			i += 2;
+		}
+		close (data->fdout);
 	}
 }
 

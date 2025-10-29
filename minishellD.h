@@ -21,17 +21,17 @@ typedef struct s_envlst t_envlst;
 
 
 
-typedef struct s_redir
-{
-	char	**token;
-	char	**file;
-}t_redir;
+// typedef struct s_redir
+// {
+// 	char	**token;
+// 	char	**file;
+// }t_redir;
 
 typedef struct s_cmdlist
 {
 	char				**command;
-	t_redir				*input;
-	t_redir				*output;
+	char				**input;
+	char				**output;
 	struct s_command	*next;
 }t_cmdlist;
 
@@ -110,6 +110,7 @@ bool	atoll_parser(const char *str, long long *nbr);
 int	exit_converter(long long nbr);
 int str_valid_nbr (char *str);
 void	ft_exit(char **cmd, t_envlst *lst);
+void hdoc_rdwr(char *del);
 
 
 #endif
