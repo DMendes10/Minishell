@@ -78,45 +78,22 @@ char	*path_finder(char *cmd, char **paths)
 	return (NULL);
 }
 
-int	cmd_exec (char *input, char **env)
-{
-	char **command;
-	
-	command = ft_split_pipex (input, ' ');
-        if (ft_strncmp (command[0], "echo", 100) == 0)
-            ft_echo(command);
-        else if (ft_strncmp (command[0], "exit", 100) == 0)
-            exit (0);
-        else if (ft_strncmp (command[0], "cd", 100) == 0)
-            ft_cd(command);
-        else if (ft_strncmp (command[0], "pwd", 100) == 0)
-            ft_pwd();
-        // else if (ft_strncmp (command[0], "export", 100) == 0)
-        //     ft_export();
-        // else if (ft_strncmp (command[0], "unset", 100) == 0)
-        //     ft_unset();
-        else if (ft_strncmp (command[0], "env", 100) == 0)
-            ft_env(env);
-		else
-			return (forked_exec (command, env));
-		return (0);
-}
-
 int main (int ac, char **av, char **env)
 {
 	char *input;
-	char *prompt;
-	char **command;
-	(void) ac;
 	(void) av;
 	input = NULL;
-	prompt = NULL;
-	command = NULL;
+	t_master *mstr;
+
+	if (ac > 1)
+		exit (1);
+	master_struct_init();
+	if (!env_finder(env, PATH))
+		env_populator(mstr, PATH, PWD, OLDPWD);
+	env_populator (, env);
 	while(1)
 	{
-		prompt = getcwd(NULL, 0);
-		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
-		input = get_input (prompt);
+		input = get_input ("@Minishel> ");
 		if (input && input[0])
 		{
 			// parsing, trabalha Maia

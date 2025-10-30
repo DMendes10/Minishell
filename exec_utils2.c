@@ -6,15 +6,16 @@ void	child_process(t_edata *data)
 	char **paths;
 	char *path;
 
-	if (dup2(data->last_fd, STDIN_FILENO) == -1)
-		return_error();
+	dup2(data->last_fd, STDIN_FILENO);
 	close (data->last_fd);
 	if (data->ptr->input)
-		input_redirect (data);
+	{
+		if(input_redirect (data))
+			return (free_exec(data));
+	}
 	if (data->ptr->next)
 	{
-		if (dup2(data->pipefd[1], STDOUT_FILENO))
-			return_error();
+		dup2(data->pipefd[1], STDOUT_FILENO);
 		close (data->pipefd[0]);
 		close (data->pipefd[1]);
 	}
@@ -28,35 +29,30 @@ void	child_process(t_edata *data)
 		return_error();
 }
 
-void	input_redirect (t_edata *data)
+int	input_redirect (t_edata *data)
 {
 	int i;
 
 	i = 0;
+	if (hdoc_handler (data))
+		return (1);
 	while (data->ptr->input[i])
 	{
-		if (!ft_strncmp (data->ptr->input[i], "<", 1))
+		if (!ft_strncmp (data->ptr->input[i], "<", 2))
 		{
 			data->fdin = open(data->ptr->input[i + 1], O_RDONLY);
-			if (data->fdin == -1)
-				return_error();
-			if (dup2 (data->fdin, STDIN_FILENO) == -1)
-				return_error();
-			i += 2;
+			if (data->fdin < 0)
+			{
+				printf("%s", data->ptr->input[i + 1]);
+				perror(":");
+				return (1);
+			}
+			dup2 (data->fdin, STDIN_FILENO);
 		}
-		else
-		{
-			hdoc_rdwr(data->ptr->input[i + 1]);
-			data->fdin = open("tmp_heredoc.txt", O_RDONLY);
-			if (data->fdin == -1)
-				return_error();
-			if (dup2 (data->fdin, STDIN_FILENO) == -1)
-				return_error();
-			unlink ("tmp_heredoc.txt");
-			i += 2;
-		}
+		i++;
 		close (data->fdin);
 	}
+	return (0);
 }
 
 void	output_redirect (t_edata *data)

@@ -53,6 +53,14 @@ typedef struct s_envlst
 	t_envlst	*next;
 }t_envlst;
 
+typedef struct s_master
+{
+	t_envlst	*env;
+	t_cmdlist	*cmd;
+	t_edata		*data;
+	int			exit;
+}t_master;
+
 
 void	return_error(char *error);
 void	child_proc1(char **av, char *envp[], int pipefd[]);
@@ -110,7 +118,9 @@ bool	atoll_parser(const char *str, long long *nbr);
 int	exit_converter(long long nbr);
 int str_valid_nbr (char *str);
 void	ft_exit(char **cmd, t_envlst *lst);
-void hdoc_rdwr(char *del);
+void	hdoc_rdwr(char *del);
+int	hdoc_handler(t_edata *data);
+int	input_redirect (t_edata *data);
 
 
 #endif

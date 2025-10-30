@@ -81,8 +81,7 @@ int	add_export(t_envlst *lst, t_cmdlist *cmdlst, int exit_code, int super_exit)
 	{
 		if (key_check(cmdlst->command[i]))
 		{
-			if (super_exit == 0)
-				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+			printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
 			super_exit = 1;
 			i++;
 		}

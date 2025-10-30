@@ -46,5 +46,4 @@ void	free_array(char **s)
 	free (s);
 }
 
-// int main 
-
+void	free_exec(master struct);
