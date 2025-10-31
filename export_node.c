@@ -16,7 +16,6 @@ void	exp_full (t_envlst *lst ,char *cmd)
 	// if (!splited)
 	// 	return_error();
 	splited[2] = NULL;
-	// splited = ft_split_pipex (cmd, '=');
 	if (change_env_var(splited, lst) == 1)
 		return;
 	node = export_new_env(splited);
@@ -102,55 +101,55 @@ void	exp_key (t_envlst *lst ,char *cmd)
 	ft_envlst_add_back (&lst, node);
 }
 
-t_envlst	*ft_new_env_key(char *envkey)
-{
-	t_envlst	*node;
-
-	node = malloc(sizeof(t_envlst));
-	if (!node)
-		return (NULL);
-	node->token = ft_strdup(envkey);
-	node->var = NULL;
-	node->next = NULL;
-	return (node);
-}
-
-// char *key_alloc (char *key)
+// t_envlst	*ft_new_env_key(char *envkey)
 // {
-// 	int i;
-// 	char *new_key;
+// 	t_envlst	*node;
 
-// 	i = 0;
-// 	if (!ft_strchr (key, '+'))
-// 		return (ft_strdup(key));
-// 	else
-// 	{
-// 		new_key = ft_substr(key, 0, ft_strchar_int (key, '+'));
-// 		return (new_key);
-// 	}
+// 	node = malloc(sizeof(t_envlst));
+// 	if (!node)
+// 		return (NULL);
+// 	node->token = ft_strdup(envkey);
+// 	node->var = NULL;
+// 	node->next = NULL;
+// 	return (node);
 // }
 
-int key_check(char *key)
+char *key_alloc (char *key)
 {
 	int i;
+	char *new_key;
 
-	i = 1;
-	if (!ft_isalpha(key[0]) && key[0] != '_')
-		return (1);
-	while (key[i] && key[i] != '=')
+	i = 0;
+	if (!ft_strchr (key, '+'))
+		return (ft_strdup(key));
+	else
 	{
-		if (!ft_isalnum (key[i]) && key[0] != '_')
-			break;
-		i++;
+		new_key = ft_substr(key, 0, ft_strchar_int (key, '+'));
+		return (new_key);
 	}
-	if (key[i] && key[i] == '+')
-	{
-		if (key[i + 1] && key[i + 1] == '=')
-			return (0);
-	}
-	else if (key[i] && key[i] == '=')
-		return (0);
-	else if (!key[i])
-		return (0);
-	return (1);
 }
+
+// int key_check(char *key)
+// {
+// 	int i;
+
+// 	i = 1;
+// 	if (!ft_isalpha(key[0]) && key[0] != '_')
+// 		return (1);
+// 	while (key[i] && key[i] != '=')
+// 	{
+// 		if (!ft_isalnum (key[i]) && key[0] != '_')
+// 			break;
+// 		i++;
+// 	}
+// 	if (key[i] && key[i] == '+')
+// 	{
+// 		if (key[i + 1] && key[i + 1] == '=')
+// 			return (0);
+// 	}
+// 	else if (key[i] && key[i] == '=')
+// 		return (0);
+// 	else if (!key[i])
+// 		return (0);
+// 	return (1);
+// }

@@ -29,30 +29,30 @@ int	hdoc_rdwr(char *del)
 	return (0);
 }
 
-int	hdoc_handler(t_edata *data)
+int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 {
 	int i;
 
 	i = 0;
-	while (data->ptr->input[i])
+	while (cmd->input[i])
 	{
-		if (!ft_strncmp (data->ptr->input[i], "<<", 3))
+		if (!ft_strncmp (cmd->input[i], "<<", 3))
 		{
-			if (hdoc_rdwr(data->ptr->input[i + 1]))
+			if (hdoc_rdwr(cmd->input[i + 1]))
 				return (1);
-			// pensar melhor nisto
-			data->fdin = open("tmp_heredoc.txt", O_RDONLY);
-			if (data->fdin == -1)
+			// pensar melhor nisto (no return)
+			mstr->data->fdin = open("tmp_heredoc.txt", O_RDONLY);
+			if (mstr->data->fdin == -1)
 			{
-				printf("%s", data->ptr->input[i + 1]);
+				printf("%s", cmd->input[i + 1]);
 				perror(":");
 				return (1);
 			}
-			dup2 (data->fdin, STDIN_FILENO);
+			dup2 (mstr->data->fdin, STDIN_FILENO);
 			unlink ("tmp_heredoc.txt");
 		}
 		i++;
-		close (data->fdin);
+		close (mstr->data->fdin);
 	}
 	return (0);
 }

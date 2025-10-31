@@ -46,4 +46,30 @@ void	free_array(char **s)
 	free (s);
 }
 
-void	free_exec(master struct);
+void	free_master(t_master **master)
+{
+	// if ((*master)->cmd)
+	// 	free_cmdlst();
+	if ((*master)->env)
+		free_envlst((*master)->env);
+	if ((*master)->data)
+		free ((*master)->data);
+	free (*master);
+	exit (1);
+}
+
+void free_envlst (t_envlst *envlst)
+{
+	t_envlst *ptr;
+
+	ptr = envlst;
+	while (ptr)
+	{
+		envlst = (envlst)->next;
+		free (ptr->token);
+		free (ptr->var);
+		free (ptr);
+		ptr = envlst;
+	}
+	free (envlst);
+}

@@ -37,7 +37,7 @@ int	ft_wait(pid_t pid)
 	return (exit_code);
 }
 
-void	path_checker(char *path, t_edata *data)
+void	path_checker(char *path, t_master *master)
 {
 	char **split_cmd;
 
@@ -78,26 +78,67 @@ char	*path_finder(char *cmd, char **paths)
 	return (NULL);
 }
 
+void	master_struct_init(t_master **master)
+{
+	*master = malloc (sizeof(t_master));
+	if (!*master)
+	{
+		perror("Mem_aloc Error: ");
+		exit(1);
+	}
+	(*master)->data = malloc (sizeof(t_edata));
+	if (!(*master)->data)
+	{
+		free ((*master));
+		perror("Mem_aloc Error: ");
+		exit (1);
+	}
+	(*master)->data = ft_memset ((*master)->data, 0, sizeof (t_edata));
+	(*master)->cmd = NULL;
+	(*master)->env = NULL;
+	(*master)->exit = 0;
+}
+
+char	*env_finder (t_envlst *lst ,char *cmd)
+{
+	t_envlst	*ptr;
+	int	i;
+
+	i = 0;
+	ptr = lst;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
+			return (ptr->var);
+		ptr = ptr->next;
+	}
+	return (NULL);
+}
+
 int main (int ac, char **av, char **env)
 {
 	char *input;
 	(void) av;
-	input = NULL;
 	t_master *mstr;
 
+	input = NULL;
+	mstr = NULL;
 	if (ac > 1)
 		exit (1);
-	master_struct_init();
-	if (!env_finder(env, PATH))
-		env_populator(mstr, PATH, PWD, OLDPWD);
-	env_populator (, env);
+	master_struct_init(&mstr);
+	if (!env[0])
+		mstr->env = personal_env();
+	else
+		mstr->env = env_populator (env);
+	ft_env(mstr->env);
+	free_master (&mstr);
 	while(1)
 	{
 		input = get_input ("@Minishel> ");
 		if (input && input[0])
 		{
 			// parsing, trabalha Maia
-			cmd_exec (input, env);
+			executor (input, env);
 		}
 	}
 }

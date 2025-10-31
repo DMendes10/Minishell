@@ -43,7 +43,6 @@ typedef struct s_edata
 	int pipefd[2];
 	int i;
 	int exit_code;
-	t_cmdlist	*ptr;
 }t_edata;
 
 typedef struct s_envlst
@@ -114,13 +113,19 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list);
 int	change_env_var (char **cmd, t_envlst *lst);
 int	export_append (char **cmd, t_envlst *lst);
 t_envlst *export_new_env(char **env);
-bool	atoll_parser(const char *str, long long *nbr);
+bool	atoll_parser(char *str, long long *nbr);
 int	exit_converter(long long nbr);
 int str_valid_nbr (char *str);
-void	ft_exit(char **cmd, t_envlst *lst);
+void	ft_exit(char **cmd, t_master *mstr);
 void	hdoc_rdwr(char *del);
-int	hdoc_handler(t_edata *data);
+int	hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 int	input_redirect (t_edata *data);
-
+t_envlst	*env_populator (char **env);
+int	str_valid_nbr (char *str);
+void	free_envlst (t_envlst *envlst);
+void	free_master(t_master **master);
+void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[]);
+char	*env_finder (t_envlst *lst ,char *cmd);
+int exec_built (t_cmdlist *cmd, t_master *mstr);
 
 #endif

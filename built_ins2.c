@@ -42,7 +42,7 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list)
 	free(ptr);
 }
 
-void	ft_exit(char **cmd, t_envlst *lst)
+void	ft_exit(char **cmd, t_master *mstr)
 {
 	long long nbr;
 
@@ -63,7 +63,7 @@ void	ft_exit(char **cmd, t_envlst *lst)
 	exit(exit_converter(nbr));
 }
 
-bool	atoll_parser(const char *str, long long *nbr)
+bool	atoll_parser(char *str, long long *nbr)
 {
 	int            sign;
     int            i;
