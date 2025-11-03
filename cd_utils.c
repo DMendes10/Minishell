@@ -1,11 +1,11 @@
 #include "minishellD.h"
 
-int chdir_env_pwd(t_envlst *lst, char *directory)
+int chdir_env_pwd(t_master *mstr, char *directory)
 {
 	t_envlst *ptr;
 	int exit_code;
 
-	ptr = lst;
+	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, "OLDPWD", 7))
@@ -16,7 +16,7 @@ int chdir_env_pwd(t_envlst *lst, char *directory)
 		ptr = ptr->next;
 	}
 	exit_code = chdir(directory);
-	ptr = lst;
+	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, "PWD", 4))
@@ -29,15 +29,15 @@ int chdir_env_pwd(t_envlst *lst, char *directory)
 	return(exit_code);
 }
 
-int find_home(t_envlst *lst)
+int find_home(t_master *mstr)
 {
 	t_envlst *ptr;
 
-	ptr = lst;
+	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, "HOME", 5))
-			return(chdir_env_pwd(lst, ptr->var));
+			return(chdir_env_pwd(mstr, ptr->var));
 		ptr = ptr->next;
 	}
 	return(ft_putstr_fd ("cd: HOME not set\n", 2), 1);

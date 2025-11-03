@@ -4,6 +4,7 @@
 void	child_process(t_master *mstr, t_cmdlist *cmd)
 {
 	char **paths;
+	char **env;
 	char *path;
 
 	dup2(mstr->data->last_fd, STDIN_FILENO);
@@ -11,7 +12,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	if (cmd->input)
 	{
 		if(input_redirect (mstr, cmd))
-			return (free_master(data));
+			return (free_master(&mstr));
 	}
 	if (cmd->next)
 	{
@@ -21,11 +22,13 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	}
 	if (cmd->output)
 		output_redirect (mstr, cmd);
+	if (exec_built (cmd, mstr))
+		return (mstr->exit);
 	paths = ft_split (env_finder(cmd, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
 	path_checker(path, mstr);
 	free_array (paths);
-	exec_
+	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 		return_error();
 }

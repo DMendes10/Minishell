@@ -32,16 +32,16 @@ t_envlst	*ft_envlstnew(char *env)
 	return (node);
 }
 
-void	ft_envlst_add_back(t_envlst **lst, t_envlst *new)
+void	ft_envlst_add_back(t_master **mstr, t_envlst *new)
 {
 	t_envlst	*last;
 
-	if (!new || !lst)
+	if (!new || !mstr)
 		return ;
-	last = *lst;
-	if (!*lst)
+	last = (*mstr)->env;
+	if (!(*mstr)->env)
 	{
-		*lst = new;
+		(*mstr)->env = new;
 		return ;
 	}
 	else

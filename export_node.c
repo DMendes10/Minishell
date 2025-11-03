@@ -1,6 +1,6 @@
 #include "minishellD.h"
 
-void	exp_full (t_envlst *lst ,char *cmd)
+void	exp_full (t_master *mstr ,char *cmd)
 {
 	t_envlst *node;
 	char **splited;
@@ -16,12 +16,12 @@ void	exp_full (t_envlst *lst ,char *cmd)
 	// if (!splited)
 	// 	return_error();
 	splited[2] = NULL;
-	if (change_env_var(splited, lst) == 1)
+	if (change_env_var(splited, mstr) == 1)
 		return;
 	node = export_new_env(splited);
 	// if (!node)
 		// 	return_error();
-	ft_envlst_add_back (&lst, node);
+	ft_envlst_add_back (&mstr->env, node);
 	free_array(splited);
 }
 
@@ -44,20 +44,20 @@ t_envlst *export_new_env(char **env)
 	return (node);
 }
 
-int	change_env_var (char **cmd, t_envlst *lst)
+int	change_env_var (char **cmd, t_master *mstr)
 {
 	t_envlst *ptr;
 
-	ptr = lst;
+	ptr = mstr->env;
 	if (ft_strchr (cmd[0], '+'))
-		return (export_append(cmd, lst));
+		return (export_append(cmd, mstr));
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd[0], ft_strlen(cmd[0]) + 1))
 		{
 			free (ptr->var);
 			ptr->var = ft_strdup(cmd[1]);
-			free_array(cmd);
+			// free_array(cmd);
 			return (1);
 		}
 		ptr = ptr->next;
@@ -65,11 +65,11 @@ int	change_env_var (char **cmd, t_envlst *lst)
 	return (0);
 }
 
-int	export_append (char **cmd, t_envlst *lst)
+int	export_append (char **cmd, t_master *mstr)
 {
 	t_envlst *ptr;
 
-	ptr = lst;
+	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd[0], ft_strchar_int (cmd[0], '+')))
@@ -83,12 +83,12 @@ int	export_append (char **cmd, t_envlst *lst)
 	return (0);
 }
 
-void	exp_key (t_envlst *lst ,char *cmd)
+void	exp_key (t_master *mstr ,char *cmd)
 {
 	t_envlst *node;
 	t_envlst *ptr;
 
-	ptr = lst;
+	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
@@ -98,7 +98,7 @@ void	exp_key (t_envlst *lst ,char *cmd)
 	node = ft_new_env_key(cmd);
 	// if (!node)
 		// 	return_error();
-	ft_envlst_add_back (&lst, node);
+	ft_envlst_add_back (&mstr, node);
 }
 
 // t_envlst	*ft_new_env_key(char *envkey)

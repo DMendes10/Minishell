@@ -1,20 +1,20 @@
 
 #include "minishellD.h"
 
-int ft_cd(char **command, t_envlst *lst)
+int ft_cd(char **command, t_master *mstr)
 {
 	char *h_env;
 
 	if (!command [1])
-		return(find_home(lst));
+		return(find_home(mstr));
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
-			invalid_command (command, command[1]);
+			invalid_path(command, command[1]);
 		if (access (command[1], X_OK) != 0)
-			no_perms_command (command, command[1]);
+			no_perms_path (command, command[1]);
 		else
-			chdir_env_pwd(lst, command[1]);
+			chdir_env_pwd(mstr, command[1]);
 	}
 	else
 		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
@@ -47,7 +47,8 @@ int ft_pwd()
 		printf ("%s\n", getenv ("PWD"));
 	else
 		printf ("%s\n", path);
-	return (exit_code);
+	free (path);
+	return (0);
 }
 
 int ft_echo (char **command, int exit_code, int flag, int i)
@@ -76,14 +77,14 @@ int ft_echo (char **command, int exit_code, int flag, int i)
 	}
 	if (!flag)
 		printf ("\n");
-	return (exit_code);
+	return (0);
 }
 
-int	ft_export(t_envlst *lst, t_cmdlist *cmdlst)
+int	ft_export(t_master *mstr, t_cmdlist *cmdlst)
 {
 	if (!cmdlst->command[1])
-		return (simple_export(lst));
+		return (simple_export(mstr));
 	else
-		return (add_export(lst, cmdlst, EXIT_CODE, SUPER_EXIT));
+		return (add_export(mstr, cmdlst, EXIT_CODE, SUPER_EXIT));
 }
 

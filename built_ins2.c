@@ -1,13 +1,13 @@
 #include "minishellD.h"
 
-int	ft_unset(char **cmd, t_envlst *lst)
+int	ft_unset(char **cmd, t_master *mstr)
 {
 	int i;
 	t_envlst *ptr;
 	t_envlst *last;
 
 	i = 1;
-	ptr = lst;
+	ptr = mstr->env;
 	if (!cmd[i])
 		return (0);
 	while (cmd[i])
@@ -16,8 +16,8 @@ int	ft_unset(char **cmd, t_envlst *lst)
 		{
 			if (!(ft_strncmp(ptr->token, cmd[i], ft_strlen(cmd[i]) + 1)))
 			{
-				delete_env_node (ptr, last, &lst);
-				ptr = lst;
+				delete_env_node (ptr, last, &mstr);
+				ptr = mstr->env;
 				break;
 			}
 			last = ptr;
@@ -29,10 +29,10 @@ int	ft_unset(char **cmd, t_envlst *lst)
 	return (0);
 }
 
-void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list)
+void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
 {
 	if (!last)
-		*list = ptr->next;
+		(*mstr)->env = ptr->next;
 	else
 		last->next = ptr->next;
 	free(ptr->token);
@@ -42,7 +42,7 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_envlst **list)
 	free(ptr);
 }
 
-void	ft_exit(char **cmd, t_master *mstr)
+int	ft_exit(char **cmd, t_master *mstr)
 {
 	long long nbr;
 
@@ -50,16 +50,19 @@ void	ft_exit(char **cmd, t_master *mstr)
 	if (!cmd[1])
 	{
 		ft_putstr_fd("exit\nexit: too many arguments", 2);
+		free_master (&mstr);
 		exit(0);
 	}
 	if (cmd[2])
-		return(ft_putstr_fd("exit\nexit: too many arguments", 2));
+		return (ft_putstr_fd("exit\nexit: too many arguments", 2), 1);
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
 		ft_putstr_fd("exit\nexit: ", 2);
 		printf ("%s: numeric argument required", cmd[1]);
+		free_master (&mstr);
 		exit(2);
 	}
+	free_master (&mstr);
 	exit(exit_converter(nbr));
 }
 

@@ -51,3 +51,28 @@ int str_valid_nbr (char *str)
     }
     return (1);
 }
+
+char	**envlst_to_char(t_master *mstr)
+{
+	t_envlst	*ptr;
+	char 		**env;
+	int 		i;
+
+	ptr = mstr->env;
+	i = 0;
+	env = malloc (sizeof (char *) * ft_envlst_size (mstr->env));
+	// if (!env)
+	// 	return;
+	while(ptr)
+	{
+		if (ptr->var)
+		{
+			env[i] = ft_strjoin_gnl (ft_strjoin(ptr->token, "="), ptr->var);
+			i++;
+		}
+		ptr = ptr->next;
+	}
+	env[i] = NULL;
+	return (env);
+}
+
