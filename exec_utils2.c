@@ -12,7 +12,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	if (cmd->input)
 	{
 		if(input_redirect (mstr, cmd))
-			return (free_master(&mstr));
+			exit_minishell(&mstr, 1);
 	}
 	if (cmd->next)
 	{
@@ -22,18 +22,21 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	}
 	if (cmd->output)
 		output_redirect (mstr, cmd);
-	if (exec_built (cmd, mstr))
-		return (mstr->exit);
+	if (!exec_built (cmd, mstr))
+		exit_minishell (&mstr, mstr->exit);
 	paths = ft_split (env_finder(cmd, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
 	path_checker(path, mstr);
 	free_array (paths);
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
-		return_error();
+	{
+		perror (cmd->command[0]);
+		exit_minishell(&mstr, 127);
+	}
 }
 
-int	input_redirect (t_master *mstr, t_cmdlist *cmd)
+int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int i;
 
@@ -48,7 +51,7 @@ int	input_redirect (t_master *mstr, t_cmdlist *cmd)
 			if (mstr->data->fdin < 0)
 			{
 				printf("%s", cmd->input[i + 1]);
-				perror(":");
+				perror(": ");
 				return (1);
 			}
 			dup2 (mstr->data->fdin, STDIN_FILENO);
@@ -59,7 +62,7 @@ int	input_redirect (t_master *mstr, t_cmdlist *cmd)
 	return (0);
 }
 
-void	output_redirect (t_master *mstr, t_cmdlist *cmd)
+void	output_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int	i;
 
@@ -70,25 +73,31 @@ void	output_redirect (t_master *mstr, t_cmdlist *cmd)
 		{
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (mstr->data->fdout == -1)
-				return_error();
-			if (dup2 (mstr->data->fdout, STDOUT_FILENO) == -1)
-				return_error();
+			{
+				printf("%s", cmd->output[i + 1]);
+				perror(": ");
+				exit_minishell (&mstr, 1);
+			}
+			dup2 (mstr->data->fdout, STDOUT_FILENO);
 			i += 2;
 		}
 		else
 		{
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (mstr->data->fdout == -1)
-				return_error();
-			if (dup2 (mstr->data->fdout, STDOUT_FILENO) == -1)
-				return_error();
+			{
+				printf("%s", cmd->output[i + 1]);
+				perror(": ");
+				exit_minishell (&mstr, 1);
+			}
+			dup2 (mstr->data->fdout, STDOUT_FILENO);
 			i += 2;
 		}
 		close (mstr->data->fdout);
 	}
 }
 
-void	exec_init (t_edata *data)
+void	exec_init(t_edata *data)
 {
 	data = malloc (sizeof(t_edata));
 	data = ft_memset (data, 0, sizeof (t_edata));
@@ -99,7 +108,10 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[])
 	if (cmd->next)
 		{
 			if (pipe (mstr->data->pipefd) == -1)
-				return_error();
+			{
+				perror("pipe: ");
+				exit_minishell (&mstr, 1);
+			}
 		}
 		pid[mstr->data->i] = fork();
 		if (pid[mstr->data->i] == 0)

@@ -43,3 +43,9 @@ void free_cmdlst(t_cmdlist *cmdlst)
 	}
 	free (cmdlst);
 }
+
+void exit_minishell(t_master **mstr, int exit_code)
+{
+	free_master(mstr);
+	exit (exit_code);
+}

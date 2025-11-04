@@ -10,7 +10,7 @@ int	executor(t_master *mstr, int cmd_count)
 	ptr = mstr->cmd;
 	while (ptr)
 	{
-		pipe_operator(ptr , mstr->data, pid);
+		pipe_operator(ptr , mstr, pid);
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
