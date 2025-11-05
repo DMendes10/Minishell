@@ -52,13 +52,13 @@ void	ft_envlst_add_back(t_master **mstr, t_envlst *new)
 	}
 }
 
-t_envlst	*env_populator (char **env)
+void	env_populator (t_master *mstr, char **env)
 {
 	int i;
-	t_envlst *list;
+	// t_envlst *list;
 	t_envlst *node;
 
-	list = NULL;
+	// list = NULL;
 	node = NULL;
 	i = 0;
 	while (env[i])
@@ -66,10 +66,10 @@ t_envlst	*env_populator (char **env)
 		node = ft_envlstnew(env[i]);
 		// if (!node)
 		// 	return_error();
-		ft_envlst_add_back (&list, node);
+		ft_envlst_add_back (&mstr, node);
 		i++;
 	}
-	return (list);
+	return ;
 }
 
 int	ft_envlst_size(t_envlst *lst)

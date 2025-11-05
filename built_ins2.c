@@ -68,30 +68,30 @@ int	ft_exit(char **cmd, t_master *mstr)
 
 bool	atoll_parser(char *str, long long *nbr)
 {
-	int            sign;
-    int            i;
-    int            digit;
+	int	sign;
+	int	i;
+	int	digit;
 
 	i = 0;
 	sign = 1;
-    if (!str_valid_nbr(str))
-        return (false);
+	if (!str_valid_nbr(str))
+		return (false);
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i++] == '-')
-        	sign = -1;
-    }
-    while (str[i])
-    {
+			sign = -1;
+	}
+	while (str[i])
+	{
 		digit = str[i++] - '0';
-        if (sign == 1 && (*nbr > (LLONG_MAX - digit) / 10))
+		if (sign == 1 && (*nbr > (LLONG_MAX - digit) / 10))
 			return (false);
-        if (sign == -1 && (-(*nbr) < (LLONG_MIN + digit) / 10))
+		if (sign == -1 && (-(*nbr) < (LLONG_MIN + digit) / 10))
 			return (false);
-        *nbr = *nbr * 10 + digit;
-    }
-    *nbr *= sign;
-    return (true);
+		*nbr = *nbr * 10 + digit;
+	}
+	*nbr *= sign;
+	return (true);
 }
 
 int	exit_converter(long long nbr)

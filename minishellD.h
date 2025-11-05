@@ -1,6 +1,6 @@
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHELLD_H
+# define MINISHELLD_H
 
 # include <stdio.h>
 # include <unistd.h>
@@ -11,15 +11,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "src/Libft/libft.h"
- #include <stdbool.h>
-typedef struct s_envlst t_envlst;
+# include <stdbool.h>
+# include "minishell.h"
+# include "parser.h"
+// typedef struct s_envlst t_envlst;
 
 # define EXIT_CODE 0
 # define SUPER_EXIT 0
 # define ECHO_FLAG 0
 # define ECHO_INDEX 1
-
-
 
 // typedef struct s_redir
 // {
@@ -27,13 +27,14 @@ typedef struct s_envlst t_envlst;
 // 	char	**file;
 // }t_redir;
 
-typedef struct s_cmdlist
-{
-	char				**command;
-	char				**input;
-	char				**output;
-	struct s_command	*next;
-}t_cmdlist;
+// typedef struct s_cmdlist
+// {
+// 	char				**command;
+// 	char				**input;
+// 	char				**output;
+// 	struct s_cmdlist	*next;
+// }t_cmdlist;
+
 
 typedef struct s_edata
 {
@@ -45,12 +46,12 @@ typedef struct s_edata
 	int exit_code;
 }t_edata;
 
-typedef struct s_envlst
-{
-	char		*token;
-	char		*var;
-	t_envlst	*next;
-}t_envlst;
+// typedef struct s_envlst
+// {
+// 	char		*token;
+// 	char		*var;
+// 	t_envlst	*next;
+// }t_envlst;
 
 typedef struct s_master
 {
@@ -62,9 +63,9 @@ typedef struct s_master
 
 
 void	return_error(char *error);
-char	*path_finder(char *cmd, char **paths);
+char	*path_finder(t_cmdlist *cmd, char **paths);
 void	free_array(char **s);
-int		ft_wait(pid_t pid);
+int		ft_wait(pid_t *pid);
 // void	close_files(int *fd, int file);
 void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
@@ -84,7 +85,7 @@ char	*get_input (char *prompt);
 void	return_error(char *error);
 void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
-void	path_checker(char *path, t_master *mstr);
+void	path_checker(char *path, t_cmdlist *cmd);
 int		forked_exec (char **command, char **env);
 int		simple_export(t_master *mstr);
 void	export_sorter (char **exp);
@@ -112,11 +113,11 @@ t_envlst *export_new_env(char **env);
 bool	atoll_parser(char *str, long long *nbr);
 int		exit_converter(long long nbr);
 int		str_valid_nbr (char *str);
-void	ft_exit(char **cmd, t_master *mstr);
-void	hdoc_rdwr(char *del);
+int	ft_exit(char **cmd, t_master *mstr);
+int	hdoc_rdwr(char *del);
 int		hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 int		input_redirect (t_master *mstr, t_cmdlist *cmd);
-t_envlst	*env_populator (char **env);
+void	env_populator (t_master *mstr, char **env);
 int		str_valid_nbr (char *str);
 void	free_envlst (t_envlst *envlst);
 void	free_master(t_master **master);
@@ -124,5 +125,14 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[]);
 char	*env_finder (t_envlst *lst ,char *cmd);
 int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
+int		executor(t_master *mstr, int cmd_count);
+void	parser(char *input, t_cmdlist **cmdlist);
+void	invalid_path(char **array, char *cmd);
+void	no_perms_command(char **array, char *cmd);
+void	no_perms_path(char **array, char *cmd);
+void	output_redirect(t_master *mstr, t_cmdlist *cmd);
+char	**envlst_to_char(t_master *mstr);
+void free_cmdlst(t_cmdlist *cmdlst);
+
 
 #endif

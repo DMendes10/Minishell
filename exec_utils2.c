@@ -24,9 +24,9 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 		output_redirect (mstr, cmd);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
-	paths = ft_split (env_finder(cmd, "PATH"), ':');
-	path = path_finder(cmd->command, paths);
-	path_checker(path, mstr);
+	paths = ft_split (env_finder(mstr->env, "PATH"), ':');
+	path = path_finder(mstr->cmd, paths);
+	path_checker(path, cmd);
 	free_array (paths);
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)

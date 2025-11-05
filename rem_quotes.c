@@ -38,7 +38,7 @@ int	rem_dquotes(char *cmd, int quotes)
 			{
 				cmd[i] = 1;
 				quotes = quotes_check(cmd[i], quotes);
-				expand(cmd);
+				// expand(cmd);
 			}
 			if (quotes == 0)
 			{

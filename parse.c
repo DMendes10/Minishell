@@ -38,7 +38,7 @@ static void	syntax_checker(char **cmdtable)
 			print_err("syntax error near unexpected token", cmdtable);
 }
 
-static void	parser(char *input, t_cmdlist **cmdlist)
+void	parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;
@@ -61,50 +61,50 @@ static void	parser(char *input, t_cmdlist **cmdlist)
 	}
 }
 
-int main ()
-{
-	char *input;
-	char *prompt;
-	char **args;
-	int	i, j;
-	t_cmdlist	*cmdlist;
-	cmdlist = NULL;
-	input = NULL;
-	prompt = NULL;
-	args = NULL;
-	i = 0;
-	j = 0;
-	while(1)
-	{
-		i = 0;
-		prompt = getcwd(NULL, 0);
-		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
-		input = get_input (prompt);
-		parser(input, &cmdlist);
-		quote_search(&cmdlist);
-		if (input && input[0])
-		{
-			j = 0;
-			while(cmdlist)
-			{	
-				i = 0;
-				while(cmdlist->command[i])
-					printf("Command[%d]:%s\n", j, cmdlist->command[i++]);
-				i = 0;
-				if(cmdlist->input)
-				{
-					while(cmdlist->input[i])
-						printf("Input[%d]:%s\n", j, cmdlist->input[i++]);
-				}
-				i = 0;
-				if(cmdlist->output)
-				{
-					while(cmdlist->output[i])
-						printf("Output[%d]:%s\n", j, cmdlist->output[i++]);
-				}
-				cmdlist = cmdlist->next;
-				j++;
-			}
-		}
-	}
-}
+// int main ()
+// {
+// 	char *input;
+// 	char *prompt;
+// 	char **args;
+// 	int	i, j;
+// 	t_cmdlist	*cmdlist;
+// 	cmdlist = NULL;
+// 	input = NULL;
+// 	prompt = NULL;
+// 	args = NULL;
+// 	i = 0;
+// 	j = 0;
+// 	while(1)
+// 	{
+// 		i = 0;
+// 		prompt = getcwd(NULL, 0);
+// 		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
+// 		input = get_input (prompt);
+// 		parser(input, &cmdlist);
+// 		quote_search(&cmdlist);
+// 		if (input && input[0])
+// 		{
+// 			j = 0;
+// 			while(cmdlist)
+// 			{	
+// 				i = 0;
+// 				while(cmdlist->command[i])
+// 					printf("Command[%d]:%s\n", j, cmdlist->command[i++]);
+// 				i = 0;
+// 				if(cmdlist->input)
+// 				{
+// 					while(cmdlist->input[i])
+// 						printf("Input[%d]:%s\n", j, cmdlist->input[i++]);
+// 				}
+// 				i = 0;
+// 				if(cmdlist->output)
+// 				{
+// 					while(cmdlist->output[i])
+// 						printf("Output[%d]:%s\n", j, cmdlist->output[i++]);
+// 				}
+// 				cmdlist = cmdlist->next;
+// 				j++;
+// 			}
+// 		}
+// 	}
+// }
