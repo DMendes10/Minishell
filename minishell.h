@@ -23,7 +23,12 @@ typedef struct s_cmdlist
 	struct s_cmdlist	*next;
 }t_cmdlist;
 
-
+typedef struct s_envlst
+{
+	char			*token;
+	char			*var;
+	struct s_envlst	*next;
+}t_envlst;
 
 // typedef struct s_command
 // {

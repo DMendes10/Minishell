@@ -1,5 +1,3 @@
-
-
 #include "parser.h"
 
 static int	redir_checker(char **cmd)
@@ -38,12 +36,6 @@ static void	syntax_checker(char **cmdtable)
 	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) || !ft_strncmp(cmdtable[i], "<<", 3) || \
 		!ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
 			print_err("syntax error near unexpected token", cmdtable);
-}
-
-static void	list_creator(t_cmdlist **s_cmdlist, char **cmdtable)
-{
-	int	i;
-	
 }
 
 static void	parser(char *input, t_cmdlist **cmdlist)
@@ -89,6 +81,7 @@ int main ()
 		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
 		input = get_input (prompt);
 		parser(input, &cmdlist);
+		quote_search(&cmdlist);
 		if (input && input[0])
 		{
 			j = 0;

@@ -13,6 +13,8 @@ t_cmdlist	*ft_lstlast(t_cmdlist *stack)
 static int	final_cmd_size(char **cmd, int i)
 {
 	int	count;
+
+	count = 0;
 	while(cmd[i] && cmd[i][0] != '|')
 	{
 		if(cmd[i][0] == '<' || cmd[i][0] == '>')
@@ -32,7 +34,7 @@ static char	**final_cmd(char **cmd, int i)
 
 	j = 0;
 	cmd_size = final_cmd_size(cmd, i);
-	final_cmd = malloc(cmd_size * sizeof(char *));
+	final_cmd = ft_calloc((cmd_size + 1), sizeof(char *));
 	while(cmd[i] && cmd[i][0] != '|')
 	{
 		if(cmd[i][0] == '<' || cmd[i][0] == '>')
@@ -41,6 +43,7 @@ static char	**final_cmd(char **cmd, int i)
 			final_cmd[j++] = ft_strdup(cmd[i]);
 		i++;
 	}
+	// final_cmd[j] = NULL;
 	return(final_cmd);
 }
 
