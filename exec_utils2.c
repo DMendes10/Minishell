@@ -1,99 +1,125 @@
 
 #include "minishellD.h"
 
-void	child_process(t_edata *data)
+void	child_process(t_master *mstr, t_cmdlist *cmd)
 {
 	char **paths;
+	char **env;
 	char *path;
 
-	if (dup2(data->last_fd, STDIN_FILENO) == -1)
-		return_error();
-	close (data->last_fd);
-	if (data->ptr->input)
-		input_redirect (data);
-	if (data->ptr->next)
+	dup2(mstr->data->last_fd, STDIN_FILENO);
+	close (mstr->data->last_fd);
+	if (cmd->input)
 	{
-		if (dup2(data->pipefd[1], STDOUT_FILENO))
-			return_error();
-		close (data->pipefd[0]);
-		close (data->pipefd[1]);
+		if(input_redirect (mstr, cmd))
+			exit_minishell(&mstr, 1);
 	}
-	if (data->ptr->output)
-		output_redirect (data->ptr->output, data->fdout);
-	paths = ft_split (getenv("PATH"), ':');
-	path = path_finder(data->ptr->command, paths);
-	path_checker(path, data);
+	if (cmd->next)
+	{
+		dup2(mstr->data->pipefd[1], STDOUT_FILENO);
+		close (mstr->data->pipefd[0]);
+		close (mstr->data->pipefd[1]);
+	}
+	if (cmd->output)
+		output_redirect (mstr, cmd);
+	if (!exec_built (cmd, mstr))
+		exit_minishell (&mstr, mstr->exit);
+	paths = ft_split (env_finder(cmd, "PATH"), ':');
+	path = path_finder(cmd->command, paths);
+	path_checker(path, mstr);
 	free_array (paths);
-	if (execve (path, data->ptr->command, env) == -1)
-		return_error();
+	env = envlst_to_char (mstr);
+	if (execve (path, cmd->command, env) == -1)
+	{
+		perror (cmd->command[0]);
+		exit_minishell(&mstr, 127);
+	}
 }
 
-void	input_redirect (t_edata *data)
+int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int i;
 
-	while (data->ptr->input->file[i])
+	i = 0;
+	if (hdoc_handler (mstr, cmd))
+		return (1);
+	while (cmd->input[i])
 	{
-		if (data->ptr->input->token[i] == '<')
+		if (!ft_strncmp (cmd->input[i], "<", 2))
 		{
-			data->fdin = open(data->ptr->input->file[i], O_RDONLY);
-			if (data->fdin == -1)
-				return_error();
-			if (dup2 (data->fdin, STDIN_FILENO) == -1)
-				return_error();
-			i++;
+			mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
+			if (mstr->data->fdin < 0)
+			{
+				printf("%s", cmd->input[i + 1]);
+				perror(": ");
+				return (1);
+			}
+			dup2 (mstr->data->fdin, STDIN_FILENO);
 		}
+		i++;
+		close (mstr->data->fdin);
 	}
-	close (data->fdin);
+	return (0);
 }
 
-void	output_redirect (char *output, int fdout)
+void	output_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int	i;
 
-	while (data->ptr->output->file[i])
+	i = 0;
+	while (cmd->output[i])
 	{
-		if (data->ptr->output->token[i] == '>')
+		if (!ft_strncmp (cmd->output[i], ">", 1))
 		{
-			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (data->fdout == -1)
-				return_error();
-			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
-				return_error();
-			i++;
+			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (mstr->data->fdout == -1)
+			{
+				printf("%s", cmd->output[i + 1]);
+				perror(": ");
+				exit_minishell (&mstr, 1);
+			}
+			dup2 (mstr->data->fdout, STDOUT_FILENO);
+			i += 2;
 		}
 		else
 		{
-			data->fdout = open (data->ptr->output->file[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (data->fdout == -1)
-				return_error();
-			if (dup2 (data->fdout, STDOUT_FILENO) == -1)
-				return_error();
-			i++;
+			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (mstr->data->fdout == -1)
+			{
+				printf("%s", cmd->output[i + 1]);
+				perror(": ");
+				exit_minishell (&mstr, 1);
+			}
+			dup2 (mstr->data->fdout, STDOUT_FILENO);
+			i += 2;
 		}
+		close (mstr->data->fdout);
 	}
 }
 
-void	exec_init (t_edata *data)
+void	exec_init(t_edata *data)
 {
 	data = malloc (sizeof(t_edata));
 	data = ft_memset (data, 0, sizeof (t_edata));
 }
 
-void	io_operator(t_edata *data, pid_t pid[])
+void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[])
 {
-	if (data->ptr->next)
+	if (cmd->next)
 		{
-			if (pipe (data->pipefd) == -1)
-				return_error();
+			if (pipe (mstr->data->pipefd) == -1)
+			{
+				perror("pipe: ");
+				exit_minishell (&mstr, 1);
+			}
 		}
-		pid[data->i] = fork();
-		if (pid[data->i] == 0)
-			child_process (data);
-		close (data->last_fd);
-		if (data->ptr->next)
+		pid[mstr->data->i] = fork();
+		if (pid[mstr->data->i] == 0)
+			child_process (mstr, cmd);
+		close (mstr->data->last_fd);
+		if (cmd->next)
 		{
-			close (data->pipefd[1]);
-			data->last_fd = data->pipefd[0];
+			close (mstr->data->pipefd[1]);
+			mstr->data->last_fd = mstr->data->pipefd[0];
 		}
 }

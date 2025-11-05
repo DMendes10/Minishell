@@ -1,17 +1,17 @@
 #include "minishellD.h"
 
-int	simple_export(t_envlst *lst)
+int	simple_export(t_master *mstr)
 {
 	char **exp;
 	int i;
 	t_envlst *ptr;
 
 	i = 0;
-	ptr = lst;
-	exp = malloc ((ft_envlst_size(lst) + 1) * sizeof(char*));
+	ptr = mstr->env;
+	exp = malloc (((ft_envlst_size(ptr)) + 1) * sizeof(char*));
 	// if (!exp)
 	// 	return_error();
-	while (i < ft_envlst_size(lst))
+	while (i < ft_envlst_size(mstr->env))
 	{
 		exp[i] = ft_strdup(ptr->token);
 		ptr = ptr->next;
@@ -19,7 +19,7 @@ int	simple_export(t_envlst *lst)
 	}
 	exp[i] = NULL;
 	export_sorter (exp);
-	print_export (exp, lst);
+	print_export (exp, mstr);
 	free_array (exp);
 	return (0);
 }
@@ -36,7 +36,7 @@ void	export_sorter (char **exp)
 		j = i + 1;
 		while (exp[j])
 		{
-			if (ft_strncmp (exp[i], exp[j], ft_strlen(exp[i])) > 0)
+			if (ft_strncmp (exp[i], exp[j], ft_strlen(exp[i]) + 1) > 0)
 			{
 				tmp = exp[i];
 				exp[i] = exp[j];
@@ -48,28 +48,52 @@ void	export_sorter (char **exp)
 	}
 }
 
-void	print_export(char **exp, t_envlst *lst)
+void	print_export(char **exp, t_master *mstr)
 {
 	int			i;
 	t_envlst	*ptr;
 
 	i = 0;
-	ptr = lst;
+	ptr = mstr->env;
 	while (exp[i])
 	{
-		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i])) == 0)
+		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i]) + 1) == 0)
 		{
-			printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
-			ptr = lst;
+			if (ptr->var != NULL)
+				printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
+			else
+				printf("declare -x %s\n",ptr->token);
+			// ptr = lst;
 			i++;
 		}
 		ptr = ptr->next;
 		if (!ptr)
-			ptr = lst;
+			ptr = mstr->env;
 	}
 }
 
-int	add_export(t_envlst lst, t_cmdlist)
+int	add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit)
 {
-	
+	int i;
+
+	i = 1;
+	while (cmdlst->command[i])
+	{
+		if (key_check(cmdlst->command[i]))
+		{
+			printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+			super_exit = 1;
+			i++;
+		}
+		else
+		{
+			if (ft_strchar_int(cmdlst->command[i], '=') != -1)
+				exp_full(mstr, cmdlst->command[i]);
+			else
+				exp_key (mstr, cmdlst->command[i]);
+			i++;
+		}
+	}
+	mstr->exit = (super_exit > 0);
+	return ;
 }

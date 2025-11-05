@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "minishellD.h"
 
 char	*ft_makestring(const char *s, char c, size_t *i)
 {
@@ -111,20 +111,20 @@ size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size)
 	return (ft_strlen(src));
 }
 
-void	free_array(char **s)
-{
-	size_t	i;
+// void	free_array(char **s)
+// {
+// 	size_t	i;
 
-	i = 0;
-	if (!s)
-		return ;
-	while (s[i])
-	{
-		free (s[i]);
-		i++;
-	}
-	free (s);
-}
+// 	i = 0;
+// 	if (!s)
+// 		return ;
+// 	while (s[i])
+// 	{
+// 		free (s[i]);
+// 		i++;
+// 	}
+// 	free (s);
+// }
 
 size_t	ft_count_words_pipex(const char *a, char c, int i)
 {

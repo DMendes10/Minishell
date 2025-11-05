@@ -6,12 +6,15 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 21:04:15 by diomende          #+#    #+#             */
-/*   Updated: 2025/04/23 12:09:04 by diomende         ###   ########.fr       */
+/*   Updated: 2025/10/17 15:15:49 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/// @brief writes an int in the given file descriptor
+/// @param n 
+/// @param fd 
 void	ft_putnbr_fd(int n, int fd)
 {
 	if (n == -2147483648)

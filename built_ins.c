@@ -1,25 +1,20 @@
 
 #include "minishellD.h"
 
-int ft_cd(char **command)
+int ft_cd(char **command, t_master *mstr)
 {
 	char *h_env;
 
 	if (!command [1])
-	{
-		h_env = getenv ("HOME");
-		if (!h_env)
-			return(ft_putstr_fd ("cd: HOME not set\n", 2), 1);
-		chdir (h_env);
-	}
+		return(find_home(mstr));
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
-			invalid_command (command, command[1]);
+			invalid_path(command, command[1]);
 		if (access (command[1], X_OK) != 0)
-			no_perms_command (command, command[1]);
+			no_perms_path (command, command[1]);
 		else
-			chdir (command[1]);
+			chdir_env_pwd(mstr, command[1]);
 	}
 	else
 		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
@@ -52,74 +47,44 @@ int ft_pwd()
 		printf ("%s\n", getenv ("PWD"));
 	else
 		printf ("%s\n", path);
-	return (exit_code);
+	free (path);
+	return (0);
 }
 
-int ft_echo (char **command)
+int ft_echo (char **command, int exit_code, int flag, int i)
 {
-	int exit_code;
-	int i;
 	char *line;
 		
 	line = NULL;
-	i = 1;
-	exit_code = 0;
-	if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
-		i = 2;
+	if (command[i] && !ft_strncmp (command[i], "-n", 2))
+	{
+		while (!valid_flag(command[i]))
+		{
+			flag++;
+			i++;
+		}
+	}
 	while (command[i])
 	{
 		line = ft_strjoin_gnl (line, command[i]);
-		i++;
-		if (command[i])
+		if (command[1 + i++])
 			line = ft_strjoin_gnl (line, " ");
 	}
-	if (command[1] && ft_strncmp (command[1], "-n", 100) == 0)
+	if (line)
+	{
 		printf ("%s",line);
-	else
-		printf ("%s\n", line);
-	return (exit_code);
+		free (line);
+	}
+	if (!flag)
+		printf ("\n");
+	return (0);
 }
 
-int	export(t_envlst *lst, t_cmdlist *cmdlst)
+int	ft_export(t_master *mstr, t_cmdlist *cmdlst)
 {
-	int i;
-	int exit_code;
-	int super_exit;
-
-	i = 1;
-	exit_code = 0;
-	super_exit = 0;
 	if (!cmdlst->command[1])
-		return (simple_export(lst));
+		return (simple_export(mstr));
 	else
-	{
-		while (cmdlst->command[i])
-		{
-			if (cmdlst->command[i][0] == '=')
-			{
-				printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
-				super_exit = 1;
-				i++;
-			}
-			
-		}
-	}
-	
+		return (add_export(mstr, cmdlst, EXIT_CODE, SUPER_EXIT));
 }
 
-int	ft_envlst_size(t_envlst *lst)
-{
-	int	i;
-	t_envlst *ptr;
-
-	i = 0;
-	ptr = lst;
-	if (!ptr)
-		return (0);
-	while (!ptr)
-	{
-		ptr = ptr->next;
-		i++;
-	}
-	return (i);
-}

@@ -37,7 +37,7 @@ int	ft_wait(pid_t pid)
 	return (exit_code);
 }
 
-void	path_checker(char *path, t_edata *data)
+void	path_checker(char *path, t_master *master)
 {
 	char **split_cmd;
 
@@ -78,49 +78,67 @@ char	*path_finder(char *cmd, char **paths)
 	return (NULL);
 }
 
-int	cmd_exec (char *input, char **env)
+void	master_struct_init(t_master **master)
 {
-	char **command;
-	
-	command = ft_split_pipex (input, ' ');
-        if (ft_strncmp (command[0], "echo", 100) == 0)
-            ft_echo(command);
-        else if (ft_strncmp (command[0], "exit", 100) == 0)
-            exit (0);
-        else if (ft_strncmp (command[0], "cd", 100) == 0)
-            ft_cd(command);
-        else if (ft_strncmp (command[0], "pwd", 100) == 0)
-            ft_pwd();
-        // else if (ft_strncmp (command[0], "export", 100) == 0)
-        //     ft_export();
-        // else if (ft_strncmp (command[0], "unset", 100) == 0)
-        //     ft_unset();
-        else if (ft_strncmp (command[0], "env", 100) == 0)
-            ft_env(env);
-		else
-			return (forked_exec (command, env));
-		return (0);
+	*master = malloc (sizeof(t_master));
+	if (!*master)
+	{
+		perror("Mem_aloc Error: ");
+		exit(1);
+	}
+	(*master)->data = malloc (sizeof(t_edata));
+	if (!(*master)->data)
+	{
+		free ((*master));
+		perror("Mem_aloc Error: ");
+		exit (1);
+	}
+	(*master)->data = ft_memset ((*master)->data, 0, sizeof (t_edata));
+	(*master)->cmd = NULL;
+	(*master)->env = NULL;
+	(*master)->exit = 0;
+}
+
+char	*env_finder (t_envlst *lst ,char *cmd)
+{
+	t_envlst	*ptr;
+	int	i;
+
+	i = 0;
+	ptr = lst;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
+			return (ptr->var);
+		ptr = ptr->next;
+	}
+	return (NULL);
 }
 
 int main (int ac, char **av, char **env)
 {
 	char *input;
-	char *prompt;
-	char **command;
-	(void) ac;
 	(void) av;
+	t_master *mstr;
+
 	input = NULL;
-	prompt = NULL;
-	command = NULL;
+	mstr = NULL;
+	if (ac > 1)
+		exit (1);
+	master_struct_init(&mstr);
+	if (!env[0])
+		mstr->env = personal_env();
+	else
+		mstr->env = env_populator (env);
+	ft_env(mstr->env);
+	free_master (&mstr);
 	while(1)
 	{
-		prompt = getcwd(NULL, 0);
-		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
-		input = get_input (prompt);
+		input = get_input ("@Minishel> ");
 		if (input && input[0])
 		{
 			// parsing, trabalha Maia
-			cmd_exec (input, env);
+			executor (input, env);
 		}
 	}
 }
