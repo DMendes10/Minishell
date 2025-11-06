@@ -42,6 +42,7 @@ typedef struct s_edata
 	int fdout;
 	int fdin;
 	int pipefd[2];
+	int *pid;
 	int i;
 	int exit_code;
 }t_edata;
@@ -63,9 +64,9 @@ typedef struct s_master
 
 
 void	return_error(char *error);
-char	*path_finder(t_cmdlist *cmd, char **paths);
+char	*path_finder(char **command, char **paths);
 void	free_array(char **s);
-int		ft_wait(pid_t *pid);
+int		ft_wait(pid_t *pid, int cmd_count);
 // void	close_files(int *fd, int file);
 void	invalid_command(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
@@ -121,7 +122,7 @@ void	env_populator (t_master *mstr, char **env);
 int		str_valid_nbr (char *str);
 void	free_envlst (t_envlst *envlst);
 void	free_master(t_master **master);
-void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[]);
+void	pipe_operator(t_cmdlist *cmd, t_master *mstr);
 char	*env_finder (t_envlst *lst ,char *cmd);
 int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
@@ -133,6 +134,9 @@ void	no_perms_path(char **array, char *cmd);
 void	output_redirect(t_master *mstr, t_cmdlist *cmd);
 char	**envlst_to_char(t_master *mstr);
 void free_cmdlst(t_cmdlist *cmdlst);
+int	is_built_in(t_cmdlist *cmd);
+int	cmdlist_size(t_cmdlist *cmd);
+void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 
 
 #endif

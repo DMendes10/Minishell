@@ -3,18 +3,19 @@
 
 int	executor(t_master *mstr, int cmd_count)
 {
-	pid_t pid[cmd_count];
 	t_cmdlist *ptr;
 
+	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
 	mstr->data->last_fd = dup(STDIN_FILENO);
 	ptr = mstr->cmd;
 	while (ptr)
 	{
-		pipe_operator(ptr , mstr, pid);
+		pipe_operator(ptr, mstr);
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
-	mstr->exit = ft_wait (pid);
+	mstr->exit = ft_wait (mstr->data->pid, cmd_count);
+	// free(pid);
 	close(mstr->data->last_fd);
 	return (mstr->data->exit_code);
 }
@@ -39,15 +40,25 @@ int	exec_built(t_cmdlist *cmd, t_master *mstr)
 		return (1);
 }
 
-int	ft_wait(pid_t *proc_id)
+int	ft_wait(pid_t *proc_id, int cmd_count)
 {
 	int	status;
 	int	exit_code;
+	int i;
 
+	i = 0;
 	exit_code = 0;
-	waitpid(proc_id[1], &status, 0);
-	if (WIFEXITED (status))
-		exit_code = WEXITSTATUS (status);
-	waitpid(proc_id[0], NULL, 0);
+	while (i < cmd_count)
+	{
+		if (i == cmd_count - 1)
+		{
+			waitpid(proc_id[i], &status, 0);
+			if (WIFEXITED (status))
+				exit_code = WEXITSTATUS (status);
+		}
+		else
+			waitpid(proc_id[i], NULL, 0);
+		i++;
+	}
 	return (exit_code);
 }

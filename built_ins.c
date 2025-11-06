@@ -3,8 +3,6 @@
 
 int ft_cd(char **command, t_master *mstr)
 {
-	// char *h_env;
-
 	if (!command [1])
 		return(find_home(mstr));
 	else if (!command[2])

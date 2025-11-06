@@ -39,30 +39,26 @@ void	path_checker(char *path, t_cmdlist *cmd)
 		no_perms_command (cmd->command, cmd->command[0]);
 }
 
-char	*path_finder(t_cmdlist *cmd, char **paths)
+char	*path_finder(char **command, char **paths)
 {
 	int		i;
 	char	*temp;
 	char	*new_path;
-	char	**split_cmd;
 
 	i = 0;
-	split_cmd = cmd->command;
 	while (paths[i])
 	{
 		temp = ft_strjoin (paths[i], "/");
-		new_path = ft_strjoin (temp, split_cmd[0]);
+		new_path = ft_strjoin (temp, command[0]);
 		free (temp);
 		if (access (new_path, X_OK) == 0)
 		{
 			free_array (paths);
-			free_array (split_cmd);
 			return (new_path);
 		}
 		free (new_path);
 		i++;
 	}
-	free_array (split_cmd);
 	free_array (paths);
 	return (NULL);
 }
@@ -126,7 +122,7 @@ int main(int ac, char **av, char **env)
 	char *input;
 	(void) av;
 	t_master *mstr;
-	char	*prompt;
+	// char	*prompt;
 
 	input = NULL;
 	mstr = NULL;
@@ -142,13 +138,18 @@ int main(int ac, char **av, char **env)
 	// free_master (&mstr);
 	while(1)
 	{
-		prompt = getcwd(NULL, 0);
+		// prompt = getcwd(NULL, 0);
 		input = get_input ("@Minishell> ");
 		if (input && input[0])
 		{
 			parser(input, &mstr->cmd);
 			quote_search(&mstr->cmd);
 			executor (mstr, cmdlist_size(mstr->cmd));
+			free_cmdlst (mstr->cmd);
+			free (mstr->data->pid);
+			// free (mstr->data);
+			// free(mstr->data);
+			// mstr->data = ft_memset (mstr->data, 0, sizeof (t_edata));
 		}
 	}
 }

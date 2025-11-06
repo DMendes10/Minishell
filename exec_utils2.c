@@ -25,15 +25,35 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
 	paths = ft_split (env_finder(mstr->env, "PATH"), ':');
-	path = path_finder(mstr->cmd, paths);
+	path = path_finder(cmd->command, paths);
 	path_checker(path, cmd);
-	free_array (paths);
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
 		perror (cmd->command[0]);
 		exit_minishell(&mstr, 127);
 	}
+}
+
+void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
+{
+	dup2(mstr->data->last_fd, STDIN_FILENO);
+	close (mstr->data->last_fd);
+	if (cmd->input)
+	{
+		if(input_redirect (mstr, cmd))
+			exit_minishell(&mstr, 1);
+	}
+	// if (cmd->next)
+	// {
+	// 	dup2(mstr->data->pipefd[1], STDOUT_FILENO);
+	// 	close (mstr->data->pipefd[0]);
+	// 	close (mstr->data->pipefd[1]);
+	// }
+	if (cmd->output)
+		output_redirect (mstr, cmd);
+	exec_built (cmd, mstr);
+	// exit_minishell (&mstr, mstr->exit);
 }
 
 int	input_redirect(t_master *mstr, t_cmdlist *cmd)
@@ -103,23 +123,48 @@ void	exec_init(t_edata *data)
 	data = ft_memset (data, 0, sizeof (t_edata));
 }
 
-void	pipe_operator(t_cmdlist *cmd, t_master *mstr, pid_t pid[])
+void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 {
 	if (cmd->next)
+	{
+		if (pipe (mstr->data->pipefd) == -1)
 		{
-			if (pipe (mstr->data->pipefd) == -1)
-			{
-				perror("pipe: ");
-				exit_minishell (&mstr, 1);
-			}
+			perror("pipe: ");
+			exit_minishell (&mstr, 1);
 		}
-		pid[mstr->data->i] = fork();
-		if (pid[mstr->data->i] == 0)
-			child_process (mstr, cmd);
-		close (mstr->data->last_fd);
-		if (cmd->next)
-		{
-			close (mstr->data->pipefd[1]);
-			mstr->data->last_fd = mstr->data->pipefd[0];
-		}
+	}
+	if (is_built_in(cmd) && cmdlist_size(cmd) == 1)
+	{
+		built_in_single_exec(mstr, cmd);
+		return ;
+	}
+	mstr->data->pid[mstr->data->i] = fork();
+	if (mstr->data->pid[mstr->data->i] == 0)
+		child_process (mstr, cmd);
+	close (mstr->data->last_fd);
+	if (cmd->next)
+	{
+		close (mstr->data->pipefd[1]);
+		mstr->data->last_fd = mstr->data->pipefd[0];
+	}
+}
+
+int	is_built_in(t_cmdlist *cmd)
+{
+	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
+		return(1);
+	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "env", 4) == 0)
+		return(1);
+	else
+		return (0);
 }

@@ -7,9 +7,12 @@ void	free_master(t_master **master)
 	if ((*master)->env)
 		free_envlst((*master)->env);
 	if ((*master)->data)
+	{
+		free ((*master)->data->pid);
 		free ((*master)->data);
-	free (*master);
-	exit (1);
+	}
+	// free (*master);
+	// exit (1);
 }
 
 void free_envlst(t_envlst *envlst)
@@ -25,7 +28,7 @@ void free_envlst(t_envlst *envlst)
 		free (ptr);
 		ptr = envlst;
 	}
-	free (envlst);
+	// free (envlst);
 }
 
 void free_cmdlst(t_cmdlist *cmdlst)
@@ -39,13 +42,18 @@ void free_cmdlst(t_cmdlist *cmdlst)
 		free_array (ptr->command);
 		free_array (ptr->input);
 		free_array (ptr->output);
+		free (ptr);
 		ptr = cmdlst;
 	}
-	free (cmdlst);
+	// free (cmdlst);
 }
 
 void exit_minishell(t_master **mstr, int exit_code)
 {
 	free_master(mstr);
+	// free((*mstr)->cmd);
+	// free((*mstr)->env);
+	// free((*mstr)->data);
+	free (*mstr);
 	exit (exit_code);
 }

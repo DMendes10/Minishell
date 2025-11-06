@@ -59,6 +59,7 @@ void	parser(char *input, t_cmdlist **cmdlist)
 		}
 		i++;
 	}
+	free_array(cmdtable);
 }
 
 // int main ()
