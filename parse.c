@@ -38,7 +38,7 @@ static void	syntax_checker(char **cmdtable)
 			print_err("syntax error near unexpected token", cmdtable);
 }
 
-static void	parser(char *input, t_cmdlist **cmdlist)
+void	parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;

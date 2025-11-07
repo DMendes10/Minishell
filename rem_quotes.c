@@ -25,31 +25,31 @@ int	rem_squotes(char *cmd, int quotes)
 	return (quotes);
 }
 
-int	rem_dquotes(char *cmd, int quotes)
-{
-	int	i;
+// int	rem_dquotes(char *cmd, int quotes)
+// {
+// 	int	i;
 
-	i = 0;
-	while(cmd[i])
-	{
-		if (cmd[i] == '\"')
-		{
-			if (quotes == 2)
-			{
-				cmd[i] = 1;
-				quotes = quotes_check(cmd[i], quotes);
-				expand(cmd);
-			}
-			if (quotes == 0)
-			{
-				cmd[i] = 1;
-				quotes = quotes_check(cmd[i], quotes);
-			}
-		}
-		i++;
-	}
-	return (quotes);
-}
+// 	i = 0;
+// 	while(cmd[i])
+// 	{
+// 		if (cmd[i] == '\"')
+// 		{
+// 			if (quotes == 2)
+// 			{
+// 				cmd[i] = 1;
+// 				quotes = quotes_check(cmd[i], quotes);
+// 				expansion(cmd);
+// 			}
+// 			if (quotes == 0)
+// 			{
+// 				cmd[i] = 1;
+// 				quotes = quotes_check(cmd[i], quotes);
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (quotes);
+// }
 
 int	quote_rem_selector(char *cmd, int quotes)
 {
