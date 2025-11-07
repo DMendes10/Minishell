@@ -4,7 +4,7 @@ void	exp_full (t_master *mstr ,char *cmd)
 {
 	t_envlst *node;
 	char **splited;
-	t_envlst *ptr;
+	// t_envlst *ptr;
 
 	splited = malloc (3 * sizeof(char *));
 	// if (!splited)
@@ -21,7 +21,7 @@ void	exp_full (t_master *mstr ,char *cmd)
 	node = export_new_env(splited);
 	// if (!node)
 		// 	return_error();
-	ft_envlst_add_back (&mstr->env, node);
+	ft_envlst_add_back (&mstr, node);
 	free_array(splited);
 }
 

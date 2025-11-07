@@ -49,49 +49,48 @@ int	ft_exit(char **cmd, t_master *mstr)
 	nbr = 0;
 	if (!cmd[1])
 	{
-		ft_putstr_fd("exit\nexit: too many arguments", 2);
-		free_master (&mstr);
-		exit(0);
+		ft_putstr_fd("exit\n", 2);
+		exit_minishell (&mstr, 0);
 	}
 	if (cmd[2])
-		return (ft_putstr_fd("exit\nexit: too many arguments", 2), 1);
+		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
 		ft_putstr_fd("exit\nexit: ", 2);
 		printf ("%s: numeric argument required", cmd[1]);
-		free_master (&mstr);
-		exit(2);
+		exit_minishell (&mstr, 2);
 	}
-	free_master (&mstr);
-	exit(exit_converter(nbr));
+	ft_putstr_fd("exit\n", 2);
+	exit_minishell (&mstr, exit_converter(nbr));
+	return (1);
 }
 
 bool	atoll_parser(char *str, long long *nbr)
 {
-	int            sign;
-    int            i;
-    int            digit;
+	int	sign;
+	int	i;
+	int	digit;
 
 	i = 0;
 	sign = 1;
-    if (!str_valid_nbr(str))
-        return (false);
+	if (!str_valid_nbr(str))
+		return (false);
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i++] == '-')
-        	sign = -1;
-    }
-    while (str[i])
-    {
+			sign = -1;
+	}
+	while (str[i])
+	{
 		digit = str[i++] - '0';
-        if (sign == 1 && (*nbr > (LLONG_MAX - digit) / 10))
+		if (sign == 1 && (*nbr > (LLONG_MAX - digit) / 10))
 			return (false);
-        if (sign == -1 && (-(*nbr) < (LLONG_MIN + digit) / 10))
+		if (sign == -1 && (-(*nbr) < (LLONG_MIN + digit) / 10))
 			return (false);
-        *nbr = *nbr * 10 + digit;
-    }
-    *nbr *= sign;
-    return (true);
+		*nbr = *nbr * 10 + digit;
+	}
+	*nbr *= sign;
+	return (true);
 }
 
 int	exit_converter(long long nbr)

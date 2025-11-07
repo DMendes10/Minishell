@@ -3,8 +3,6 @@
 
 int ft_cd(char **command, t_master *mstr)
 {
-	char *h_env;
-
 	if (!command [1])
 		return(find_home(mstr));
 	else if (!command[2])
@@ -54,6 +52,7 @@ int ft_pwd()
 int ft_echo (char **command, int exit_code, int flag, int i)
 {
 	char *line;
+	(void)exit_code;
 		
 	line = NULL;
 	if (command[i] && !ft_strncmp (command[i], "-n", 2))

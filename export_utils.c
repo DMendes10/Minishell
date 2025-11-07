@@ -76,6 +76,7 @@ int	add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit)
 {
 	int i;
 
+	(void)exit_code;
 	i = 1;
 	while (cmdlst->command[i])
 	{
@@ -95,5 +96,5 @@ int	add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit)
 		}
 	}
 	mstr->exit = (super_exit > 0);
-	return ;
+	return (0);
 }
