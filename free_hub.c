@@ -57,3 +57,11 @@ void exit_minishell(t_master **mstr, int exit_code)
 	free (*mstr);
 	exit (exit_code);
 }
+
+void	reset_master(t_master **master)
+{
+	free_cmdlst((*master)->cmd);
+	(*master)->cmd = NULL;
+	free ((*master)->data->pid);
+	ft_memset ((*master)->data, 0, sizeof (t_edata));
+}

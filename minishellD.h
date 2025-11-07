@@ -137,6 +137,7 @@ void free_cmdlst(t_cmdlist *cmdlst);
 int	is_built_in(t_cmdlist *cmd);
 int	cmdlist_size(t_cmdlist *cmd);
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
+void	reset_master(t_master **master);
 
 
 #endif

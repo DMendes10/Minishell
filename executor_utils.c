@@ -6,7 +6,7 @@ int	executor(t_master *mstr, int cmd_count)
 	t_cmdlist *ptr;
 
 	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
-	mstr->data->last_fd = dup(STDIN_FILENO);
+	mstr->data->last_fd = dup(0);
 	ptr = mstr->cmd;
 	while (ptr)
 	{
@@ -46,6 +46,7 @@ int	ft_wait(pid_t *proc_id, int cmd_count)
 	int	exit_code;
 	int i;
 
+	status = 0;
 	i = 0;
 	exit_code = 0;
 	while (i < cmd_count)

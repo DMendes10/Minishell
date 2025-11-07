@@ -134,8 +134,6 @@ int main(int ac, char **av, char **env)
 	// else
 	// mstr->env = env_populator (env);
 	env_populator (mstr, env);
-	// ft_env(mstr->env);
-	// free_master (&mstr);
 	while(1)
 	{
 		// prompt = getcwd(NULL, 0);
@@ -145,11 +143,15 @@ int main(int ac, char **av, char **env)
 			parser(input, &mstr->cmd);
 			quote_search(&mstr->cmd);
 			executor (mstr, cmdlist_size(mstr->cmd));
-			free_cmdlst (mstr->cmd);
-			free (mstr->data->pid);
+			reset_master (&mstr);
+			// free_cmdlst (mstr->cmd);
+			// mstr->cmd = NULL;
+			// free (mstr->data->pid);
+			// free (mstr->data);
+			// mstr->data->last_fd = 0;
+			// mstr->data = ft_memset (mstr->data, 0, sizeof (t_edata));
 			// free (mstr->data);
 			// free(mstr->data);
-			// mstr->data = ft_memset (mstr->data, 0, sizeof (t_edata));
 		}
 	}
 }

@@ -18,15 +18,15 @@ int	hdoc_rdwr(char *del)
 			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del)))
 			break ;
+		line = ft_strjoin_gnl (line, "\n");
 		hdoc = ft_strjoin_gnl (hdoc, line);
 		if (hdoc == NULL)
 			break ;
 	}
 	write (fd, hdoc, ft_strlen(hdoc));
 	free (line);
-	free (hdoc);
 	close (fd);
-	return (0);
+	return (free(hdoc), 0);
 }
 
 int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
