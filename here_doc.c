@@ -44,15 +44,15 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 			mstr->data->fdin = open("tmp_heredoc.txt", O_RDONLY);
 			if (mstr->data->fdin == -1)
 			{
-				printf("%s", cmd->input[i + 1]);
-				perror(":");
+				// printf("%s", cmd->input[i + 1]);
+				perror("here-document error");
 				return (1);
 			}
 			dup2 (mstr->data->fdin, STDIN_FILENO);
 			unlink ("tmp_heredoc.txt");
+			close (mstr->data->fdin);
 		}
 		i++;
-		close (mstr->data->fdin);
 	}
 	return (0);
 }

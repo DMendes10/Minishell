@@ -20,8 +20,6 @@ int	quotes_check(char c, int quotes)
 	return (quotes);
 }
 
-
-
 char	**split_args(char *input)
 {
 	int		i;

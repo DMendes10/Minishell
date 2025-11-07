@@ -37,22 +37,32 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 {
+	int saved_stdin;
+	int saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
 	dup2(mstr->data->last_fd, STDIN_FILENO);
 	close (mstr->data->last_fd);
 	if (cmd->input)
 	{
 		if(input_redirect (mstr, cmd))
-			exit_minishell(&mstr, 1);
+		{
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+			return;
+		}
 	}
-	// if (cmd->next)
-	// {
-	// 	dup2(mstr->data->pipefd[1], STDOUT_FILENO);
-	// 	close (mstr->data->pipefd[0]);
-	// 	close (mstr->data->pipefd[1]);
-	// }
 	if (cmd->output)
 		output_redirect (mstr, cmd);
+	// reformat the code so that output logic returns int so that i can re-establish stdin and out
 	exec_built (cmd, mstr);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
 	// exit_minishell (&mstr, mstr->exit);
 }
 
@@ -70,14 +80,15 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 			mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
 			if (mstr->data->fdin < 0)
 			{
-				printf("%s", cmd->input[i + 1]);
-				perror(": ");
+				// printf("%s", cmd->input[i + 1]);
+				// fflush (stdin);
+				perror(cmd->input[i + 1]);
 				return (1);
 			}
 			dup2 (mstr->data->fdin, STDIN_FILENO);
+			close (mstr->data->fdin);
 		}
 		i++;
-		close (mstr->data->fdin);
 	}
 	return (0);
 }
@@ -89,7 +100,7 @@ void	output_redirect(t_master *mstr, t_cmdlist *cmd)
 	i = 0;
 	while (cmd->output[i])
 	{
-		if (!ft_strncmp (cmd->output[i], ">", 1))
+		if (!ft_strncmp (cmd->output[i], ">", 2))
 		{
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (mstr->data->fdout == -1)
@@ -136,6 +147,7 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 	if (is_built_in(cmd) && cmdlist_size(cmd) == 1)
 	{
 		built_in_single_exec(mstr, cmd);
+		close (mstr->data->last_fd);
 		return ;
 	}
 	mstr->data->pid[mstr->data->i] = fork();
