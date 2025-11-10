@@ -60,9 +60,17 @@ char	**envlst_to_char(t_master *mstr)
 
 	ptr = mstr->env;
 	i = 0;
-	env = malloc (sizeof (char *) * ft_envlst_size (mstr->env));
+	while(ptr)
+	{
+		if (ptr->var)
+			i++;
+		ptr = ptr->next;
+	}
+	env = malloc (sizeof (char *) * (i + 1));
 	// if (!env)
 	// 	return;
+	i = 0;
+	ptr = mstr->env;
 	while(ptr)
 	{
 		if (ptr->var)

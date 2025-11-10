@@ -87,9 +87,9 @@ void	master_struct_init(t_master **master)
 char	*env_finder(t_envlst *lst ,char *cmd)
 {
 	t_envlst	*ptr;
-	int	i;
+	// int	i;
 
-	i = 0;
+	// i = 0;
 	ptr = lst;
 	while (ptr)
 	{

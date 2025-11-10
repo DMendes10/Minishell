@@ -131,7 +131,7 @@ void	parser(char *input, t_cmdlist **cmdlist);
 void	invalid_path(char **array, char *cmd);
 void	no_perms_command(char **array, char *cmd);
 void	no_perms_path(char **array, char *cmd);
-void	output_redirect(t_master *mstr, t_cmdlist *cmd);
+int	output_redirect(t_master *mstr, t_cmdlist *cmd);
 char	**envlst_to_char(t_master *mstr);
 void free_cmdlst(t_cmdlist *cmdlst);
 int	is_built_in(t_cmdlist *cmd);

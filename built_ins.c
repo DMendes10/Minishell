@@ -35,11 +35,11 @@ int ft_env(t_envlst *list)
 
 int ft_pwd()
 {
-	int exit_code;
+	// int exit_code;
 	char *path;
 
 	path = NULL;
-	exit_code = 0;
+	// exit_code = 0;
 	path = getcwd(NULL, 0);
 	if (!path)
 		printf ("%s\n", getenv ("PWD"));

@@ -116,10 +116,10 @@ void	exp_key (t_master *mstr ,char *cmd)
 
 char *key_alloc (char *key)
 {
-	int i;
+	// int i;
 	char *new_key;
 
-	i = 0;
+	// i = 0;
 	if (!ft_strchr (key, '+'))
 		return (ft_strdup(key));
 	else

@@ -21,7 +21,10 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 		close (mstr->data->pipefd[1]);
 	}
 	if (cmd->output)
-		output_redirect (mstr, cmd);
+	{
+		if(output_redirect (mstr, cmd))
+			exit_minishell(&mstr, 1);
+	}
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
 	paths = ft_split (env_finder(mstr->env, "PATH"), ':');
@@ -31,6 +34,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	if (execve (path, cmd->command, env) == -1)
 	{
 		perror (cmd->command[0]);
+		free_array(env);
 		exit_minishell(&mstr, 127);
 	}
 }
@@ -56,8 +60,16 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 		}
 	}
 	if (cmd->output)
-		output_redirect (mstr, cmd);
-	// reformat the code so that output logic returns int so that i can re-establish stdin and out
+	{
+		if (output_redirect (mstr, cmd))
+		{
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+			return;
+		}
+	}
 	exec_built (cmd, mstr);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
@@ -93,7 +105,7 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 	return (0);
 }
 
-void	output_redirect(t_master *mstr, t_cmdlist *cmd)
+int	output_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int	i;
 
@@ -107,25 +119,29 @@ void	output_redirect(t_master *mstr, t_cmdlist *cmd)
 			{
 				printf("%s", cmd->output[i + 1]);
 				perror(": ");
-				exit_minishell (&mstr, 1);
+				return (1);
+				// exit_minishell (&mstr, 1);
 			}
 			dup2 (mstr->data->fdout, STDOUT_FILENO);
-			i += 2;
+			close (mstr->data->fdout);
 		}
-		else
+		else if (!ft_strncmp (cmd->output[i], ">>", 3))
 		{
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (mstr->data->fdout == -1)
 			{
 				printf("%s", cmd->output[i + 1]);
 				perror(": ");
-				exit_minishell (&mstr, 1);
+				return (1);
+				// exit_minishell (&mstr, 1);
 			}
 			dup2 (mstr->data->fdout, STDOUT_FILENO);
-			i += 2;
+			close (mstr->data->fdout);
 		}
-		close (mstr->data->fdout);
+		i++;
+		// close (mstr->data->fdout);
 	}
+	return (0);
 }
 
 void	exec_init(t_edata *data)

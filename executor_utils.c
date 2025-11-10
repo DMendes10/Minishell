@@ -6,6 +6,8 @@ int	executor(t_master *mstr, int cmd_count)
 	t_cmdlist *ptr;
 
 	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
+	if (!mstr->data->pid)
+		exit_minishell (&mstr, 1);
 	mstr->data->last_fd = dup(STDIN_FILENO);
 	ptr = mstr->cmd;
 	while (ptr)
