@@ -20,13 +20,13 @@ int	hdoc_rdwr(char *del)
 			break ;
 		line = ft_strjoin_gnl (line, "\n");
 		hdoc = ft_strjoin_gnl (hdoc, line);
+		free (line);
 		if (hdoc == NULL)
 			break ;
 	}
 	write (fd, hdoc, ft_strlen(hdoc));
-	free (line);
 	close (fd);
-	return (free(hdoc), 0);
+	return (free(line), free(hdoc), 0);
 }
 
 int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)

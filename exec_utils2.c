@@ -70,6 +70,11 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 			return;
 		}
 	}
+	if (!ft_strncmp (cmd->command[0], "exit", 5))
+	{
+		close(saved_stdin);
+		close(saved_stdout);
+	}
 	exec_built (cmd, mstr);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
@@ -179,6 +184,8 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 
 int	is_built_in(t_cmdlist *cmd)
 {
+	if (!cmd->command[0])
+		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
 		return(1);
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)

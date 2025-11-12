@@ -24,6 +24,8 @@ int	executor(t_master *mstr, int cmd_count)
 
 int	exec_built(t_cmdlist *cmd, t_master *mstr)
 {
+	if (!cmd->command[0])
+		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
 		return(ft_echo(mstr, cmd->command, ECHO_FLAG, ECHO_INDEX));
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)

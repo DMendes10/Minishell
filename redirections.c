@@ -27,6 +27,7 @@ void	populate_input(char **cmd, t_cmdlist *node, int i)
 		else
 			i++;
 	}
+	node->input[j] = NULL;
 }
 
 void	populate_output(char **cmd, t_cmdlist *node, int i)
@@ -44,6 +45,7 @@ void	populate_output(char **cmd, t_cmdlist *node, int i)
 		else
 			i++;
 	}
+	node->output[j] = NULL;
 }
 
 void	get_redir(char **cmd, t_cmdlist *node, int i)
