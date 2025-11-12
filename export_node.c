@@ -1,26 +1,25 @@
 #include "minishellD.h"
 
-void	exp_full (t_master *mstr ,char *cmd)
+void	exp_full(t_master *mstr ,char *cmd)
 {
 	t_envlst *node;
 	char **splited;
-	// t_envlst *ptr;
 
 	splited = malloc (3 * sizeof(char *));
-	// if (!splited)
-	// 	return_error();
+	if (!splited)
+		alloc_error(&mstr);
 	splited[0] = ft_substr (cmd, 0, ft_strchar_int (cmd, '='));
-	// if (!splited[0])
-	// 	return_error();
+	if (!splited[0])
+		alloc_error(&mstr);
 	splited[1] = ft_strdup ((ft_strchr (cmd, '=')) + 1);
-	// if (!splited)
-	// 	return_error();
+	if (!splited[1])
+		alloc_error(&mstr);
 	splited[2] = NULL;
 	if (change_env_var(splited, mstr) == 1)
 		return;
 	node = export_new_env(splited);
-	// if (!node)
-		// 	return_error();
+	if (!node)
+		alloc_error(&mstr);
 	ft_envlst_add_back (&mstr, node);
 	free_array(splited);
 }
@@ -30,8 +29,8 @@ t_envlst *export_new_env(char **env)
 	t_envlst	*node;
 
 	node = malloc(sizeof(t_envlst));
-	// if (!node)
-	// 	return_error(NULL);
+	if (!node)
+		return (NULL);
 	if (!ft_strchr (env[0], '+'))
 		node->token = ft_strdup (env[0]);
 	else

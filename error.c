@@ -15,12 +15,12 @@ void	return_error(char *error)
 // 		return_error("closing error");
 // }
 
-void	invalid_command(char **array, char *cmd)
+void	invalid_command(t_master **mstr, char **array, char *cmd)
 {
 	ft_putstr_fd (cmd, 2);
 	ft_putstr_fd (": Command not found \n", 2);
 	free_array (array);
-	// exit (127);
+	exit_minishell (mstr, 127);
 }
 
 void	invalid_path(char **array, char *cmd)
@@ -30,18 +30,16 @@ void	invalid_path(char **array, char *cmd)
 	ft_putstr_fd (": No such file or directory\n", 2);
 	free_array (array);
 	// exit (1);
-	return;
 }
 
 
-void	no_perms_command(char **array, char *cmd)
+void	no_perms_command(t_master **mstr, char **array, char *cmd)
 {
 	ft_putstr_fd ("cd: ", 2);
 	ft_putstr_fd (cmd, 2);
 	ft_putstr_fd (": Permission denied\n", 2);
 	free_array (array);
-	// exit (1);
-	return ;
+	exit_minishell (mstr, 126);
 }
 
 void	no_perms_path(char **array, char *cmd)
@@ -49,7 +47,7 @@ void	no_perms_path(char **array, char *cmd)
 	ft_putstr_fd (cmd, 2);
 	ft_putstr_fd (": Permission denied \n", 2);
 	free_array (array);
-	exit (126);
+	// exit (1);
 }
 
 void	free_array(char **s)
@@ -67,4 +65,8 @@ void	free_array(char **s)
 	free (s);
 }
 
-
+void	alloc_error(t_master **mstr)
+{
+	perror("ERROR");
+	exit_minishell (mstr, 1);
+}

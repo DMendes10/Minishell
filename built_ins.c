@@ -19,7 +19,7 @@ int ft_cd(char **command, t_master *mstr)
 	return (0);
 }
 
-int ft_env(t_envlst *list)
+int ft_env(t_master *mstr, t_envlst *list)
 {
 	t_envlst *ptr;
 
@@ -30,29 +30,28 @@ int ft_env(t_envlst *list)
 			printf ("%s=%s\n", ptr->token, ptr->var);
 		ptr = ptr->next;
 	}
+	mstr->exit = 0;
 	return (0);
 }
 
-int ft_pwd()
+int ft_pwd(t_master *mstr)
 {
-	// int exit_code;
 	char *path;
 
 	path = NULL;
-	// exit_code = 0;
 	path = getcwd(NULL, 0);
 	if (!path)
 		printf ("%s\n", getenv ("PWD"));
 	else
 		printf ("%s\n", path);
 	free (path);
+	mstr->exit = 0;
 	return (0);
 }
 
-int ft_echo (char **command, int exit_code, int flag, int i)
+int ft_echo(t_master *mstr, char **command, int flag, int i)
 {
 	char *line;
-	(void)exit_code;
 		
 	line = NULL;
 	if (command[i] && !ft_strncmp (command[i], "-n", 2))
@@ -76,6 +75,7 @@ int ft_echo (char **command, int exit_code, int flag, int i)
 	}
 	if (!flag)
 		printf ("\n");
+	mstr->exit = 0;
 	return (0);
 }
 
@@ -84,6 +84,6 @@ int	ft_export(t_master *mstr, t_cmdlist *cmdlst)
 	if (!cmdlst->command[1])
 		return (simple_export(mstr));
 	else
-		return (add_export(mstr, cmdlst, EXIT_CODE, SUPER_EXIT));
+		return (add_export(mstr, cmdlst, SUPER_EXIT));
 }
 

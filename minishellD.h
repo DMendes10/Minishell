@@ -10,10 +10,12 @@
 # include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
 # include "src/Libft/libft.h"
 # include <stdbool.h>
 # include "minishell.h"
 # include "parser.h"
+
 // typedef struct s_envlst t_envlst;
 
 # define EXIT_CODE 0
@@ -68,8 +70,6 @@ char	*path_finder(char **command, char **paths);
 void	free_array(char **s);
 int		ft_wait(pid_t *pid, int cmd_count);
 // void	close_files(int *fd, int file);
-void	invalid_command(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
 int		end_quote_check(const char *s, int i);
 size_t	ft_count_words_pipex(const char *a, char c, int i);
 char	*ft_makestring(const char *s, char c, size_t *i);
@@ -78,15 +78,15 @@ char	**ft_minisplit(char **a, char const *s, char c);
 char	**ft_split_pipex(char const *s, char c);
 int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
-int 	ft_echo (char **command, int exit_code, int flag, int i);
-int		ft_pwd();
-int		ft_env(t_envlst *list);
+int 	ft_echo (t_master *mstr,char **command, int flag, int i);
+int		ft_pwd(t_master *mstr);
+int		ft_env(t_master *mstr, t_envlst *list);
 int		ft_cd(char **command, t_master *mstr);
 char	*get_input (char *prompt);
 void	return_error(char *error);
-void	invalid_command(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
-void	path_checker(char *path, t_cmdlist *cmd);
+void	invalid_command(t_master **mstr, char **array, char *cmd);
+void	no_perms_command(t_master **mstr, char **array, char *cmd);
+void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd);
 int		forked_exec (char **command, char **env);
 int		simple_export(t_master *mstr);
 void	export_sorter (char **exp);
@@ -94,7 +94,7 @@ void	print_export(char **exp, t_master *mstr);
 int		ft_envlst_size(t_envlst *lst);
 void	free_array(char **s);
 int		ft_strchar_int(const char *s, int c);
-int		add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit);
+int		add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit);
 int		ft_export(t_master *mstr, t_cmdlist *cmdlst);
 t_envlst	*ft_envlstnew(char *env);
 t_envlst	*ft_new_env_key(char *env);
@@ -103,7 +103,7 @@ void	exp_full (t_master *mstr ,char *cmd);
 void	ft_envlst_add_back(t_master **mstr, t_envlst *new);
 int		key_check(char *key);
 char	**ft_split(char const *s, char c);
-int		chdir_env_pwd(t_master *mstr, char *directory);
+void		chdir_env_pwd(t_master *mstr, char *directory);
 int		find_home(t_master *mstr);
 int 	valid_flag(char *flag);
 int		ft_unset(char **cmd, t_master *mstr);
@@ -129,7 +129,7 @@ void	exit_minishell(t_master **mstr, int exit_code);
 int		executor(t_master *mstr, int cmd_count);
 void	parser(char *input, t_cmdlist **cmdlist);
 void	invalid_path(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
+void	no_perms_command(t_master **mstr, char **array, char *cmd);
 void	no_perms_path(char **array, char *cmd);
 int	output_redirect(t_master *mstr, t_cmdlist *cmd);
 char	**envlst_to_char(t_master *mstr);
@@ -138,6 +138,7 @@ int	is_built_in(t_cmdlist *cmd);
 int	cmdlist_size(t_cmdlist *cmd);
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 void	reset_master(t_master **master);
+void	alloc_error(t_master **mstr);
 
 
 #endif

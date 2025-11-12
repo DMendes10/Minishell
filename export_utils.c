@@ -9,8 +9,11 @@ int	simple_export(t_master *mstr)
 	i = 0;
 	ptr = mstr->env;
 	exp = malloc (((ft_envlst_size(ptr)) + 1) * sizeof(char*));
-	// if (!exp)
-	// 	return_error();
+	if (!exp)
+	{
+		perror("ERROR");
+		exit_minishell(&mstr, 1);
+	}
 	while (i < ft_envlst_size(mstr->env))
 	{
 		exp[i] = ft_strdup(ptr->token);
@@ -21,6 +24,7 @@ int	simple_export(t_master *mstr)
 	export_sorter (exp);
 	print_export (exp, mstr);
 	free_array (exp);
+	mstr->exit = 0;
 	return (0);
 }
 
@@ -72,11 +76,10 @@ void	print_export(char **exp, t_master *mstr)
 	}
 }
 
-int	add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit)
+int	add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit)
 {
 	int i;
 
-	(void)exit_code;
 	i = 1;
 	while (cmdlst->command[i])
 	{

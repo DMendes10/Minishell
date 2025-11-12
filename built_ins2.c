@@ -26,7 +26,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 		last = NULL;
 		i++;
 	}
-	return (0);
+	return (mstr->exit = 0, 0);
 }
 
 void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
@@ -53,7 +53,10 @@ int	ft_exit(char **cmd, t_master *mstr)
 		exit_minishell (&mstr, 0);
 	}
 	if (cmd[2])
+	{
+		mstr->exit = 1;
 		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
+	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
 		ft_putstr_fd("exit\nexit: ", 2);
