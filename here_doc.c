@@ -14,7 +14,7 @@ int	hdoc_rdwr(char *del)
 	{
 		line = readline ("> ");
 		if (line == NULL)
-			return (free(hdoc), printf("here-document delimeted by end-of-file (wanted `%s')", del), 1);
+			return (free(hdoc), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del)))
 			break ;
