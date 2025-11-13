@@ -9,6 +9,7 @@ void	free_master(t_master **master)
 	if ((*master)->data)
 	{
 		free ((*master)->data->pid);
+		free ((*master)->data->filename);
 		free ((*master)->data);
 	}
 	// free (*master);

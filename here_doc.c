@@ -1,31 +1,30 @@
 #include "minishellD.h"
 
-int	hdoc_rdwr(char *del)
+int	hdoc_rdwr(t_master *mstr, char *del)
 {
 	char	*hdoc;
 	char	*line;
 	int		fd;
 	int 	i;
-	char *filename;
 
+	i = 0;
 	hdoc = ft_strdup("");
 	while (1)
 	{
-		filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
-		if (access(filename, F_OK) == -1)
+		free (mstr->data->filename);
+		mstr->data->filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		if (access(mstr->data->filename, F_OK) == -1)
 			break;
-		free (filename);
 		i++;
 	}
-	
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	fd = open(mstr->data->filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
 		return (1);
 	while(1)
 	{
 		line = readline ("> ");
 		if (line == NULL)
-			return (free(hdoc), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
+			return (free(hdoc), unlink(mstr->data->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del)))
 			break ;
@@ -49,10 +48,10 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 	{
 		if (!ft_strncmp (cmd->input[i], "<<", 3))
 		{
-			if (hdoc_rdwr(cmd->input[i + 1]))
+			if (hdoc_rdwr(mstr, cmd->input[i + 1]))
 				return (1);
 			// pensar melhor nisto (no return)
-			mstr->data->fdin = open("tmp_heredoc.txt", O_RDONLY);
+			mstr->data->fdin = open(mstr->data->filename, O_RDONLY);
 			if (mstr->data->fdin == -1)
 			{
 				// printf("%s", cmd->input[i + 1]);
@@ -60,7 +59,7 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 				return (1);
 			}
 			dup2 (mstr->data->fdin, STDIN_FILENO);
-			unlink ("tmp_heredoc.txt");
+			unlink (mstr->data->filename);
 			close (mstr->data->fdin);
 		}
 		i++;

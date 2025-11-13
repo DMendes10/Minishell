@@ -48,6 +48,7 @@ typedef struct s_edata
 	int *pid;
 	int i;
 	int exit_code;
+	char *filename;
 }t_edata;
 
 // typedef struct s_envlst
@@ -116,7 +117,7 @@ bool	atoll_parser(char *str, long long *nbr);
 int		exit_converter(long long nbr);
 int		str_valid_nbr (char *str);
 int	ft_exit(char **cmd, t_master *mstr);
-int	hdoc_rdwr(char *del);
+int	hdoc_rdwr(t_master *mstr, char *del);
 int		hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 int		input_redirect (t_master *mstr, t_cmdlist *cmd);
 void	env_populator (t_master *mstr, char **env);

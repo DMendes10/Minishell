@@ -38,7 +38,7 @@ int key_check(char *key)
 	return (1);
 }
 
-int str_valid_nbr (char *str)
+int str_valid_nbr(char *str)
 {
     int i;
 
