@@ -11,6 +11,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
+# include <linux/limits.h>
 # include "src/Libft/libft.h"
 # include <stdbool.h>
 # include "minishell.h"
@@ -84,8 +85,8 @@ int		ft_env(t_master *mstr, t_envlst *list);
 int		ft_cd(char **command, t_master *mstr);
 char	*get_input (char *prompt);
 void	return_error(char *error);
-void	invalid_command(t_master **mstr, char **array, char *cmd);
-void	no_perms_command(t_master **mstr, char **array, char *cmd);
+void	invalid_command(t_master **mstr, char *cmd);
+void	no_perms_command(t_master **mstr, char *cmd);
 void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd);
 int		forked_exec (char **command, char **env);
 int		simple_export(t_master *mstr);
@@ -128,9 +129,9 @@ int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
 int		executor(t_master *mstr, int cmd_count);
 void	parser(char *input, t_cmdlist **cmdlist);
-void	invalid_path(char **array, char *cmd);
-void	no_perms_command(t_master **mstr, char **array, char *cmd);
-void	no_perms_path(char **array, char *cmd);
+void	invalid_path(char *cmd);
+void	no_perms_command(t_master **mstr, char *cmd);
+void	no_perms_path(char *cmd);
 int	output_redirect(t_master *mstr, t_cmdlist *cmd);
 char	**envlst_to_char(t_master *mstr);
 void free_cmdlst(t_cmdlist *cmdlst);

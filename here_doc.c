@@ -5,9 +5,20 @@ int	hdoc_rdwr(char *del)
 	char	*hdoc;
 	char	*line;
 	int		fd;
+	int 	i;
+	char *filename;
 
 	hdoc = ft_strdup("");
-	fd = open("tmp_heredoc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	while (1)
+	{
+		filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		if (access(filename, F_OK) == -1)
+			break;
+		free (filename);
+		i++;
+	}
+	
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
 		return (1);
 	while(1)

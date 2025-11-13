@@ -32,11 +32,11 @@ void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd)
 
 	// split_cmd = ft_split(path, ' ');
 	if (!path)
-		invalid_command (mstr, cmd->command, cmd->command[0]);
+		invalid_command (mstr, cmd->command[0]);
 	if (access (path, F_OK) != 0)
-		invalid_command (mstr, cmd->command, cmd->command[0]);
+		invalid_command (mstr, cmd->command[0]);
 	if (access (path, X_OK) != 0)
-		no_perms_command (mstr, cmd->command, cmd->command[0]);
+		no_perms_command (mstr, cmd->command[0]);
 }
 
 char	*path_finder(char **command, char **paths)

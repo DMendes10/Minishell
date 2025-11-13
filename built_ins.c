@@ -8,14 +8,17 @@ int ft_cd(char **command, t_master *mstr)
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
-			invalid_path(command, command[1]);
-		if (access (command[1], X_OK) != 0)
-			no_perms_path (command, command[1]);
+			return (invalid_path(command[1]), 0);
+		else if (access (command[1], X_OK) != 0)
+			no_perms_path (command[1]);
 		else
 			chdir_env_pwd(mstr, command[1]);
 	}
 	else
+	{
+		mstr->exit = 1;
 		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
+	}
 	return (0);
 }
 
@@ -37,13 +40,28 @@ int ft_env(t_master *mstr, t_envlst *list)
 int ft_pwd(t_master *mstr)
 {
 	char *path;
+	char str[PATH_MAX];
 
 	path = NULL;
-	path = getcwd(NULL, 0);
-	if (!path)
-		printf ("%s\n", getenv ("PWD"));
-	else
+	
+	if (!getcwd(str, PATH_MAX) && ft_strlen(env_finder(mstr->env, "PWD")) == 0)
+	{
+		path = ft_strjoin (env_finder(mstr->env, "OLDPWD"), "/..");
 		printf ("%s\n", path);
+	}
+	else if (!env_finder (mstr->env, "PWD"))
+	{
+		path = getcwd(str, PATH_MAX);
+		if (!path)
+			printf ("%s\n", getenv ("PWD"));
+		else
+			printf ("%s\n", path);
+	}
+	else
+	{
+		path = ft_strdup (env_finder(mstr->env, "PWD"));
+		printf ("%s\n", path);
+	}
 	free (path);
 	mstr->exit = 0;
 	return (0);
