@@ -58,7 +58,7 @@ char	**ft_split_pipex(char const *s, char c);
 int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 // int		ft_echo (char **command);
-int		ft_pwd();
+// int		ft_pwd();
 // int		ft_env(char **env);
 // int		ft_cd (char **command);
 char	*get_input (char *prompt);

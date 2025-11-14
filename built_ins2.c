@@ -52,16 +52,16 @@ int	ft_exit(char **cmd, t_master *mstr)
 		ft_putstr_fd("exit\n", 2);
 		exit_minishell (&mstr, 0);
 	}
-	if (cmd[2])
-	{
-		mstr->exit = 1;
-		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
-	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
 		ft_putstr_fd("exit\nexit: ", 2);
 		printf ("%s: numeric argument required", cmd[1]);
 		exit_minishell (&mstr, 2);
+	}
+	if (cmd[2])
+	{
+		mstr->exit = 1;
+		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
 	}
 	ft_putstr_fd("exit\n", 2);
 	exit_minishell (&mstr, exit_converter(nbr));
@@ -76,13 +76,13 @@ bool	atoll_parser(char *str, long long *nbr)
 
 	i = 0;
 	sign = 1;
-	if (!str_valid_nbr(str))
-		return (false);
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i++] == '-')
 			sign = -1;
 	}
+	if (!str_valid_nbr(str + i))
+		return (false);
 	while (str[i])
 	{
 		digit = str[i++] - '0';
@@ -101,6 +101,8 @@ int	exit_converter(long long nbr)
 	int i;
 
 	i = 0;
+	while (nbr < 0)
+		nbr = nbr + 256;
 	while (nbr > 0)
 	{
 		i++;
