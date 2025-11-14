@@ -88,8 +88,8 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 	int i;
 
 	i = 0;
-	if (hdoc_handler (mstr, cmd))
-		return (1);
+	// if (hdoc_handler (mstr, cmd))
+	// 	return (1);
 	while (cmd->input[i])
 	{
 		if (!ft_strncmp (cmd->input[i], "<", 2))
@@ -104,6 +104,22 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 			}
 			dup2 (mstr->data->fdin, STDIN_FILENO);
 			close (mstr->data->fdin);
+		}
+		else if (!ft_strncmp (cmd->input[i], "<<", 2))
+		{
+			if (!cmd->input[i + 2])
+			{
+				mstr->data->fdin = open(cmd->filename, O_RDONLY);
+				if (mstr->data->fdin == -1)
+				{
+					// printf("%s", cmd->input[i + 1]);
+					perror("here-document error");
+					return (1);
+				}
+				dup2 (mstr->data->fdin, STDIN_FILENO);
+				close (mstr->data->fdin);
+				unlink (cmd->filename);
+			}
 		}
 		i++;
 	}
@@ -157,6 +173,8 @@ void	exec_init(t_edata *data)
 
 void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 {
+	if (cmd->input)
+		hdoc_handler(mstr, cmd);
 	if (cmd->next)
 	{
 		if (pipe (mstr->data->pipefd) == -1)

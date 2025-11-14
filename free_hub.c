@@ -9,7 +9,6 @@ void	free_master(t_master **master)
 	if ((*master)->data)
 	{
 		free ((*master)->data->pid);
-		free ((*master)->data->filename);
 		free ((*master)->data);
 	}
 	// free (*master);
@@ -43,6 +42,7 @@ void free_cmdlst(t_cmdlist *cmdlst)
 		free_array (ptr->command);
 		free_array (ptr->input);
 		free_array (ptr->output);
+		free (ptr->filename);
 		free (ptr);
 		ptr = cmdlst;
 	}

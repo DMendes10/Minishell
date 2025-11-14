@@ -20,6 +20,7 @@ typedef struct s_cmdlist
 	char				**command;
 	char				**input;
 	char				**output;
+	char				*filename;
 	struct s_cmdlist	*next;
 }t_cmdlist;
 
