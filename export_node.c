@@ -43,7 +43,7 @@ t_envlst *export_new_env(char **env)
 	return (node);
 }
 
-int	change_env_var (char **cmd, t_master *mstr)
+int	change_env_var(char **cmd, t_master *mstr)
 {
 	t_envlst *ptr;
 
@@ -64,7 +64,7 @@ int	change_env_var (char **cmd, t_master *mstr)
 	return (0);
 }
 
-int	export_append (char **cmd, t_master *mstr)
+int	export_append(char **cmd, t_master *mstr)
 {
 	t_envlst *ptr;
 
@@ -82,7 +82,7 @@ int	export_append (char **cmd, t_master *mstr)
 	return (0);
 }
 
-void	exp_key (t_master *mstr ,char *cmd)
+void	exp_key(t_master *mstr ,char *cmd)
 {
 	t_envlst *node;
 	t_envlst *ptr;
@@ -113,7 +113,7 @@ void	exp_key (t_master *mstr ,char *cmd)
 // 	return (node);
 // }
 
-char *key_alloc (char *key)
+char *key_alloc(char *key)
 {
 	// int i;
 	char *new_key;

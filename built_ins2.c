@@ -8,8 +8,8 @@ int	ft_unset(char **cmd, t_master *mstr)
 
 	i = 1;
 	ptr = mstr->env;
-	if (!cmd[i])
-		return (0);
+	// if (!cmd[i])
+	// 	return (0);
 	while (cmd[i])
 	{
 		while (ptr)

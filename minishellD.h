@@ -140,6 +140,7 @@ int	cmdlist_size(t_cmdlist *cmd);
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 void	reset_master(t_master **master);
 void	alloc_error(t_master **mstr);
-
+void	env_init(t_master *mstr, char **env);
+void	update_shlvl (t_master *mstr);
 
 #endif

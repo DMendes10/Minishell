@@ -1,0 +1,57 @@
+#include "minishellD.h"
+
+void	env_init(t_master *mstr, char **env)
+{
+	char *pwd;
+	char **new_env;
+	char str[PATH_MAX];
+
+	pwd = NULL;
+	new_env = NULL;
+	// write (1, "a\n", 2);
+	if (!env[0])
+	{
+		// write (1, "a\n", 2);
+		pwd = getcwd(str, PATH_MAX);
+		new_env = malloc (4 * sizeof(char *));
+		if (!new_env)
+			alloc_error(&mstr);
+		new_env[0] = ft_strjoin ("PWD=", pwd);
+		// free (pwd);
+		// write (1, "a\n", 2);
+		if (!new_env[0])
+			alloc_error(&mstr);
+		new_env[1] = ft_strdup ("SHLVL=1");
+		if (!new_env[1])
+			alloc_error(&mstr);
+		new_env[2] = ft_strdup ("_=./minishell");
+		new_env[3] = NULL;
+		env_populator(mstr, new_env);
+		free_array (new_env);
+	}
+	else
+	{
+		env_populator(mstr, env);
+		update_shlvl(mstr);
+	}
+}
+
+void	update_shlvl(t_master *mstr)
+{
+	t_envlst *ptr;
+	int	lvl;
+
+	ptr = mstr->env;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->token, "SHLVL", 6))
+		{
+			lvl = ft_atoi(ptr->var);
+			lvl++;
+			free (ptr->var);
+			ptr->var = ft_strdup(ft_itoa(lvl));
+			return ;
+		}
+		ptr = ptr->next;
+	}
+}

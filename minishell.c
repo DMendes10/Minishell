@@ -126,14 +126,12 @@ int main(int ac, char **av, char **env)
 
 	input = NULL;
 	mstr = NULL;
+	// write (1, "a", 1);
 	if (ac > 1)
 		exit (1);
 	master_struct_init(&mstr);
-	// if (!env[0])
-	// 	mstr->env = personal_env();
-	// else
-	// mstr->env = env_populator (env);
-	env_populator (mstr, env);
+	// env_populator (mstr, env);
+	env_init(mstr, env);
 	while(1)
 	{
 		// prompt = getcwd(NULL, 0);
@@ -144,14 +142,6 @@ int main(int ac, char **av, char **env)
 			quote_search(&mstr->cmd);
 			executor (mstr, cmdlist_size(mstr->cmd));
 			reset_master (&mstr);
-			// free_cmdlst (mstr->cmd);
-			// mstr->cmd = NULL;
-			// free (mstr->data->pid);
-			// free (mstr->data);
-			// mstr->data->last_fd = 0;
-			// mstr->data = ft_memset (mstr->data, 0, sizeof (t_edata));
-			// free (mstr->data);
-			// free(mstr->data);
 		}
 	}
 }

@@ -52,13 +52,11 @@ void	ft_envlst_add_back(t_master **mstr, t_envlst *new)
 	}
 }
 
-void	env_populator (t_master *mstr, char **env)
+void	env_populator(t_master *mstr, char **env)
 {
 	int i;
-	// t_envlst *list;
 	t_envlst *node;
 
-	// list = NULL;
 	node = NULL;
 	i = 0;
 	while (env[i])
