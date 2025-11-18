@@ -8,8 +8,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 
 	i = 1;
 	ptr = mstr->env;
-	// if (!cmd[i])
-	// 	return (0);
+	last = ptr;
 	while (cmd[i])
 	{
 		while (ptr)
@@ -31,7 +30,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 
 void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
 {
-	if (!last)
+	if (!last || ptr == last)
 		(*mstr)->env = ptr->next;
 	else
 		last->next = ptr->next;
@@ -50,7 +49,7 @@ int	ft_exit(char **cmd, t_master *mstr)
 	if (!cmd[1])
 	{
 		ft_putstr_fd("exit\n", 2);
-		exit_minishell (&mstr, 0);
+		exit_minishell (&mstr, mstr->exit);
 	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{

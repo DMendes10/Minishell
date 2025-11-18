@@ -128,11 +128,9 @@ int main(int ac, char **av, char **env)
 
 	input = NULL;
 	mstr = NULL;
-	// write (1, "a", 1);
 	if (ac > 1)
 		exit (1);
 	master_struct_init(&mstr);
-	// env_populator (mstr, env);
 	env_init(mstr, env);
 	while(1)
 	{
@@ -140,7 +138,7 @@ int main(int ac, char **av, char **env)
 		input = get_input ("@Minishell> ");
 		if (input && input[0])
 		{
-			parser(input, &mstr->cmd);
+			parser(input, &mstr->cmd); //dar free ao input aqui
 			quote_search(&mstr->cmd);
 			executor (mstr, cmdlist_size(mstr->cmd));
 			reset_master (&mstr);

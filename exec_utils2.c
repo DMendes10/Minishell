@@ -7,6 +7,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	char **env;
 	char *path;
 
+	paths = NULL;
 	dup2(mstr->data->last_fd, STDIN_FILENO);
 	close (mstr->data->last_fd);
 	if (cmd->next)
@@ -15,19 +16,14 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 		close (mstr->data->pipefd[0]);
 		close (mstr->data->pipefd[1]);
 	}
-	if (cmd->input)
-	{
-		if(input_redirect (mstr, cmd))
+	if (cmd->input && input_redirect (mstr, cmd))
 			exit_minishell(&mstr, 1);
-	}
-	if (cmd->output)
-	{
-		if(output_redirect (mstr, cmd))
+	if (cmd->output && output_redirect (mstr, cmd))
 			exit_minishell(&mstr, 1);
-	}
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
-	paths = ft_split_pipex (env_finder(mstr->env, "PATH"), ':');
+	if (env_finder(mstr->env, "PATH"))
+		paths = ft_split (env_finder(mstr->env, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
 	path_checker(&mstr, path, cmd);
 	env = envlst_to_char (mstr);

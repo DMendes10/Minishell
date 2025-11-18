@@ -52,17 +52,17 @@ int ft_pwd(t_master *mstr)
 	else if (!env_finder (mstr->env, "PWD"))
 	{
 		path = getcwd(str, PATH_MAX);
-		if (!path)
-			printf ("%s\n", getenv ("PWD"));
-		else
-			printf ("%s\n", path);
+		// if (!path)
+		// 	printf ("%s\n", getenv ("PWD"));
+		// else
+		printf ("%s\n", path);
 	}
 	else
 	{
 		path = ft_strdup (env_finder(mstr->env, "PWD"));
 		printf ("%s\n", path);
+		free (path);
 	}
-	free (path);
 	mstr->exit = 0;
 	return (0);
 }

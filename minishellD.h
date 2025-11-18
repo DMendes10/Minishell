@@ -142,5 +142,7 @@ void	reset_master(t_master **master);
 void	alloc_error(t_master **mstr);
 void	env_init(t_master *mstr, char **env);
 void	update_shlvl (t_master *mstr);
+char	**custom_env_builder(t_master *mstr);
+void	alloc_error_exit(t_master *master, char **array);
 
 #endif
