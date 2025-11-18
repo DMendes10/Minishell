@@ -40,6 +40,7 @@ void	update_shlvl(t_master *mstr)
 {
 	t_envlst *ptr;
 	int	lvl;
+	char *new_lvl;
 
 	ptr = mstr->env;
 	while (ptr)
@@ -49,7 +50,9 @@ void	update_shlvl(t_master *mstr)
 			lvl = ft_atoi(ptr->var);
 			lvl++;
 			free (ptr->var);
-			ptr->var = ft_strdup(ft_itoa(lvl));
+			new_lvl = ft_itoa(lvl);
+			ptr->var = ft_strdup(new_lvl);
+			free (new_lvl);
 			return ;
 		}
 		ptr = ptr->next;

@@ -46,6 +46,8 @@ char	*path_finder(char **command, char **paths)
 	char	*new_path;
 
 	i = 0;
+	if (command[0][0] == '.' || command[0][0] == '/' || !paths)
+		return (command[0]);
 	while (paths[i])
 	{
 		temp = ft_strjoin (paths[i], "/");

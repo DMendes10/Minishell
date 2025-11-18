@@ -27,7 +27,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	}
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
-	paths = ft_split (env_finder(mstr->env, "PATH"), ':');
+	paths = ft_split_pipex (env_finder(mstr->env, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
 	path_checker(&mstr, path, cmd);
 	env = envlst_to_char (mstr);
