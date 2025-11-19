@@ -28,19 +28,6 @@ int	ft_unset(char **cmd, t_master *mstr)
 	return (mstr->exit = 0, 0);
 }
 
-void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
-{
-	if (!last || ptr == last)
-		(*mstr)->env = ptr->next;
-	else
-		last->next = ptr->next;
-	free(ptr->token);
-	if (ptr->var)
-		free(ptr->var);
-	// free(ptr->next);
-	free(ptr);
-}
-
 int	ft_exit(char **cmd, t_master *mstr)
 {
 	long long nbr;

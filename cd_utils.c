@@ -12,12 +12,22 @@ void chdir_env_pwd(t_master *mstr, char *directory)
 		{	
 			free (ptr->var);
 			ptr->var = ft_strdup(env_finder(mstr->env, "PWD"));
+			if (!ptr->var)
+				alloc_error (&mstr);
 		}
 		ptr = ptr->next;
 	}
 	mstr->exit = chdir(directory);
 	if (!getcwd(str, PATH_MAX))
 		printf ("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+	update_pwd (mstr);
+}
+
+void	update_pwd(t_master *mstr)
+{
+	t_envlst *ptr;
+	char str[PATH_MAX];
+
 	ptr = mstr->env;
 	while (ptr)
 	{
@@ -25,6 +35,8 @@ void chdir_env_pwd(t_master *mstr, char *directory)
 		{	
 			free (ptr->var);
 			ptr->var = ft_strdup(getcwd(str, PATH_MAX));
+			if (!ptr->var)
+				alloc_error(&mstr);
 		}
 		ptr = ptr->next;
 	}
@@ -38,7 +50,7 @@ int find_home(t_master *mstr)
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, "HOME", 5))
-			return(chdir_env_pwd(mstr, ptr->var), 0);
+			return(mstr->exit = 0, chdir_env_pwd(mstr, ptr->var), 0);
 		ptr = ptr->next;
 	}
 	mstr->exit = 1;

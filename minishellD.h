@@ -47,7 +47,7 @@ typedef struct s_edata
 	int pipefd[2];
 	int *pid;
 	int i;
-	int exit_code;
+	int built_in_flag;
 }t_edata;
 
 // typedef struct s_envlst
@@ -127,7 +127,7 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr);
 char	*env_finder (t_envlst *lst ,char *cmd);
 int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
-int		executor(t_master *mstr, int cmd_count);
+void	executor(t_master *mstr, int cmd_count);
 void	parser(char *input, t_cmdlist **cmdlist);
 void	invalid_path(char *cmd);
 void	no_perms_command(t_master **mstr, char *cmd);
@@ -144,5 +144,7 @@ void	env_init(t_master *mstr, char **env);
 void	update_shlvl (t_master *mstr);
 char	**custom_env_builder(t_master *mstr);
 void	alloc_error_exit(t_master *master, char **array);
+void	update_pwd(t_master *mstr);
+void	redir_handler(t_master *mstr, t_cmdlist *cmd);
 
 #endif

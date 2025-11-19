@@ -63,9 +63,3 @@ char	**custom_env_builder(t_master *mstr)
 	new_env[3] = NULL;
 	return (new_env);
 }
-
-void	alloc_error_exit(t_master *master, char **array)
-{
-	free_array (array);
-	alloc_error (&master);
-}

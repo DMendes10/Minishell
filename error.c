@@ -1,20 +1,6 @@
 
 #include "minishellD.h"
 
-void	return_error(char *error)
-{
-	perror (error);
-	exit(1);
-}
-
-// void	close_files(int *fd, int file)
-// {
-// 	if (close(fd[0]) < 0 || close(fd[1]) < 0)
-// 		return_error("closing error");
-// 	if (close(file) < 0)
-// 		return_error("closing error");
-// }
-
 void	invalid_command(t_master **mstr, char *cmd)
 {
 	ft_putstr_fd (cmd, 2);
@@ -69,4 +55,10 @@ void	alloc_error(t_master **mstr)
 {
 	perror("ERROR");
 	exit_minishell (mstr, 1);
+}
+
+void	alloc_error_exit(t_master *master, char **array)
+{
+	free_array (array);
+	alloc_error (&master);
 }

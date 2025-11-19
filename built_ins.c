@@ -8,9 +8,9 @@ int ft_cd(char **command, t_master *mstr)
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
-			return (invalid_path(command[1]), 0);
+			return (mstr->exit = 1, invalid_path(command[1]), 0);
 		else if (access (command[1], X_OK) != 0)
-			no_perms_path (command[1]);
+			return(mstr->exit = 1, no_perms_path (command[1]), 0);
 		else
 			chdir_env_pwd(mstr, command[1]);
 	}
@@ -48,13 +48,11 @@ int ft_pwd(t_master *mstr)
 	{
 		path = ft_strjoin (env_finder(mstr->env, "OLDPWD"), "/..");
 		printf ("%s\n", path);
+		free (path);
 	}
 	else if (!env_finder (mstr->env, "PWD"))
 	{
 		path = getcwd(str, PATH_MAX);
-		// if (!path)
-		// 	printf ("%s\n", getenv ("PWD"));
-		// else
 		printf ("%s\n", path);
 	}
 	else
@@ -93,8 +91,7 @@ int ft_echo(t_master *mstr, char **command, int flag, int i)
 	}
 	if (!flag)
 		printf ("\n");
-	mstr->exit = 0;
-	return (0);
+	return (mstr->exit = 0, 0);
 }
 
 int	ft_export(t_master *mstr, t_cmdlist *cmdlst)

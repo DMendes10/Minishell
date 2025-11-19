@@ -10,17 +10,22 @@ void	exp_full(t_master *mstr ,char *cmd)
 		alloc_error(&mstr);
 	splited[0] = ft_substr (cmd, 0, ft_strchar_int (cmd, '='));
 	if (!splited[0])
-		alloc_error(&mstr);
+		alloc_error_exit (mstr, splited);
 	splited[1] = ft_strdup ((ft_strchr (cmd, '=')) + 1);
 	if (!splited[1])
-		alloc_error(&mstr);
+		alloc_error_exit(mstr, splited);
 	splited[2] = NULL;
 	if (change_env_var(splited, mstr) == 1)
+	{
+		free_array (splited);
+		mstr->exit = 0;
 		return;
+	}
 	node = export_new_env(splited);
 	if (!node)
-		alloc_error(&mstr);
+		alloc_error_exit(mstr, splited);
 	ft_envlst_add_back (&mstr, node);
+	mstr->exit = 0;
 	free_array(splited);
 }
 
@@ -35,10 +40,14 @@ t_envlst *export_new_env(char **env)
 		node->token = ft_strdup (env[0]);
 	else
 		node->token = ft_substr (env[0], 0, ft_strchar_int(env[0], '+'));
+	if (!node->token)
+		return (free (node), NULL);
 	if (env[1] && env[1][0])
 		node->var = ft_strdup (env[1]);
 	else
 		node->var = ft_strdup ("");
+	if (!node->var)
+		return (free (node), NULL);
 	node->next = NULL;
 	return (node);
 }
@@ -56,7 +65,7 @@ int	change_env_var(char **cmd, t_master *mstr)
 		{
 			free (ptr->var);
 			ptr->var = ft_strdup(cmd[1]);
-			// free_array(cmd);
+			// mstr->exit = 0;
 			return (1);
 		}
 		ptr = ptr->next;
@@ -74,7 +83,8 @@ int	export_append(char **cmd, t_master *mstr)
 		if (!ft_strncmp(ptr->token, cmd[0], ft_strchar_int (cmd[0], '+')))
 		{
 			ptr->var = ft_strjoin_gnl (ptr->var, cmd[1]);
-			free_array(cmd);
+			// free_array(cmd);
+			mstr->exit = 0;
 			return (1);
 		}
 		ptr = ptr->next;
@@ -100,19 +110,6 @@ void	exp_key(t_master *mstr ,char *cmd)
 	ft_envlst_add_back (&mstr, node);
 }
 
-// t_envlst	*ft_new_env_key(char *envkey)
-// {
-// 	t_envlst	*node;
-
-// 	node = malloc(sizeof(t_envlst));
-// 	if (!node)
-// 		return (NULL);
-// 	node->token = ft_strdup(envkey);
-// 	node->var = NULL;
-// 	node->next = NULL;
-// 	return (node);
-// }
-
 char *key_alloc(char *key)
 {
 	// int i;
@@ -128,27 +125,3 @@ char *key_alloc(char *key)
 	}
 }
 
-// int key_check(char *key)
-// {
-// 	int i;
-
-// 	i = 1;
-// 	if (!ft_isalpha(key[0]) && key[0] != '_')
-// 		return (1);
-// 	while (key[i] && key[i] != '=')
-// 	{
-// 		if (!ft_isalnum (key[i]) && key[0] != '_')
-// 			break;
-// 		i++;
-// 	}
-// 	if (key[i] && key[i] == '+')
-// 	{
-// 		if (key[i + 1] && key[i + 1] == '=')
-// 			return (0);
-// 	}
-// 	else if (key[i] && key[i] == '=')
-// 		return (0);
-// 	else if (!key[i])
-// 		return (0);
-// 	return (1);
-// }
