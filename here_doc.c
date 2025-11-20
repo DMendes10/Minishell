@@ -5,20 +5,9 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 	char	*hdoc;
 	char	*line;
 	int		fd;
-	int 	i;
 
-	i = 0;
-	(void) mstr;
-	hdoc = ft_strdup("");
-	while (1)
-	{
-		free (cmd->filename);
-		cmd->filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
-		if (access(cmd->filename, F_OK) == -1)
-			break;
-		i++;
-	}
-	fd = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	hdoc = NULL;
+	fd = hdoc_opener (mstr, cmd);
 	if (fd == -1)
 		return (1);
 	while(1)
@@ -29,16 +18,54 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
-		line = ft_strjoin_gnl (line, "\n");
-		hdoc = ft_strjoin_gnl (hdoc, line);
-		free (line);
+		hdoc = hdoc_wr_helper(mstr, line);
+		// free (line);
 		if (hdoc == NULL)
 			break ;
 	}
 	write (fd, hdoc, ft_strlen(hdoc));
 	close (fd);
-	// cmd->filename = ft_strdup (mstr->data->filename);
 	return (free(line), free(hdoc), 0);
+}
+
+char	*hdoc_wr_helper(t_master *mstr, char *line)
+{
+	char *hdoc;
+
+	hdoc = NULL;
+	line = ft_strjoin_gnl (line, "\n");
+	if (!line)
+		alloc_error (&mstr);
+	hdoc = ft_strjoin_gnl (hdoc, line);
+	if (!hdoc)
+	{
+		free (line);
+		alloc_error (&mstr);
+	}
+	free (line);
+	return (hdoc);
+}
+
+int	hdoc_opener(t_master *mstr, t_cmdlist *cmd)
+{
+	int i;
+	int fd;
+
+	i = 0;
+	while (1)
+	{
+		free (cmd->filename);
+		cmd->filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		if (!cmd->filename)
+			alloc_error (&mstr);
+		if (access(cmd->filename, F_OK) == -1)
+			break;
+		i++;
+	}
+	fd = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (fd == -1)
+		return (-1);
+	return (fd);
 }
 
 int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
@@ -57,18 +84,25 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 			if (ptr->input[i + 2])
 				unlink(cmd->filename);
 			// pensar melhor nisto (no return)
-			// mstr->data->fdin = open(mstr->data->filename, O_RDONLY);
-			// if (mstr->data->fdin == -1)
-			// {
-			// 	// printf("%s", cmd->input[i + 1]);
-			// 	perror("here-document error");
-			// 	return (1);
-			// }
-			// dup2 (mstr->data->fdin, STDIN_FILENO);
-			// unlink (mstr->data->filename);
-			// close (mstr->data->fdin);
 		}
 		i++;
+	}
+	return (0);
+}
+
+int	h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i)
+{
+	if (!cmd->input[i + 2])
+	{
+		mstr->data->fdin = open(cmd->filename, O_RDONLY);
+		if (mstr->data->fdin == -1)
+		{
+			perror("here-document error");
+			return (1);
+		}
+		dup2 (mstr->data->fdin, STDIN_FILENO);
+		close (mstr->data->fdin);
+		unlink (cmd->filename);
 	}
 	return (0);
 }

@@ -89,3 +89,29 @@ int	is_built_in(t_cmdlist *cmd)
 	else
 		return (0);
 }
+
+char	*path_finder(char **command, char **paths)
+{
+	int		i;
+	char	*temp;
+	char	*new_path;
+
+	i = 0;
+	if (command[0][0] == '.' || command[0][0] == '/' || !paths)
+		return (command[0]);
+	while (paths[i])
+	{
+		temp = ft_strjoin (paths[i], "/");
+		new_path = ft_strjoin (temp, command[0]);
+		free (temp);
+		if (access (new_path, X_OK) == 0)
+		{
+			free_array (paths);
+			return (new_path);
+		}
+		free (new_path);
+		i++;
+	}
+	free_array (paths);
+	return (NULL);
+}

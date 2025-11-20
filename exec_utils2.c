@@ -24,22 +24,6 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	}
 }
 
-void	redir_handler(t_master *mstr, t_cmdlist *cmd)
-{
-	dup2(mstr->data->last_fd, STDIN_FILENO);
-	close (mstr->data->last_fd);
-	if (cmd->next)
-	{
-		dup2(mstr->data->pipefd[1], STDOUT_FILENO);
-		close (mstr->data->pipefd[0]);
-		close (mstr->data->pipefd[1]);
-	}
-	if (cmd->input && input_redirect (mstr, cmd))
-			exit_minishell(&mstr, 1);
-	if (cmd->output && output_redirect (mstr, cmd))
-			exit_minishell(&mstr, 1);
-}
-
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 {
 	int saved_stdin;
@@ -49,28 +33,8 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 	saved_stdout = dup(STDOUT_FILENO);
 	dup2(mstr->data->last_fd, STDIN_FILENO);
 	close (mstr->data->last_fd);
-	if (cmd->input)
-	{
-		if(input_redirect (mstr, cmd))
-		{
-			dup2(saved_stdin, STDIN_FILENO);
-			dup2(saved_stdout, STDOUT_FILENO);
-			close(saved_stdin);
-			close(saved_stdout);
-			return;
-		}
-	}
-	if (cmd->output)
-	{
-		if (output_redirect (mstr, cmd))
-		{
-			dup2(saved_stdin, STDIN_FILENO);
-			dup2(saved_stdout, STDOUT_FILENO);
-			close(saved_stdin);
-			close(saved_stdout);
-			return;
-		}
-	}
+	if (built_in_redir(mstr, cmd, saved_stdin, saved_stdout))
+		return;
 	if (!ft_strncmp (cmd->command[0], "exit", 5))
 	{
 		close(saved_stdin);
@@ -104,18 +68,8 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 		}
 		else if (!ft_strncmp (cmd->input[i], "<<", 2))
 		{
-			if (!cmd->input[i + 2])
-			{
-				mstr->data->fdin = open(cmd->filename, O_RDONLY);
-				if (mstr->data->fdin == -1)
-				{
-					perror("here-document error");
-					return (1);
-				}
-				dup2 (mstr->data->fdin, STDIN_FILENO);
-				close (mstr->data->fdin);
-				unlink (cmd->filename);
-			}
+			if (h_doc_redir (mstr, cmd, i))
+				return (1);
 		}
 		i++;
 	}

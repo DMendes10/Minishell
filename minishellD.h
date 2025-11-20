@@ -146,5 +146,10 @@ char	**custom_env_builder(t_master *mstr);
 void	alloc_error_exit(t_master *master, char **array);
 void	update_pwd(t_master *mstr);
 void	redir_handler(t_master *mstr, t_cmdlist *cmd);
+int		built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, int saved_out);
+char	*hdoc_wr_helper(t_master *mstr, char *line);
+int	hdoc_opener(t_master *mstr, t_cmdlist *cmd);
+int	h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i);
+
 
 #endif

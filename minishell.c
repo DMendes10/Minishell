@@ -1,31 +1,6 @@
 
 #include "minishellD.h"
 
-// int forked_exec(char **command, char **env)
-// {
-// 	int		exit_code;
-// 	pid_t	pid;
-
-// 	exit_code = 1;
-// 	pid = fork();
-// 	if (pid == 0)
-// 		child_proc(command, env);
-// 	exit_code = ft_wait(pid);
-// 	return (exit_code);
-// }
-
-// int	ft_wait(pid_t *pid)
-// {
-// 	int	status;
-// 	int	exit_code;
-
-// 	exit_code = 0;
-// 	waitpid(*pid, &status, 0);
-// 	if (WIFEXITED (status))
-// 		exit_code = WEXITSTATUS (status);
-// 	return (exit_code);
-// }
-
 void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd)
 {
 	// char **split_cmd;
@@ -37,32 +12,6 @@ void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd)
 		invalid_command (mstr, cmd->command[0]);
 	if (access (path, X_OK) != 0)
 		no_perms_command (mstr, cmd->command[0]);
-}
-
-char	*path_finder(char **command, char **paths)
-{
-	int		i;
-	char	*temp;
-	char	*new_path;
-
-	i = 0;
-	if (command[0][0] == '.' || command[0][0] == '/' || !paths)
-		return (command[0]);
-	while (paths[i])
-	{
-		temp = ft_strjoin (paths[i], "/");
-		new_path = ft_strjoin (temp, command[0]);
-		free (temp);
-		if (access (new_path, X_OK) == 0)
-		{
-			free_array (paths);
-			return (new_path);
-		}
-		free (new_path);
-		i++;
-	}
-	free_array (paths);
-	return (NULL);
 }
 
 void	master_struct_init(t_master **master)

@@ -65,7 +65,6 @@ int	change_env_var(char **cmd, t_master *mstr)
 		{
 			free (ptr->var);
 			ptr->var = ft_strdup(cmd[1]);
-			// mstr->exit = 0;
 			return (1);
 		}
 		ptr = ptr->next;
@@ -83,7 +82,6 @@ int	export_append(char **cmd, t_master *mstr)
 		if (!ft_strncmp(ptr->token, cmd[0], ft_strchar_int (cmd[0], '+')))
 		{
 			ptr->var = ft_strjoin_gnl (ptr->var, cmd[1]);
-			// free_array(cmd);
 			mstr->exit = 0;
 			return (1);
 		}
@@ -105,23 +103,23 @@ void	exp_key(t_master *mstr ,char *cmd)
 		ptr = ptr->next;
 	}
 	node = ft_new_env_key(cmd);
-	// if (!node)
-		// 	return_error();
+	if (!node)
+		alloc_error(&mstr);
 	ft_envlst_add_back (&mstr, node);
 }
 
-char *key_alloc(char *key)
-{
-	// int i;
-	char *new_key;
+// char *key_alloc(char *key)
+// {
+// 	char *new_key;
 
-	// i = 0;
-	if (!ft_strchr (key, '+'))
-		return (ft_strdup(key));
-	else
-	{
-		new_key = ft_substr(key, 0, ft_strchar_int (key, '+'));
-		return (new_key);
-	}
-}
+// 	if (!ft_strchr (key, '+'))
+// 		return (ft_strdup(key));
+// 	else
+// 	{
+// 		new_key = ft_substr(key, 0, ft_strchar_int (key, '+'));
+// 		if (!new_key)
+// 			alloc_error(&mstr);
+// 		return (new_key);
+// 	}
+// }
 
