@@ -1,36 +1,43 @@
 #include "parser.h"
+#include "minishellD.h"
 
-int	expansion_checker(t_cmdlist *cmd, t_envlst *env)
+void	search_and_replace(char *s, char *key, t_envlst **env)
 {
-	int		i;
-	char	*ret;
+	int			size;
+	char		*var;
+	char		*temp;
+	t_envlst	*node;
 
-	i = 0;
-	ret = NULL;
-	while (cmd)
+	var = env_finder(node, key);
+	node = *env;
+	if (var)
 	{
-		if (ft_strnstr(cmd->command[i], env->token, ft_strlen(cmd->command[i])))
-		{
-			ret = ft_strdup(env->var);
-			free(cmd->command[i]);
-			cmd->command[i] = ret;
-		}
+		size = ft_strlen(s) - ft_strlen(key) + ft_strlen(var);
+		temp = s;
+		s = ft_calloc(size + 1, 1);
+		while(temp && *temp != '$')
+			*(s++) = *(temp++);
+		while(var)
+			*(s++) = *(var++);
+		temp = temp + ft_strlen(key);
+		while(temp)
+			*(s++) = *(temp++);
+		free (temp);
 	}
-	cmd = cmd->next;
-	return (1);
 }
 
-int	expansion(t_cmdlist **cmdlist, t_envlst **envlst)
+void	expansion(t_cmdlist **cmdlist, t_envlst **env)
 {
-	t_cmdlist	*cmdtable;
-	t_envlst	*env;
+	t_expansion	*exp;
 
-	cmdtable = *cmdlist;
-	env = *envlst;
-	while(env)
-	{
-		while(!expansion_checker(cmdtable, env));
-			env = env->next;
-	}
-	printf("%d", expansion_checker(cmdtable, env));
+	exp = malloc(sizeof(t_expansion));
+	while(get_varkey_cmd(cmdlist, exp))
+		search_and_replace(exp->s, exp->key, env);
+	while(get_varkey_input(cmdlist, exp, 0))
+		search_and_replace(exp->s, exp->key, env);
+	while(get_varkey_output(cmdlist, exp))
+		search_and_replace(exp->s, exp->key, env);
+
 }
+
+
