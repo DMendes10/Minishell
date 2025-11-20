@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:28:14 by diomende          #+#    #+#             */
-/*   Updated: 2025/08/20 16:39:56 by diomende         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:38:05 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static char	**ft_minisplit(char **a, char const *s, char c)
 	return (a);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split_libft(char const *s, char c)
 {
 	char	**array;
 

@@ -1,58 +1,108 @@
 #include "minishellD.h"
 
-int	hdoc_rdwr(char *del)
+int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 {
 	char	*hdoc;
 	char	*line;
 	int		fd;
 
-	hdoc = ft_strdup("");
-	fd = open("tmp_heredoc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	hdoc = NULL;
+	fd = hdoc_opener (mstr, cmd);
 	if (fd == -1)
 		return (1);
 	while(1)
 	{
 		line = readline ("> ");
 		if (line == NULL)
-			return (free(hdoc), printf("here-document delimeted by end-of-file (wanted `%s')", del), 1);
+			return (free(hdoc), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 			// ou perror()?
-		if (!ft_strncmp(del, line, ft_strlen(del)))
+		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
-		line = ft_strjoin_gnl (line, "\n");
-		hdoc = ft_strjoin_gnl (hdoc, line);
+		hdoc = hdoc_wr_helper(mstr, line);
+		// free (line);
 		if (hdoc == NULL)
 			break ;
 	}
 	write (fd, hdoc, ft_strlen(hdoc));
-	free (line);
 	close (fd);
-	return (free(hdoc), 0);
+	return (free(line), free(hdoc), 0);
+}
+
+char	*hdoc_wr_helper(t_master *mstr, char *line)
+{
+	char *hdoc;
+
+	hdoc = NULL;
+	line = ft_strjoin_gnl (line, "\n");
+	if (!line)
+		alloc_error (&mstr);
+	hdoc = ft_strjoin_gnl (hdoc, line);
+	if (!hdoc)
+	{
+		free (line);
+		alloc_error (&mstr);
+	}
+	free (line);
+	return (hdoc);
+}
+
+int	hdoc_opener(t_master *mstr, t_cmdlist *cmd)
+{
+	int i;
+	int fd;
+
+	i = 0;
+	while (1)
+	{
+		free (cmd->filename);
+		cmd->filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		if (!cmd->filename)
+			alloc_error (&mstr);
+		if (access(cmd->filename, F_OK) == -1)
+			break;
+		i++;
+	}
+	fd = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (fd == -1)
+		return (-1);
+	return (fd);
 }
 
 int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 {
 	int i;
+	t_cmdlist *ptr;
 
 	i = 0;
-	while (cmd->input[i])
+	ptr = cmd;
+	while (ptr->input[i])
 	{
-		if (!ft_strncmp (cmd->input[i], "<<", 3))
+		if (!ft_strncmp (ptr->input[i], "<<", 3))
 		{
-			if (hdoc_rdwr(cmd->input[i + 1]))
+			if (hdoc_rdwr(mstr, ptr, ptr->input[i + 1]))
 				return (1);
+			if (ptr->input[i + 2])
+				unlink(cmd->filename);
 			// pensar melhor nisto (no return)
-			mstr->data->fdin = open("tmp_heredoc.txt", O_RDONLY);
-			if (mstr->data->fdin == -1)
-			{
-				printf("%s", cmd->input[i + 1]);
-				perror(":");
-				return (1);
-			}
-			dup2 (mstr->data->fdin, STDIN_FILENO);
-			unlink ("tmp_heredoc.txt");
 		}
 		i++;
+	}
+	return (0);
+}
+
+int	h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i)
+{
+	if (!cmd->input[i + 2])
+	{
+		mstr->data->fdin = open(cmd->filename, O_RDONLY);
+		if (mstr->data->fdin == -1)
+		{
+			perror("here-document error");
+			return (1);
+		}
+		dup2 (mstr->data->fdin, STDIN_FILENO);
 		close (mstr->data->fdin);
+		unlink (cmd->filename);
 	}
 	return (0);
 }
