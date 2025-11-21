@@ -91,6 +91,8 @@ char	*env_finder(t_envlst *lst ,char *cmd)
 
 	i = 0;
 	ptr = lst;
+	if (!*cmd)
+		return (NULL);
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
@@ -142,7 +144,7 @@ int main(int ac, char **av, char **env)
 		{
 			parser(input, &mstr->cmd);
 			// quote_search(&mstr->cmd);
-			expansion(mstr);
+			// expansion(mstr);
 			executor (mstr, cmdlist_size(mstr->cmd));
 			reset_master (&mstr);
 			// free_cmdlst (mstr->cmd);

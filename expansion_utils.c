@@ -6,6 +6,8 @@ int	get_keysize(char *key)
 	int	size;
 
 	size = 0;
+	if (!ft_strncmp(key, "?", ft_strlen(key)))
+		size = 1;
 	while((ft_isalnum(key[size]) || key[size] == '_'))
 	{
 		size++;
@@ -40,23 +42,25 @@ int	get_varkey_cmd(t_master *master)
 {
 	int		i;
 	char	*key;
+	t_cmdlist	*cmd;
 
+	cmd = master->cmd;
 	i = 0;
 	key = NULL;
-	while(master->cmd)
+	while(cmd)
 	{
 		i = 0;
-		while (master->cmd->command && master->cmd->command[i])
+		while (cmd->command && cmd->command[i])
 		{
-			key = get_varkey(master->cmd->command[i]);
+			key = get_varkey(cmd->command[i]);
 			if (key)
 			{
-				search_and_replace(&master->cmd->command[i], key, master);
+				search_and_replace(&cmd->command[i], key, master, 0, 0);
 				return (1);
 			}
 			i++;
 		}
-		master->cmd = master->cmd->next;
+		cmd = cmd->next;
 	}
 	return (0);
 }
@@ -64,26 +68,28 @@ int	get_varkey_cmd(t_master *master)
 int	get_varkey_input(t_master *master, int i)
 {
 	char	*key;
+	t_cmdlist	*cmd;
 
+	cmd = master->cmd;
 	key = NULL;
 	while(master->cmd->input[i])
 	{
 		i = 0;
-		while (master->cmd->input && master->cmd->input[i])
+		while (cmd->input && cmd->input[i])
 		{
-			if (ft_strncmp(master->cmd->input[i], "<<", 2))
+			if (ft_strncmp(cmd->input[i], "<<", 2))
 				i = i + 2;
 			else
 			{
-				key = get_varkey(master->cmd->input[i]);
+				key = get_varkey(cmd->input[i]);
 				if (key)
 				{
-					search_and_replace(&master->cmd->input[i], key, master);
+					search_and_replace(&cmd->input[i], key, master, 0, 0);
 					return (1);
 				}
 				i++;
 			}
-			master->cmd = master->cmd->next;
+			cmd = cmd->next;
 		}
 	}
 	return (0);
@@ -93,23 +99,25 @@ int	get_varkey_output(t_master *master)
 {
 	int		i;
 	char	*key;
+	t_cmdlist	*cmd;
 
+	cmd = master->cmd;
 	i = 0;
 	key = NULL;
-	while(master->cmd)
+	while(cmd)
 	{
 		i = 0;
-		while (master->cmd->output[i] && master->cmd->output[i])
+		while (cmd->output[i] && cmd->output[i])
 		{
-			key = get_varkey(master->cmd->output[i]);
+			key = get_varkey(cmd->output[i]);
 			if (key)
 			{
-				search_and_replace(&master->cmd->output[i], key, master);
+				search_and_replace(&cmd->output[i], key, master, 0, 0);
 				return (1);
 			}
 			i++;
 		}
-		master->cmd = master->cmd->next;
+		cmd = cmd->next;
 	}
 	return (0);
 }
