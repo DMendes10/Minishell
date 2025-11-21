@@ -140,4 +140,11 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 void	reset_master(t_master **master);
 
 
+int			get_varkey_cmd(t_master *master);
+int			get_varkey_input(t_master *master, int i);
+int			get_varkey_output(t_master *master);
+void		search_and_replace(char **s, char *key, t_master *master);
+void		expansion(t_master *master);
+
+
 #endif
