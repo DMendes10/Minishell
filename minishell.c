@@ -91,7 +91,7 @@ int main(int ac, char **av, char **env)
 		{
 			parser(input, &mstr->cmd);
 			// quote_search(&mstr->cmd);
-			// expansion(mstr);
+			expansion(mstr);
 			executor (mstr, cmdlist_size(mstr->cmd));
 			reset_master (&mstr);
 		}

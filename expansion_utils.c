@@ -5,7 +5,7 @@ int	get_keysize(char *key)
 	int	size;
 
 	size = 0;
-	if (!ft_strncmp(key, "?", ft_strlen(key)))
+	if (!ft_strncmp(key, "?", 2))
 		size = 1;
 	while((ft_isalnum(key[size]) || key[size] == '_'))
 	{
@@ -31,13 +31,13 @@ char	*get_varkey(char *s)
 			return(key);
 		}
 		else if (s[i] == '\'' || s[i] == '\"')
-			quotes_check(s[i], quotes);
+			quotes = quotes_check(s[i], quotes);
 		i++;
 	}
 	return (key);
 }
 
-int	get_varkey_cmd(t_master *master)
+void	get_varkey_cmd(t_master *master)
 {
 	int		i;
 	char	*key;
@@ -52,49 +52,54 @@ int	get_varkey_cmd(t_master *master)
 		while (cmd->command && cmd->command[i])
 		{
 			key = get_varkey(cmd->command[i]);
-			if (key)
+			while (key)
 			{
-				search_and_replace(&cmd->command[i], key, master, 0, 0);
-				return (1);
+				if (check_exp(&cmd->command[i], &key, master))
+				{
+					search_and_replace(&cmd->command[i], key, master, 0, 0);
+				}
+				key = get_varkey(cmd->command[i]);
 			}
 			i++;
 		}
 		cmd = cmd->next;
 	}
-	return (0);
 }
 
-int	get_varkey_input(t_master *master, int i)
+void	get_varkey_input(t_master *master, int i)
 {
 	char	*key;
 	t_cmdlist	*cmd;
 
 	cmd = master->cmd;
 	key = NULL;
-	while(master->cmd->input[i])
+	while(cmd)
 	{
 		i = 0;
 		while (cmd->input && cmd->input[i])
 		{
-			if (ft_strncmp(cmd->input[i], "<<", 2))
-				i = i + 2;
+			if (!ft_strncmp(cmd->input[i], "<<", 3))
+				i++;
 			else
 			{
 				key = get_varkey(cmd->input[i]);
-				if (key)
+				while (key)
 				{
-					search_and_replace(&cmd->input[i], key, master, 0, 0);
-					return (1);
+					if (check_exp(&cmd->input[i], &key, master))
+					{	
+
+						search_and_replace(&cmd->input[i], key, master, 0, 0);
+					}
+					key = get_varkey(cmd->input[i]);
 				}
-				i++;
 			}
-			cmd = cmd->next;
+			i++;
 		}
+		cmd = cmd->next;
 	}
-	return (0);
 }
 
-int	get_varkey_output(t_master *master)
+void	get_varkey_output(t_master *master)
 {
 	int		i;
 	char	*key;
@@ -106,17 +111,19 @@ int	get_varkey_output(t_master *master)
 	while(cmd)
 	{
 		i = 0;
-		while (cmd->output[i] && cmd->output[i])
+		while (cmd->output && cmd->output[i])
 		{
 			key = get_varkey(cmd->output[i]);
-			if (key)
+			while (key)
 			{
-				search_and_replace(&cmd->output[i], key, master, 0, 0);
-				return (1);
+				if (check_exp(&cmd->output[i], &key, master))
+				{
+					search_and_replace(&cmd->output[i], key, master, 0, 0);
+				}
+				key = get_varkey(cmd->output[i]);
 			}
 			i++;
 		}
 		cmd = cmd->next;
 	}
-	return (0);
 }

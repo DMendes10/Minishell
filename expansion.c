@@ -3,21 +3,28 @@
 
 void	free_keyvar(char *temp, char *key, char *var)
 {
-	free (temp);
+	if (temp)
+		free (temp);
 	if (!ft_strncmp(key, "?", 2))
-		free (var);
+	{
+		if (var)
+			free (var);
+	}
 	free (key);
 }
 
 void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 {
-	int			size;
-	char		*var;
-	char		*temp;
-	t_envlst	*node;
+	int		size;
+	char	*var;
+	char	*temp;
 
-	var = env_finder(node, key);
-	node = *env;
+	var = NULL;
+	temp = NULL;
+	if (!ft_strncmp(key, "?", 2))
+		var = ft_itoa(master->exit);
+	else
+		var = env_finder(master->env, key);
 	if (var)
 	{
 		size = ft_strlen(*s) - (ft_strlen(key)) + ft_strlen(var);
@@ -31,14 +38,16 @@ void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 		j = i - ft_strlen(var) + ft_strlen(key) + 1;
 		while(temp[j])
 			(*s)[i++] = (temp[j++]);
-		free_keyvar(temp, key, var);
 	}
-	free (key);
+	free_keyvar(temp, key, var);
 }
 
 void	expansion(t_master *master)
 {
 	get_varkey_cmd(master);
+	get_varkey_input(master, 0);
+	get_varkey_output(master);
+	restore_cmd(master);
 }
 
 
