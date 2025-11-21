@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "minishellD.h"
 
 int	get_keysize(char *key)
 {

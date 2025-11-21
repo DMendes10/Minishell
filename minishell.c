@@ -1,66 +1,17 @@
 
 #include "minishellD.h"
 
-// int forked_exec(char **command, char **env)
-// {
-// 	int		exit_code;
-// 	pid_t	pid;
-
-// 	exit_code = 1;
-// 	pid = fork();
-// 	if (pid == 0)
-// 		child_proc(command, env);
-// 	exit_code = ft_wait(pid);
-// 	return (exit_code);
-// }
-
-// int	ft_wait(pid_t *pid)
-// {
-// 	int	status;
-// 	int	exit_code;
-
-// 	exit_code = 0;
-// 	waitpid(*pid, &status, 0);
-// 	if (WIFEXITED (status))
-// 		exit_code = WEXITSTATUS (status);
-// 	return (exit_code);
-// }
-
-void	path_checker(char *path, t_cmdlist *cmd)
+void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd)
 {
 	// char **split_cmd;
 
 	// split_cmd = ft_split(path, ' ');
 	if (!path)
-		invalid_command (cmd->command, cmd->command[0]);
+		invalid_command (mstr, cmd->command[0]);
 	if (access (path, F_OK) != 0)
-		invalid_command (cmd->command, cmd->command[0]);
+		invalid_command (mstr, cmd->command[0]);
 	if (access (path, X_OK) != 0)
-		no_perms_command (cmd->command, cmd->command[0]);
-}
-
-char	*path_finder(char **command, char **paths)
-{
-	int		i;
-	char	*temp;
-	char	*new_path;
-
-	i = 0;
-	while (paths[i])
-	{
-		temp = ft_strjoin (paths[i], "/");
-		new_path = ft_strjoin (temp, command[0]);
-		free (temp);
-		if (access (new_path, X_OK) == 0)
-		{
-			free_array (paths);
-			return (new_path);
-		}
-		free (new_path);
-		i++;
-	}
-	free_array (paths);
-	return (NULL);
+		no_perms_command (mstr, cmd->command[0]);
 }
 
 void	master_struct_init(t_master **master)
@@ -87,9 +38,9 @@ void	master_struct_init(t_master **master)
 char	*env_finder(t_envlst *lst ,char *cmd)
 {
 	t_envlst	*ptr;
-	int	i;
+	// int	i;
 
-	i = 0;
+	// i = 0;
 	ptr = lst;
 	if (!*cmd)
 		return (NULL);
@@ -131,11 +82,7 @@ int main(int ac, char **av, char **env)
 	if (ac > 1)
 		exit (1);
 	master_struct_init(&mstr);
-	// if (!env[0])
-	// 	mstr->env = personal_env();
-	// else
-	// mstr->env = env_populator (env);
-	env_populator (mstr, env);
+	env_init(mstr, env);
 	while(1)
 	{
 		// prompt = getcwd(NULL, 0);
@@ -147,14 +94,6 @@ int main(int ac, char **av, char **env)
 			// expansion(mstr);
 			executor (mstr, cmdlist_size(mstr->cmd));
 			reset_master (&mstr);
-			// free_cmdlst (mstr->cmd);
-			// mstr->cmd = NULL;
-			// free (mstr->data->pid);
-			// free (mstr->data);
-			// mstr->data->last_fd = 0;
-			// mstr->data = ft_memset (mstr->data, 0, sizeof (t_edata));
-			// free (mstr->data);
-			// free(mstr->data);
 		}
 	}
 }

@@ -9,8 +9,8 @@ int	simple_export(t_master *mstr)
 	i = 0;
 	ptr = mstr->env;
 	exp = malloc (((ft_envlst_size(ptr)) + 1) * sizeof(char*));
-	// if (!exp)
-	// 	return_error();
+	if (!exp)
+		alloc_error (&mstr);
 	while (i < ft_envlst_size(mstr->env))
 	{
 		exp[i] = ft_strdup(ptr->token);
@@ -21,10 +21,11 @@ int	simple_export(t_master *mstr)
 	export_sorter (exp);
 	print_export (exp, mstr);
 	free_array (exp);
+	mstr->exit = 0;
 	return (0);
 }
 
-void	export_sorter (char **exp)
+void	export_sorter(char **exp)
 {
 	int i;
 	int j;
@@ -57,13 +58,14 @@ void	print_export(char **exp, t_master *mstr)
 	ptr = mstr->env;
 	while (exp[i])
 	{
-		if (ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i]) + 1) == 0)
+		if (!(ft_strncmp (exp[i], ptr->token, ft_strlen(exp[i]) + 1)))
 		{
-			if (ptr->var != NULL)
+			if (!ft_strncmp(ptr->token, "_", 2))
+				;
+			else if (ptr->var != NULL)
 				printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
 			else
 				printf("declare -x %s\n",ptr->token);
-			// ptr = lst;
 			i++;
 		}
 		ptr = ptr->next;
@@ -72,11 +74,10 @@ void	print_export(char **exp, t_master *mstr)
 	}
 }
 
-int	add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit)
+int	add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit)
 {
 	int i;
 
-	(void)exit_code;
 	i = 1;
 	while (cmdlst->command[i])
 	{

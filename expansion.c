@@ -11,15 +11,13 @@ void	free_keyvar(char *temp, char *key, char *var)
 
 void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 {
-	int		size;
-	char	*var;
-	char	*temp;
+	int			size;
+	char		*var;
+	char		*temp;
+	t_envlst	*node;
 
-	var = NULL;
-	if (!ft_strncmp(key, "?", 2))
-		var = ft_itoa(master->exit);
-	else
-		var = env_finder(master->env, key);
+	var = env_finder(node, key);
+	node = *env;
 	if (var)
 	{
 		size = ft_strlen(*s) - (ft_strlen(key)) + ft_strlen(var);

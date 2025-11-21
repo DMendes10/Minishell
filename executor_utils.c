@@ -1,12 +1,14 @@
 
 #include "minishellD.h"
 
-int	executor(t_master *mstr, int cmd_count)
+void	executor(t_master *mstr, int cmd_count)
 {
 	t_cmdlist *ptr;
 
 	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
-	mstr->data->last_fd = dup(0);
+	if (!mstr->data->pid)
+		exit_minishell (&mstr, 1);
+	mstr->data->last_fd = dup(STDIN_FILENO);
 	ptr = mstr->cmd;
 	while (ptr)
 	{
@@ -14,28 +16,30 @@ int	executor(t_master *mstr, int cmd_count)
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
-	mstr->exit = ft_wait (mstr->data->pid, cmd_count);
-	// free(pid);
+	if (mstr->data->built_in_flag != 1)
+		mstr->exit = ft_wait (mstr->data->pid, cmd_count);
 	close(mstr->data->last_fd);
-	return (mstr->data->exit_code);
+	return ;
 }
 
 int	exec_built(t_cmdlist *cmd, t_master *mstr)
 {
+	if (!cmd->command[0])
+		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
-		return(ft_echo(cmd->command, EXIT_CODE, ECHO_FLAG, ECHO_INDEX));
+		return(ft_echo(mstr, cmd->command, ECHO_FLAG, ECHO_INDEX));
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
 		return (ft_exit (cmd->command, mstr), 0);
 	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
 		return (ft_cd(cmd->command, mstr));
 	else if (ft_strncmp (cmd->command[0], "pwd", 4) == 0)
-		return (ft_pwd());
+		return (ft_pwd(mstr));
 	else if (ft_strncmp (cmd->command[0], "export", 7) == 0)
 		return (ft_export(mstr, cmd));
 	else if (ft_strncmp (cmd->command[0], "unset", 6) == 0)
 		return (ft_unset(cmd->command, mstr));
 	else if (ft_strncmp (cmd->command[0], "env", 4) == 0)
-		return(ft_env(mstr->env));
+		return(ft_env(mstr, mstr->env));
 	else
 		return (1);
 }
@@ -62,4 +66,52 @@ int	ft_wait(pid_t *proc_id, int cmd_count)
 		i++;
 	}
 	return (exit_code);
+}
+
+int	is_built_in(t_cmdlist *cmd)
+{
+	if (!cmd->command[0])
+		return (0);
+	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
+		return(1);
+	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "pwd", 4) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "export", 7) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "unset", 6) == 0)
+		return (1);
+	else if (ft_strncmp (cmd->command[0], "env", 4) == 0)
+		return(1);
+	else
+		return (0);
+}
+
+char	*path_finder(char **command, char **paths)
+{
+	int		i;
+	char	*temp;
+	char	*new_path;
+
+	i = 0;
+	if (command[0][0] == '.' || command[0][0] == '/' || !paths)
+		return (command[0]);
+	while (paths[i])
+	{
+		temp = ft_strjoin (paths[i], "/");
+		new_path = ft_strjoin (temp, command[0]);
+		free (temp);
+		if (access (new_path, X_OK) == 0)
+		{
+			free_array (paths);
+			return (new_path);
+		}
+		free (new_path);
+		i++;
+	}
+	free_array (paths);
+	return (NULL);
 }

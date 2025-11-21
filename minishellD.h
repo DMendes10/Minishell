@@ -10,10 +10,13 @@
 # include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
+# include <linux/limits.h>
 # include "src/Libft/libft.h"
 # include <stdbool.h>
 # include "minishell.h"
 # include "parser.h"
+
 // typedef struct s_envlst t_envlst;
 
 # define EXIT_CODE 0
@@ -44,7 +47,7 @@ typedef struct s_edata
 	int pipefd[2];
 	int *pid;
 	int i;
-	int exit_code;
+	int built_in_flag;
 }t_edata;
 
 // typedef struct s_envlst
@@ -68,8 +71,6 @@ char	*path_finder(char **command, char **paths);
 void	free_array(char **s);
 int		ft_wait(pid_t *pid, int cmd_count);
 // void	close_files(int *fd, int file);
-void	invalid_command(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
 int		end_quote_check(const char *s, int i);
 size_t	ft_count_words_pipex(const char *a, char c, int i);
 char	*ft_makestring(const char *s, char c, size_t *i);
@@ -78,15 +79,15 @@ char	**ft_minisplit(char **a, char const *s, char c);
 char	**ft_split_pipex(char const *s, char c);
 int		end_quote_check(const char *s, int i);
 size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
-int 	ft_echo (char **command, int exit_code, int flag, int i);
-int		ft_pwd();
-int		ft_env(t_envlst *list);
+int 	ft_echo (t_master *mstr,char **command, int flag, int i);
+int		ft_pwd(t_master *mstr);
+int		ft_env(t_master *mstr, t_envlst *list);
 int		ft_cd(char **command, t_master *mstr);
 char	*get_input (char *prompt);
 void	return_error(char *error);
-void	invalid_command(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
-void	path_checker(char *path, t_cmdlist *cmd);
+void	invalid_command(t_master **mstr, char *cmd);
+void	no_perms_command(t_master **mstr, char *cmd);
+void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd);
 int		forked_exec (char **command, char **env);
 int		simple_export(t_master *mstr);
 void	export_sorter (char **exp);
@@ -94,7 +95,7 @@ void	print_export(char **exp, t_master *mstr);
 int		ft_envlst_size(t_envlst *lst);
 void	free_array(char **s);
 int		ft_strchar_int(const char *s, int c);
-int		add_export(t_master *mstr, t_cmdlist *cmdlst, int exit_code, int super_exit);
+int		add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit);
 int		ft_export(t_master *mstr, t_cmdlist *cmdlst);
 t_envlst	*ft_envlstnew(char *env);
 t_envlst	*ft_new_env_key(char *env);
@@ -103,7 +104,7 @@ void	exp_full (t_master *mstr ,char *cmd);
 void	ft_envlst_add_back(t_master **mstr, t_envlst *new);
 int		key_check(char *key);
 char	**ft_split(char const *s, char c);
-int		chdir_env_pwd(t_master *mstr, char *directory);
+void		chdir_env_pwd(t_master *mstr, char *directory);
 int		find_home(t_master *mstr);
 int 	valid_flag(char *flag);
 int		ft_unset(char **cmd, t_master *mstr);
@@ -115,7 +116,7 @@ bool	atoll_parser(char *str, long long *nbr);
 int		exit_converter(long long nbr);
 int		str_valid_nbr (char *str);
 int	ft_exit(char **cmd, t_master *mstr);
-int	hdoc_rdwr(char *del);
+int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del);
 int		hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 int		input_redirect (t_master *mstr, t_cmdlist *cmd);
 void	env_populator (t_master *mstr, char **env);
@@ -126,18 +127,34 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr);
 char	*env_finder (t_envlst *lst ,char *cmd);
 int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
-int		executor(t_master *mstr, int cmd_count);
+void	executor(t_master *mstr, int cmd_count);
 void	parser(char *input, t_cmdlist **cmdlist);
-void	invalid_path(char **array, char *cmd);
-void	no_perms_command(char **array, char *cmd);
-void	no_perms_path(char **array, char *cmd);
-void	output_redirect(t_master *mstr, t_cmdlist *cmd);
+void	invalid_path(char *cmd);
+void	no_perms_command(t_master **mstr, char *cmd);
+void	no_perms_path(char *cmd);
+int	output_redirect(t_master *mstr, t_cmdlist *cmd);
 char	**envlst_to_char(t_master *mstr);
 void free_cmdlst(t_cmdlist *cmdlst);
 int	is_built_in(t_cmdlist *cmd);
 int	cmdlist_size(t_cmdlist *cmd);
 void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 void	reset_master(t_master **master);
+void	alloc_error(t_master **mstr);
+void	env_init(t_master *mstr, char **env);
+void	update_shlvl (t_master *mstr);
+char	**custom_env_builder(t_master *mstr);
+void	alloc_error_exit(t_master *master, char **array);
+void	update_pwd(t_master *mstr);
+void	redir_handler(t_master *mstr, t_cmdlist *cmd);
+int		built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, int saved_out);
+char	*hdoc_wr_helper(t_master *mstr, char *line);
+int	hdoc_opener(t_master *mstr, t_cmdlist *cmd);
+int	h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i);
+void	search_and_replace(char *s, char *key, t_envlst **env);
+void	expansion(t_cmdlist **cmdlist, t_envlst **env);
+int	get_varkey_input(t_cmdlist **cmdlist, t_expansion *expansion, int i);
+int	get_varkey_output(t_cmdlist **cmdlist, t_expansion *expansion);
+int	get_varkey_cmd(t_cmdlist **cmdlist, t_expansion *expansion);
 
 
 int			get_varkey_cmd(t_master *master);

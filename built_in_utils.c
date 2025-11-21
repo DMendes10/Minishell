@@ -13,6 +13,19 @@ t_envlst	*ft_new_env_key(char *envkey)
 	return (node);
 }
 
+void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
+{
+	if (!last || ptr == last)
+		(*mstr)->env = ptr->next;
+	else
+		last->next = ptr->next;
+	free(ptr->token);
+	if (ptr->var)
+		free(ptr->var);
+	// free(ptr->next);
+	free(ptr);
+}
+
 int key_check(char *key)
 {
 	int i;
@@ -38,7 +51,7 @@ int key_check(char *key)
 	return (1);
 }
 
-int str_valid_nbr (char *str)
+int str_valid_nbr(char *str)
 {
     int i;
 
@@ -60,19 +73,23 @@ char	**envlst_to_char(t_master *mstr)
 
 	ptr = mstr->env;
 	i = 0;
-	env = malloc (sizeof (char *) * ft_envlst_size (mstr->env));
-	// if (!env)
-	// 	return;
 	while(ptr)
 	{
 		if (ptr->var)
-		{
-			env[i] = ft_strjoin_gnl (ft_strjoin(ptr->token, "="), ptr->var);
 			i++;
-		}
+		ptr = ptr->next;
+	}
+	env = malloc (sizeof (char *) * (i + 1));
+	if (!env)
+		alloc_error (&mstr);
+	i = 0;
+	ptr = mstr->env;
+	while(ptr)
+	{
+		if (ptr->var)
+			env[i++] = ft_strjoin_gnl (ft_strjoin(ptr->token, "="), ptr->var);
 		ptr = ptr->next;
 	}
 	env[i] = NULL;
 	return (env);
 }
-
