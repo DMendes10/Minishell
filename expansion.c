@@ -8,6 +8,7 @@ void	search_and_replace(char *s, char *key, t_envlst **env)
 	char		*temp;
 	t_envlst	*node;
 
+	node = *env;
 	var = env_finder(node, key);
 	node = *env;
 	if (var)

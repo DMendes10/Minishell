@@ -150,6 +150,11 @@ int		built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, int saved_out)
 char	*hdoc_wr_helper(t_master *mstr, char *line);
 int	hdoc_opener(t_master *mstr, t_cmdlist *cmd);
 int	h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i);
+void	search_and_replace(char *s, char *key, t_envlst **env);
+void	expansion(t_cmdlist **cmdlist, t_envlst **env);
+int	get_varkey_input(t_cmdlist **cmdlist, t_expansion *expansion, int i);
+int	get_varkey_output(t_cmdlist **cmdlist, t_expansion *expansion);
+int	get_varkey_cmd(t_cmdlist **cmdlist, t_expansion *expansion);
 
 
 #endif
