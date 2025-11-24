@@ -1,44 +1,44 @@
 #include "parser.h"
 
-static int	redir_checker(char **cmd)
+static int	redir_checker(char *cmd)
 {
-	if (!ft_strncmp(*cmd, "<", 2) && !ft_strncmp(*cmd, ">", 2) && !ft_strncmp(*cmd, "<<", 3) && \
-		!ft_strncmp(*cmd, ">>", 3))
+	if (!cmd)
+		return (0);
+	if (!ft_strncmp(cmd, "<", 2) || !ft_strncmp(cmd, ">", 2) || !ft_strncmp(cmd, "<<", 3) || \
+		!ft_strncmp(cmd, ">>", 3))
 	{
-		ft_putstr_fd("syntax error near unexpected token `>'", 2);
+		ft_putstr_fd("syntax error near unexpected token `>'\n", 2);
 		return (1);
 	}
 	return (0);
 }
 
-static void	syntax_checker(char **cmdtable)
+static int	syntax_checker(char **cmdtable)
 {
 	int	i;
 
 	i = 0;
 	if (!ft_strncmp(cmdtable[i], "|", 1))
-	{
-		print_err("syntax error near unexpected token `|'", cmdtable);
-	}
-	i++;
+		return(print_err("syntax error near unexpected token `|'\n", cmdtable), 1);
 	while (cmdtable[i])
 	{
 		if (!ft_strncmp(cmdtable[i], "|", 1) && !ft_strncmp(cmdtable[i - 1], "|", 1))
-		{
-			print_err("syntax error near unexpected token `|'", cmdtable);
-		}
+			return(print_err("syntax error near unexpected token `|'\n", cmdtable), 1);
 		else if (cmdtable[i][0] == '<' || cmdtable[i][0] == '>')
-			if (redir_checker(&cmdtable[i]))
-				free_args(cmdtable);
+		{
+			if (redir_checker(cmdtable[i + 1]))
+				return(free_args(cmdtable), 1);
+		}
 		i++;
 	}
 	i--;
 	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) || !ft_strncmp(cmdtable[i], "<<", 3) || \
 		!ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
-			print_err("syntax error near unexpected token", cmdtable);
+			return(print_err("syntax error near unexpected token\n", cmdtable), 1);
+	return (0);
 }
 
-void	parser(char *input, t_cmdlist **cmdlist)
+int	parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;
@@ -47,8 +47,9 @@ void	parser(char *input, t_cmdlist **cmdlist)
 	i = 0;
 	temp = lexer(input);
 	cmdtable = split_args(temp);
-	syntax_checker(cmdtable);
 	free (temp);
+	if (syntax_checker(cmdtable))
+		return(free (input), 1);
 	ft_cmd_add_back(cmdlist, new_cmd(cmdtable, i));
 	while (cmdtable[i])
 	{
@@ -60,6 +61,8 @@ void	parser(char *input, t_cmdlist **cmdlist)
 		i++;
 	}
 	free_array(cmdtable);
+	free (input);
+	return (0);
 }
 
 // int main ()

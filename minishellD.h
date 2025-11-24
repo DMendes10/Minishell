@@ -128,7 +128,7 @@ char	*env_finder (t_envlst *lst ,char *cmd);
 int		exec_built (t_cmdlist *cmd, t_master *mstr);
 void	exit_minishell(t_master **mstr, int exit_code);
 void	executor(t_master *mstr, int cmd_count);
-void	parser(char *input, t_cmdlist **cmdlist);
+int	parser(char *input, t_cmdlist **cmdlist);
 void	invalid_path(char *cmd);
 void	no_perms_command(t_master **mstr, char *cmd);
 void	no_perms_path(char *cmd);
