@@ -1,44 +1,53 @@
 #include "parser.h"
 #include "minishellD.h"
 
-void	search_and_replace(char *s, char *key, t_envlst **env)
+void	free_keyvar(char *temp, char *key, char *var)
 {
-	int			size;
-	char		*var;
-	char		*temp;
-	t_envlst	*node;
-
-	node = *env;
-	var = env_finder(node, key);
-	node = *env;
-	if (var)
-	{
-		size = ft_strlen(s) - ft_strlen(key) + ft_strlen(var);
-		temp = s;
-		s = ft_calloc(size + 1, 1);
-		while(temp && *temp != '$')
-			*(s++) = *(temp++);
-		while(var)
-			*(s++) = *(var++);
-		temp = temp + ft_strlen(key);
-		while(temp)
-			*(s++) = *(temp++);
+	if (temp)
 		free (temp);
+	if (!ft_strncmp(key, "?", 2))
+	{
+		if (var)
+			free (var);
 	}
+	free (key);
 }
 
-void	expansion(t_cmdlist **cmdlist, t_envlst **env)
+void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 {
-	t_expansion	*exp;
+	int		size;
+	char	*var;
+	char	*temp;
 
-	exp = malloc(sizeof(t_expansion));
-	while(get_varkey_cmd(cmdlist, exp))
-		search_and_replace(exp->s, exp->key, env);
-	while(get_varkey_input(cmdlist, exp, 0))
-		search_and_replace(exp->s, exp->key, env);
-	while(get_varkey_output(cmdlist, exp))
-		search_and_replace(exp->s, exp->key, env);
+	var = NULL;
+	temp = NULL;
+	if (!ft_strncmp(key, "?", 2))
+		var = ft_itoa(master->exit);
+	else
+		var = env_finder(master->env, key);
+	if (var)
+	{
+		size = ft_strlen(*s) - (ft_strlen(key)) + ft_strlen(var);
+		temp = *s;
+		*s = ft_calloc(size + 1, 1);
+		while(temp[j] && temp[j] != '$')	
+			(*s)[i++] = temp[j++];
+		j = 0;
+		while(var[j])
+			(*s)[i++] = var[j++];
+		j = i - ft_strlen(var) + ft_strlen(key) + 1;
+		while(temp[j])
+			(*s)[i++] = (temp[j++]);
+	}
+	free_keyvar(temp, key, var);
+}
 
+void	expansion(t_master *master)
+{
+	get_varkey_cmd(master);
+	get_varkey_input(master, 0);
+	get_varkey_output(master);
+	restore_cmd(master);
 }
 
 

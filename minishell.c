@@ -1,17 +1,32 @@
 
 #include "minishellD.h"
 
-void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd)
+void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd, int i)
 {
-	// char **split_cmd;
-
-	// split_cmd = ft_split(path, ' ');
 	if (!path)
 		invalid_command (mstr, cmd->command[0]);
 	if (access (path, F_OK) != 0)
 		invalid_command (mstr, cmd->command[0]);
 	if (access (path, X_OK) != 0)
 		no_perms_command (mstr, cmd->command[0]);
+	if (path[0] == '.' && !path[1])
+	{
+		ft_putstr_fd (cmd->command[0], 2);
+		ft_putstr_fd (": filename argument required\n", 2);
+		ft_putstr_fd (cmd->command[0], 2);
+		ft_putstr_fd (": usage: . filename [arguments]\n", 2);
+		exit_minishell (mstr, 2);
+	}
+	if (path[0] == '.' && path[1] == '.')
+		invalid_command (mstr, cmd->command[0]);
+	while (path[i] == '.' || path[i] == '/')
+		i++;
+	if (!path[i])
+	{
+		ft_putstr_fd (cmd->command[0], 2);
+		ft_putstr_fd (": Is a directory\n", 2);
+		exit_minishell (mstr, 126);
+	}
 }
 
 void	master_struct_init(t_master **master)
@@ -87,9 +102,9 @@ int main(int ac, char **av, char **env)
 		input = get_input ("@Minishell> ");
 		if (input && input[0])
 		{
-			if (!parser(input, &mstr->cmd))//dar free ao input aqui
+			if (!parser(mstr, input, &mstr->cmd))//dar free ao input aqui
 			{
-				// expansion (&mstr->cmd, &mstr->env);
+				expansion (mstr);
 				executor (mstr, cmdlist_size(mstr->cmd));
 			}
 			reset_master (&mstr);

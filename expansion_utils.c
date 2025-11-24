@@ -1,12 +1,14 @@
 #include "parser.h"
-#include"minishellD.h"
+#include "minishellD.h"
 
 int	get_keysize(char *key)
 {
 	int	size;
 
 	size = 0;
-	while(ft_isalnum(key[size]) || key[size] != '_')
+	if (!ft_strncmp(key, "?", 2))
+		size = 1;
+	while((ft_isalnum(key[size]) || key[size] == '_'))
 	{
 		size++;
 	}
@@ -26,90 +28,103 @@ char	*get_varkey(char *s)
 	{
 		if (s[i] == '$' && quotes != 1)
 		{
-			key = ft_substr(s, i, get_keysize(&s[i]));
+			key = ft_substr(s, i + 1, get_keysize(&s[i + 1]));
 			return(key);
 		}
 		else if (s[i] == '\'' || s[i] == '\"')
-			quotes_check(s[i], quotes);
+			quotes = quotes_check(s[i], quotes);
 		i++;
 	}
 	return (key);
 }
 
-int	get_varkey_cmd(t_cmdlist **cmdlist, t_expansion *expansion)
+void	get_varkey_cmd(t_master *master)
 {
-	t_cmdlist	*node;
-	int			i;
+	int		i;
+	char	*key;
+	t_cmdlist	*cmd;
 
+	cmd = master->cmd;
 	i = 0;
-	node = *cmdlist;
-	expansion->key = NULL;
-	while(node)
+	key = NULL;
+	while(cmd)
 	{
 		i = 0;
-		while (node->command[i])
+		while (cmd->command && cmd->command[i])
 		{
-			expansion->key = get_varkey(node->command[i]);
-			if (expansion->key)
+			key = get_varkey(cmd->command[i]);
+			while (key)
 			{
-				expansion->s = node->command[i];
-				return (1);
+				if (check_exp(&cmd->command[i], &key, master))
+				{
+					search_and_replace(&cmd->command[i], key, master, 0, 0);
+				}
+				key = get_varkey(cmd->command[i]);
 			}
+			i++;
 		}
-		node = node->next;
+		cmd = cmd->next;
 	}
-	return (0);
 }
 
-int	get_varkey_input(t_cmdlist **cmdlist, t_expansion *expansion, int i)
+void	get_varkey_input(t_master *master, int i)
 {
-	t_cmdlist	*node;
+	char	*key;
+	t_cmdlist	*cmd;
 
-	expansion->key = NULL;
-	node = *cmdlist;
-	while(node)
+	cmd = master->cmd;
+	key = NULL;
+	while(cmd)
 	{
 		i = 0;
-		while (node->input[i])
+		while (cmd->input && cmd->input[i])
 		{
-			if (ft_strncmp(node->input[i], "<<", 2))
-				i = i + 2;
+			if (!ft_strncmp(cmd->input[i], "<<", 3))
+				i++;
 			else
 			{
-				expansion->key = get_varkey(node->input[i]);
-				if (expansion->key)
+				key = get_varkey(cmd->input[i]);
+				while (key)
 				{
-					expansion->s = node->input[i];
-					return (1);
+					if (check_exp(&cmd->input[i], &key, master))
+					{	
+
+						search_and_replace(&cmd->input[i], key, master, 0, 0);
+					}
+					key = get_varkey(cmd->input[i]);
 				}
 			}
-			node = node->next;
+			i++;
 		}
+		cmd = cmd->next;
 	}
-	return (0);
 }
 
-int	get_varkey_output(t_cmdlist **cmdlist, t_expansion *expansion)
+void	get_varkey_output(t_master *master)
 {
-	t_cmdlist	*node;
-	int			i;
+	int		i;
+	char	*key;
+	t_cmdlist	*cmd;
 
+	cmd = master->cmd;
 	i = 0;
-	expansion->key = NULL;
-	node = *cmdlist;
-	while(node)
+	key = NULL;
+	while(cmd)
 	{
 		i = 0;
-		while (node->output[i])
+		while (cmd->output && cmd->output[i])
 		{
-			expansion->key = get_varkey(node->output[i]);
-			if (expansion->key)
+			key = get_varkey(cmd->output[i]);
+			while (key)
+			{
+				if (check_exp(&cmd->output[i], &key, master))
 				{
-					expansion->s = node->output[i];
-					return (1);
+					search_and_replace(&cmd->output[i], key, master, 0, 0);
 				}
+				key = get_varkey(cmd->output[i]);
+			}
+			i++;
 		}
-		node = node->next;
+		cmd = cmd->next;
 	}
-	return (0);
 }

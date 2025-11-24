@@ -14,12 +14,13 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	if (env_finder(mstr->env, "PATH"))
 		paths = ft_split (env_finder(mstr->env, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
-	path_checker(&mstr, path, cmd);
+	path_checker(&mstr, path, cmd, PATH_INDEX);
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
 		perror (cmd->command[0]);
 		free_array(env);
+		free_array(paths);
 		exit_minishell(&mstr, errno);
 	}
 }

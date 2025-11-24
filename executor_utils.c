@@ -98,7 +98,7 @@ char	*path_finder(char **command, char **paths)
 
 	i = 0;
 	if (command[0][0] == '.' || command[0][0] == '/' || !paths)
-		return (command[0]);
+		return (free_array(paths), command[0]);
 	while (paths[i])
 	{
 		temp = ft_strjoin (paths[i], "/");
