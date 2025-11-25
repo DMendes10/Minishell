@@ -89,11 +89,12 @@ int main(int ac, char **av, char **env)
 		input = get_input ("@Minishell> ");
 		if (input && input[0])
 		{
-			parser(input, &mstr->cmd);
-			// quote_search(&mstr->cmd);
-			expansion(mstr);
-			rem_quotes(mstr);
-			executor (mstr, cmdlist_size(mstr->cmd));
+			if (!parser(mstr, input, &mstr->cmd))//dar free ao input aqui
+			{
+				expansion (mstr);
+				rem_quotes(mstr);
+				executor (mstr, cmdlist_size(mstr->cmd));
+			}
 			reset_master (&mstr);
 		}
 	}

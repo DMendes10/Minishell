@@ -8,7 +8,7 @@
 
 # define SEP -1
 
-void		parser(char *input, t_cmdlist **cmdlist);
+// int		parser(t_master *mstr,char *input, t_cmdlist **cmdlist);
 int			quotes_check(char c, int quotes);
 void		print_err(char *error, char **arg);
 void		free_args(char **args);
