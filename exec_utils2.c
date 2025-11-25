@@ -99,7 +99,7 @@ int	output_redirect(t_master *mstr, t_cmdlist *cmd)
 			dup2 (mstr->data->fdout, STDOUT_FILENO);
 			close (mstr->data->fdout);
 		}
-		i++;
+		i += 2;
 	}
 	return (0);
 }

@@ -18,7 +18,7 @@ void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 
 	var = NULL;
 	temp = NULL;
-	if (!ft_strncmp(key, "?", 2))
+	if (!ft_strncmp(key, "?", 1))
 		var = ft_itoa(master->exit);
 	else
 		var = env_finder(master->env, key);

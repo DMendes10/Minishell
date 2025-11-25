@@ -5,8 +5,8 @@ int	get_keysize(char *key)
 	int	size;
 
 	size = 0;
-	if (!ft_strncmp(key, "?", 2))
-		size = 1;
+	if (!ft_strncmp(key, "?", 1))
+		return (1);
 	else if (ft_isdigit(key[0]))
 		return (1);
 	while((ft_isalnum(key[size]) || key[size] == '_'))
