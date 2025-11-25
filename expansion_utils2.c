@@ -13,14 +13,18 @@ int	check_exp(char **s, char **key, t_master *master)
 	else
 		var = env_finder(master->env, *key);
 	if (var)
+	{
+		if (!ft_strncmp(*key, "?", 2))
+			free (var);
 		return (1);
+	}
 	else
 	{
 		while((*s)[i] && (*s)[i] != '$')
 			i++;
 		if ((*s)[i] && (*s)[i] == '$')
 			(*s)[i]= -1;
-		*key = NULL;
+		free (*key);
 		return (0);
 	}
 }

@@ -7,6 +7,8 @@ int	get_keysize(char *key)
 	size = 0;
 	if (!ft_strncmp(key, "?", 2))
 		size = 1;
+	else if (ft_isdigit(key[0]))
+		return (1);
 	while((ft_isalnum(key[size]) || key[size] == '_'))
 	{
 		size++;
@@ -25,7 +27,7 @@ char	*get_varkey(char *s)
 	key = NULL;
 	while (s[i])
 	{
-		if (s[i] == '$' && quotes != 1)
+		if (s[i] == '$' && quotes != 1 && s[i + 1])
 		{
 			key = ft_substr(s, i + 1, get_keysize(&s[i + 1]));
 			return(key);

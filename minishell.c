@@ -50,7 +50,7 @@ char	*env_finder(t_envlst *lst ,char *cmd)
 			return (ptr->var);
 		ptr = ptr->next;
 	}
-	return (NULL);
+	return ("");
 }
 
 int	cmdlist_size(t_cmdlist *cmd)
