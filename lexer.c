@@ -48,7 +48,7 @@ char	*lexer(char *input)
 		i++;
 	}
 	if (quotes)
-		free(temp);
+		return(free(temp), NULL);
 	cmdtable = ft_strdup(temp);
 	free(temp);
 	return (cmdtable);
