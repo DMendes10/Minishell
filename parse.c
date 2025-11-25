@@ -48,7 +48,7 @@ int	parser(t_master *mstr, char *input, t_cmdlist **cmdlist)
 	i = 0;
 	temp = lexer(input);
 	if (!temp)
-		return (free(input), 1);
+		return (ft_putstr_fd ("ERROR: unclosed quotes found\n", 2), free(input), 1);
 	cmdtable = split_args(temp);
 	free (temp);
 	if (syntax_checker(cmdtable))
