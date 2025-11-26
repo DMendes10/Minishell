@@ -104,7 +104,7 @@ int main(int ac, char **av, char **env)
 		input = get_input ("@Minishell> ");
 		if (input && input[0])
 		{
-			if (!parser(mstr, input, &mstr->cmd))//dar free ao input aqui
+			if (!parser(mstr, input, &mstr->cmd))
 			{
 				expansion (mstr);
 				rem_quotes(mstr);
