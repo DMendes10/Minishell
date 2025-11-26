@@ -107,6 +107,7 @@ int main(int ac, char **av, char **env)
 			if (!parser(mstr, input, &mstr->cmd))
 			{
 				expansion (mstr);
+				reshaping(mstr);
 				rem_quotes(mstr);
 				executor (mstr, cmdlist_size(mstr->cmd));
 			}

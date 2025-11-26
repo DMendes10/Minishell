@@ -165,6 +165,8 @@ void		search_and_replace(char **s, char *key, t_master *master, int i, int j);
 void		expansion(t_master *master);
 int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_master *master);void	rem_quotes(t_master *master);
+void		reshaping(t_master *mstr);
+
 
 
 
