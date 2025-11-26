@@ -18,6 +18,8 @@ static int	syntax_checker(char **cmdtable)
 {
 	int	i;
 
+	if (!*cmdtable)
+		return(free_array (cmdtable), 1);
 	i = 0;
 	if (!ft_strncmp(cmdtable[i], "|", 1))
 		return(print_err("syntax error near unexpected token `|'\n", cmdtable), 1);
