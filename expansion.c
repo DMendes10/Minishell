@@ -1,16 +1,13 @@
 #include "parser.h"
 #include "minishellD.h"
 
-void	free_keyvar(char *temp, char *key, char *var)
+void	free_keyvar(char *temp, char **key, char *var)
 {
 	if (temp)
 		free (temp);
-	if (!ft_strncmp(key, "?", 2))
-	{
-		if (var)
-			free (var);
-	}
-	free (key);
+	if (!ft_strncmp(*key, "?", 2))
+		free (var);
+	free (*key);
 }
 
 void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
@@ -21,7 +18,7 @@ void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 
 	var = NULL;
 	temp = NULL;
-	if (!ft_strncmp(key, "?", 2))
+	if (!ft_strncmp(key, "?", 1))
 		var = ft_itoa(master->exit);
 	else
 		var = env_finder(master->env, key);
@@ -39,7 +36,7 @@ void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 		while(temp[j])
 			(*s)[i++] = (temp[j++]);
 	}
-	free_keyvar(temp, key, var);
+	free_keyvar(temp, &key, var);
 }
 
 void	expansion(t_master *master)
@@ -47,7 +44,7 @@ void	expansion(t_master *master)
 	get_varkey_cmd(master);
 	get_varkey_input(master, 0);
 	get_varkey_output(master);
-	restore_cmd(master);
+	// restore_cmd(master);
 }
 
 

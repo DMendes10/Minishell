@@ -57,13 +57,15 @@ char	*env_finder(t_envlst *lst ,char *cmd)
 
 	// i = 0;
 	ptr = lst;
+	if (!*cmd)
+		return (NULL);
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
 			return (ptr->var);
 		ptr = ptr->next;
 	}
-	return (NULL);
+	return ("");
 }
 
 int	cmdlist_size(t_cmdlist *cmd)
@@ -105,6 +107,7 @@ int main(int ac, char **av, char **env)
 			if (!parser(mstr, input, &mstr->cmd))//dar free ao input aqui
 			{
 				expansion (mstr);
+				rem_quotes(mstr);
 				executor (mstr, cmdlist_size(mstr->cmd));
 			}
 			reset_master (&mstr);

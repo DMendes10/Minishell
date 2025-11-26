@@ -1,6 +1,9 @@
 {
 	"files.associations": {
 		"charconv": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"minishelld.h": "c",
+		"stdio.h": "c",
+		"minishell.h": "c"
 	}
 }

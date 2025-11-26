@@ -3,9 +3,9 @@
 
 static int	redir_checker(char *cmd)
 {
-	if (!cmd)
+	if(!cmd)
 		return (0);
-	if (!ft_strncmp(cmd, "<", 2) || !ft_strncmp(cmd, ">", 2) || !ft_strncmp(cmd, "<<", 3) || \
+	if (!ft_strncmp(cmd, "<", 2) && !ft_strncmp(cmd, ">", 2) && !ft_strncmp(cmd, "<<", 3) && \
 		!ft_strncmp(cmd, ">>", 3))
 	{
 		ft_putstr_fd("syntax error near unexpected token `>'\n", 2);
