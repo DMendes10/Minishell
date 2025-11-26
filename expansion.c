@@ -44,7 +44,7 @@ void	expansion(t_master *master)
 	get_varkey_cmd(master);
 	get_varkey_input(master, 0);
 	get_varkey_output(master);
-	restore_cmd(master);
+	// restore_cmd(master);
 }
 
 
