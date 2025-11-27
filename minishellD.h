@@ -142,6 +142,7 @@ int			output_redirect(t_master *mstr, t_cmdlist *cmd);
 void		redir_handler(t_master *mstr, t_cmdlist *cmd);
 int			built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, int saved_out);
 int			h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i);
+int			redir_expansion(t_master *mstr, char **redir, int i);
 
 //-----------------here-doc-------------------------------------------------//
 int			hdoc_opener(t_master *mstr, t_cmdlist *cmd);
@@ -166,9 +167,11 @@ void		expansion(t_master *master);
 int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_master *master);void	rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
+char		*get_varkey(char *s);
 
+size_t	ft_count_words(const char *a, char c);
 
-
+void	expand_redir(t_master *mstr, char **redir);
 
 int		end_quote_check(const char *s, int i);
 size_t	ft_count_words_pipex(const char *a, char c, int i);

@@ -58,23 +58,105 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 	{
 		if (!ft_strncmp (cmd->input[i], "<", 2))
 		{
-			mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
-			if (mstr->data->fdin < 0)
+			if (!redir_expansion (mstr, cmd->input, i + 1))
 			{
-				perror(cmd->input[i + 1]);
-				return (1);
+				mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
+				if (mstr->data->fdin < 0)
+					return (perror(cmd->input[i + 1]), 1);
+				dup2 (mstr->data->fdin, STDIN_FILENO);
+				close (mstr->data->fdin);
 			}
-			dup2 (mstr->data->fdin, STDIN_FILENO);
-			close (mstr->data->fdin);
 		}
 		else if (!ft_strncmp (cmd->input[i], "<<", 2))
 		{
 			if (h_doc_redir (mstr, cmd, i))
 				return (1);
 		}
-		i++;
+		i += 2;
 	}
 	return (0);
+}
+
+int	redir_expansion(t_master *mstr, char **redir, int i)
+{
+	char *tmp;
+	char *key;
+	int j;
+	
+	j = 0;
+	tmp = NULL;
+	key = NULL;
+	if (ft_count_words (redir[i], ' ') == 1)
+	{
+		if (ft_strchr(redir[i], '$'))
+		{
+			while (redir[i][j])
+			{
+				if (redir[i][j] == '$')
+				{
+					key = get_varkey(&redir[i][j]);
+					if (*env_finder(mstr->env, key))
+					{
+						tmp = env_finder(mstr->env, key);
+						if (ft_count_words(tmp, ' ') > 1)
+							return (mstr->exit = 1, free (key), printf("%s: ambiguous redirect\n", redir[i]), 1);
+						free (key);
+					}
+					else
+					{
+						free (key);
+						key = get_varkey(&redir[i][j + 1]);
+						if (!key)
+							return (mstr->exit = 1, printf("%s: ambiguous redirect\n", redir[i]), 1);
+					}
+				}
+				j++;
+			}
+		}
+	}
+	expand_redir (mstr, redir);
+	return (0);
+}
+
+void	expand_redir(t_master *mstr, char **redir)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	key = NULL;
+	while (redir[i])
+	{
+		key = get_varkey(redir[i]);
+		while (key)
+		{
+			if (check_exp(&redir[i], &key, mstr))
+			{
+				search_and_replace(&redir[i], key, mstr, 0, 0);
+			}
+			key = get_varkey(redir[i]);
+		}
+		i++;
+	}
+}
+
+size_t	ft_count_words(const char *a, char c)
+{
+	size_t	i;
+	size_t	count;
+
+	count = 0;
+	i = 0;
+	while (a[i])
+	{
+		while (a[i] == c)
+			i++;
+		if (a[i])
+			count++;
+		while (a[i] && a[i] != c)
+			i++;
+	}
+	return (count);
 }
 
 int	output_redirect(t_master *mstr, t_cmdlist *cmd)
