@@ -27,7 +27,7 @@ char	*get_varkey(char *s)
 	key = NULL;
 	while (s[i])
 	{
-		if (s[i] == '$' && quotes != 1 && s[i + 1])
+		if ((s[i] == '$' && quotes != 1) && s[i + 1])
 		{
 			key = ft_substr(s, i + 1, get_keysize(&s[i + 1]));
 			return(key);

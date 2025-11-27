@@ -38,6 +38,7 @@ void	split_quotes(char **s)
 {
 	int	i;
 	char	**temp;
+	char	*to_free;
 
 	i = 1;
 	if (!ft_strncmp(*s, "", ft_strlen(*s)))
@@ -49,13 +50,13 @@ void	split_quotes(char **s)
 	{
 		while (temp[i])
 		{
-			*s = ft_strjoin(*s, temp[i]);
-			free (temp[i]);
+			to_free = *s;
+			*s = ft_strjoin(to_free, temp[i]);
+			free (to_free);
 			i++;
 		}
 	}
-	free(temp[0]);
-	free (temp);
+	free_array(temp);
 }
 
 

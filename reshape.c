@@ -55,19 +55,19 @@ void	reshape_split(char **s, char ***cmd, int j, int k)
 	new_arr = NULL;
 	i = 0;
 	temp = ft_split(*s, SEP);
-	size = arr_size(*cmd) + arr_size(temp);
+	size = arr_size(*cmd) + arr_size(temp) - 1;
 	new_arr = ft_calloc(size + 1, sizeof(char *));
 	if (!new_arr)
 		return ;
 	while ((*cmd)[k] && (*cmd)[k] != *s)
 	{
-		new_arr[i++] = (*cmd)[k++];
+		new_arr[i++] = ft_strdup((*cmd)[k++]);
 	}
 	while(temp[j])
-		new_arr[i++] = temp[j++];
+		new_arr[i++] = ft_strdup(temp[j++]);
 	k++;
 	while ((*cmd)[k])
-		new_arr[i++] = (*cmd)[k++];
+		new_arr[i++] = ft_strdup((*cmd)[k++]);
 	free_cmd (*cmd);
 	free_cmd (temp);
 	*cmd = new_arr;
