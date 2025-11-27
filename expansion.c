@@ -57,7 +57,14 @@ void	search_and_replace(char **s, char *key, t_master *master, int i, int j)
 
 void	expansion(t_master *master)
 {
-	get_varkey_cmd(master);
+	t_cmdlist	*node;
+
+	node = master->cmd;
+	while (node)
+	{
+		get_varkey_cmd(node, master);
+		node = node->next;
+	}
 	// get_varkey_input(master, 0);
 	// get_varkey_output(master);
 	// restore_cmd(master);

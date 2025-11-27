@@ -45,15 +45,20 @@ void	split_quotes(char **s)
 		return ;
 	temp = ft_split(quote_to_sep(s), -1);
 	free(*s);
+	if (!temp[0])
+	{
+		*s = ft_strdup("");
+		free_array(temp);
+		return ;
+	}
 	*s = ft_strdup(temp[0]);
 	if (split_size(temp) > 1)
 	{
 		while (temp[i])
 		{
 			to_free = *s;
-			*s = ft_strjoin(to_free, temp[i]);
+			*s = ft_strjoin(to_free, temp[i++]);
 			free (to_free);
-			i++;
 		}
 	}
 	free_array(temp);

@@ -158,7 +158,7 @@ char		**custom_env_builder(t_master *mstr);
 
 //---------------------parsing---------------------------------------------//
 int			parser(t_master *mstr, char *input, t_cmdlist **cmdlist);
-void		get_varkey_cmd(t_master *master);
+void		get_varkey_cmd(t_cmdlist *node,t_master *master);
 void		get_varkey_input(t_master *master, int i);
 void		get_varkey_output(t_master *master);
 void		search_and_replace(char **s, char *key, t_master *master, int i, int j);

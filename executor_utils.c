@@ -5,7 +5,7 @@ void	executor(t_master *mstr, int cmd_count)
 {
 	t_cmdlist *ptr;
 
-	if (cmd_count == 1 && (!mstr->cmd->command[0] || !*mstr->cmd->command[0]))
+	if ((!mstr->cmd->command[0]))
 		return ;
 	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
 	if (!mstr->data->pid)
