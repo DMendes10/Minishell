@@ -63,11 +63,11 @@ void	expansion(t_master *master)
 	while (node)
 	{
 		get_varkey_cmd(node, master);
+		restore_cmd(node);
 		node = node->next;
 	}
 	// get_varkey_input(master, 0);
 	// get_varkey_output(master);
-	// restore_cmd(master);
 }
 
 

@@ -29,30 +29,27 @@ int	check_exp(char **s, char **key, t_master *master)
 	}
 }
 
-void	restore_cmd(t_master *master)
+void	restore_cmd(t_cmdlist *node)
 {
-	int		i;
-	int		j;
-	t_cmdlist	*cmd;
+	int			i;
+	int			j;
+	int			quotes;
 
-	cmd = master->cmd;
 	i = 0;
 	j = 0;
-	while(cmd)
+	quotes = 0;
+	while (node->command[i])
 	{
-		i = 0;
-		while (cmd->command && cmd->command[i])
+		j = 0;
+		while(node->command[i][j])
 		{
-			j = 0;
-			while(cmd->command[i][j])
-			{
-				if (cmd->command[i][j] == -1)
-					cmd->command[i][j] = '$';
-				j++;
-			}
-			i++;
+			if (node->command[i][j] == -1 && quotes)
+				node->command[i][j] = '$';
+			else if (node->command[i][j] == '\'' || node->command[i][j] == '\"')
+				quotes = quotes_check(node->command[i][j], quotes);
+			j++;
 		}
-		cmd = cmd->next;
+		i++;
 	}
 }
 
