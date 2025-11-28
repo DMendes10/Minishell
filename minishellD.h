@@ -99,6 +99,7 @@ int			ft_cd(char **command, t_master *mstr);
 void		chdir_env_pwd(t_master *mstr, char *directory);
 int			find_home(t_master *mstr);
 void		update_pwd(t_master *mstr);
+void		reset_oldpwd (t_master *mstr);
 //unset
 int			ft_unset(char **cmd, t_master *mstr);
 void		delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr);

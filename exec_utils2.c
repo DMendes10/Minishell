@@ -58,14 +58,13 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 	{
 		if (!ft_strncmp (cmd->input[i], "<", 2))
 		{
-			if (!redir_expansion (mstr, cmd->input, i + 1))
-			{
-				mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
-				if (mstr->data->fdin < 0)
-					return (perror(cmd->input[i + 1]), 1);
-				dup2 (mstr->data->fdin, STDIN_FILENO);
-				close (mstr->data->fdin);
-			}
+			if (redir_expansion (mstr, cmd->input, i + 1))
+				return (printf("%s: ambiguous redirect\n", cmd->input[i + 1]), 1);
+			mstr->data->fdin = open(cmd->input[i + 1], O_RDONLY);
+			if (mstr->data->fdin < 0)
+				return (perror(cmd->input[i + 1]), 1);
+			dup2 (mstr->data->fdin, STDIN_FILENO);
+			close (mstr->data->fdin);
 		}
 		else if (!ft_strncmp (cmd->input[i], "<<", 2))
 		{
@@ -99,7 +98,7 @@ int	redir_expansion(t_master *mstr, char **redir, int i)
 					{
 						tmp = env_finder(mstr->env, key);
 						if (ft_count_words(tmp, ' ') > 1)
-							return (mstr->exit = 1, free (key), printf("%s: ambiguous redirect\n", redir[i]), 1);
+							return (mstr->exit = 1, free (key), 1);
 						free (key);
 					}
 					else
@@ -107,7 +106,7 @@ int	redir_expansion(t_master *mstr, char **redir, int i)
 						free (key);
 						key = get_varkey(&redir[i][j + 1]);
 						if (!key)
-							return (mstr->exit = 1, printf("%s: ambiguous redirect\n", redir[i]), 1);
+							return (mstr->exit = 1, 1);
 					}
 				}
 				j++;
@@ -168,14 +167,18 @@ int	output_redirect(t_master *mstr, t_cmdlist *cmd)
 	{
 		if (!ft_strncmp (cmd->output[i], ">", 2))
 		{
+			if (redir_expansion (mstr, cmd->output, i + 1))
+				return (printf("%s: ambiguous redirect\n", cmd->output[i + 1]), 1);
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (mstr->data->fdout == -1)
 				return (perror(cmd->output[i + 1]), 1);
 			dup2 (mstr->data->fdout, STDOUT_FILENO);
 			close (mstr->data->fdout);
 		}
-		else if (!ft_strncmp (cmd->output[i], ">>", 3))
+		else if (!ft_strncmp (cmd->output[i], ">>", 2))
 		{
+			if (redir_expansion (mstr, cmd->output, i + 1))
+				return (printf("%s: ambiguous redirect\n", cmd->output[i + 1]), 1);
 			mstr->data->fdout = open (cmd->output[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (mstr->data->fdout == -1)
 				return (perror(cmd->output[i + 1]), 1);
