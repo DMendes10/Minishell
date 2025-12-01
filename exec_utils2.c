@@ -9,6 +9,8 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 
 	paths = NULL;
 	redir_handler(mstr, cmd);
+	if (!*cmd->command[0])
+		invalid_command (&mstr, cmd->command[0]);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
 	if (env_finder(mstr->env, "PATH"))

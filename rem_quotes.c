@@ -38,24 +38,30 @@ void	split_quotes(char **s)
 {
 	int	i;
 	char	**temp;
+	char	*to_free;
 
 	i = 1;
 	if (!ft_strncmp(*s, "", ft_strlen(*s)))
 		return ;
 	temp = ft_split(quote_to_sep(s), -1);
 	free(*s);
+	if (!temp[0])
+	{
+		*s = ft_strdup("");
+		free_array(temp);
+		return ;
+	}
 	*s = ft_strdup(temp[0]);
 	if (split_size(temp) > 1)
 	{
 		while (temp[i])
 		{
-			*s = ft_strjoin(*s, temp[i]);
-			free (temp[i]);
-			i++;
+			to_free = *s;
+			*s = ft_strjoin(to_free, temp[i++]);
+			free (to_free);
 		}
 	}
-	free(temp[0]);
-	free (temp);
+	free_array(temp);
 }
 
 

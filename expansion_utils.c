@@ -27,7 +27,7 @@ char	*get_varkey(char *s)
 	key = NULL;
 	while (s[i])
 	{
-		if (s[i] == '$' && quotes != 1 && s[i + 1])
+		if ((s[i] == '$' && quotes != 1) && s[i + 1])
 		{
 			key = ft_substr(s, i + 1, get_keysize(&s[i + 1]));
 			return(key);
@@ -39,32 +39,32 @@ char	*get_varkey(char *s)
 	return (key);
 }
 
-void	get_varkey_cmd(t_master *master)
+void	get_varkey_cmd(t_cmdlist *node,t_master *master)
 {
 	int		i;
 	char	*key;
-	t_cmdlist	*cmd;
 
-	cmd = master->cmd;
 	i = 0;
 	key = NULL;
-	while(cmd)
+
+	while (node->command && node->command[i])
 	{
-		i = 0;
-		while (cmd->command && cmd->command[i])
+		key = get_varkey(node->command[i]);
+		while (key)
 		{
-			key = get_varkey(cmd->command[i]);
-			while (key)
-			{
-				if (check_exp(&cmd->command[i], &key, master))
+			if (check_exp(&node->command[i], &key, master))
+			{	
+				search_and_replace(&node->command[i], key, master, 0, 0);
+				if (i == 0 && !*node->command[i])
 				{
-					search_and_replace(&cmd->command[i], key, master, 0, 0);
+					free(node->command[i]);
+					node->command[i] = NULL;
+					return ;
 				}
-				key = get_varkey(cmd->command[i]);
 			}
-			i++;
+			key = get_varkey(node->command[i]);
 		}
-		cmd = cmd->next;
+		i++;
 	}
 }
 
