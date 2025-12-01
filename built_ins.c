@@ -81,7 +81,7 @@ int ft_echo(t_master *mstr, char **command, int flag, int i)
 	while (command[i])
 	{
 		line = ft_strjoin_gnl (line, command[i]);
-		if (command[1 + i++])
+		if (command[1 + i++] && *line && command[1 + i++])
 			line = ft_strjoin_gnl (line, " ");
 	}
 	if (line)

@@ -113,5 +113,7 @@ int main(int ac, char **av, char **env)
 			}
 			reset_master (&mstr);
 		}
+		else
+			mstr->exit = 130;
 	}
 }

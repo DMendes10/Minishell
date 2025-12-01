@@ -149,7 +149,7 @@ int			redir_expansion(t_master *mstr, char **redir, int i);
 int			hdoc_opener(t_master *mstr, t_cmdlist *cmd);
 int			hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del);
 int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
-char		*hdoc_wr_helper(t_master *mstr, char *line);
+char		*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input (char *prompt);
@@ -174,6 +174,9 @@ char		*get_varkey(char *s);
 size_t	ft_count_words(const char *a, char c);
 
 void	expand_redir(t_master *mstr, char **redir);
+void	hdoc_del_prep(t_master *mstr);
+void	remove_dollar(char **input);
+void	dollar_search(t_master *mstr, int i, int j);
 
 int		end_quote_check(const char *s, int i);
 size_t	ft_count_words_pipex(const char *a, char c, int i);

@@ -18,21 +18,19 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
-		hdoc = hdoc_wr_helper(mstr, line);
+		hdoc = hdoc_wr_helper(mstr, hdoc, line);
 		// free (line);
 		if (hdoc == NULL)
 			break ;
 	}
 	write (fd, hdoc, ft_strlen(hdoc));
 	close (fd);
-	return (free(line), free(hdoc), 0);
+	free (hdoc);
+	return (free(line), 0);
 }
 
-char	*hdoc_wr_helper(t_master *mstr, char *line)
+char	*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line)
 {
-	char *hdoc;
-
-	hdoc = NULL;
 	line = ft_strjoin_gnl (line, "\n");
 	if (!line)
 		alloc_error (&mstr);
