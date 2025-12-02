@@ -58,6 +58,13 @@ typedef struct s_edata
 // 	t_envlst	*next;
 // }t_envlst;
 
+typedef struct s_sig
+{
+	int	exit_code;
+	int	sig_flag;
+}t_sig;
+
+
 typedef struct s_master
 {
 	t_envlst	*env;
@@ -167,6 +174,12 @@ int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_cmdlist *node);
 void		rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
+
+void	signals();
+t_sig	*sign(void);
+void	init_sign(void);
+
+
 
 
 

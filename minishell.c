@@ -98,6 +98,8 @@ int main(int ac, char **av, char **env)
 		exit (1);
 	master_struct_init(&mstr);
 	env_init(mstr, env);
+	init_sign();
+	signals();
 	while(1)
 	{
 		// prompt = getcwd(NULL, 0);
