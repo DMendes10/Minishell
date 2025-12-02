@@ -62,6 +62,7 @@ typedef struct s_sig
 {
 	int	exit_code;
 	int	sig_flag;
+	int	fd;
 }t_sig;
 
 
@@ -157,7 +158,7 @@ int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 char		*hdoc_wr_helper(t_master *mstr, char *line);
 
 //-----------------iniciator-----------------------------------------------//
-char		*get_input (char *prompt);
+char		*get_input (t_master *mstr, char *prompt);
 void		env_populator (t_master *mstr, char **env);
 void		env_init(t_master *mstr, char **env);
 void		update_shlvl (t_master *mstr);

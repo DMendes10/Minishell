@@ -4,6 +4,7 @@
 		"libft.h": "c",
 		"minishelld.h": "c",
 		"stdio.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"parser.h": "c"
 	}
 }

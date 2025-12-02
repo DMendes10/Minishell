@@ -40,14 +40,14 @@ char	**split_args(char *input)
 	return (res);
 }
 
-char *get_input (char *prompt)
+char *get_input (t_master *mstr, char *prompt)
 {
 	char *input;
 	input = readline (prompt);
 	if (input && input[0])
 		add_history (input);
 	else if (!input)
-		exit (1);
+		exit_minishell (&mstr, 130);
 	return (input);
 }
 

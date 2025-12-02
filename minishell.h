@@ -61,7 +61,7 @@ size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 // int		ft_pwd();
 // int		ft_env(char **env);
 // int		ft_cd (char **command);
-char	*get_input (char *prompt);
+// char	*get_input (char *prompt);
 int		cmd_exec (char *input, char **env);
 void	return_error(char *error);
 // void	invalid_command(char **array, char *cmd);

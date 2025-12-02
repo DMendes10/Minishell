@@ -43,6 +43,7 @@ void	signal_handler_heredoc(int signal, siginfo_t *sig, void *content)
 	if (signal == SIGINT)
 	{
 		close(0);
+		close(sign()->fd);
 		sign()->exit_code = 130;
 	}
 	if (signal == SIGQUIT)
