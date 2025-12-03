@@ -3,10 +3,10 @@
 
 static int	redir_checker(char *cmd)
 {
-	if(!cmd)
+	if (!cmd)
 		return (0);
-	if (!ft_strncmp(cmd, "<", 2) && !ft_strncmp(cmd, ">", 2) && !ft_strncmp(cmd, "<<", 3) && \
-		!ft_strncmp(cmd, ">>", 3))
+	if (!ft_strncmp(cmd, "<", 2) && !ft_strncmp(cmd, ">", 2) \
+&& !ft_strncmp(cmd, "<<", 3) && !ft_strncmp(cmd, ">>", 3))
 	{
 		ft_putstr_fd("syntax error near unexpected token `>'\n", 2);
 		return (1);
@@ -19,25 +19,25 @@ static int	syntax_checker(char **cmdtable)
 	int	i;
 
 	if (!*cmdtable)
-		return(free_array (cmdtable), 1);
+		return (free_array (cmdtable), 1);
 	i = 0;
 	if (!ft_strncmp(cmdtable[i], "|", 1))
-		return(print_err("syntax error near unexpected token `|'\n", cmdtable), 1);
+		return (print_err("syntax error near unexpected token\n", cmdtable), 1);
 	while (cmdtable[i])
 	{
 		if (!ft_strncmp(cmdtable[i], "|", 1) && !ft_strncmp(cmdtable[i - 1], "|", 1))
-			return(print_err("syntax error near unexpected token `|'\n", cmdtable), 1);
+			return (print_err("syntax error near unexpected token\n", cmdtable), 1);
 		else if (cmdtable[i][0] == '<' || cmdtable[i][0] == '>')
 		{
 			if (redir_checker(cmdtable[i + 1]))
-				return(free_args(cmdtable), 1);
+				return (free_args(cmdtable), 1);
 		}
 		i++;
 	}
 	i--;
 	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) || !ft_strncmp(cmdtable[i], "<<", 3) || \
 		!ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
-			return(print_err("syntax error near unexpected token\n", cmdtable), 1);
+			return (print_err("syntax error near unexpected token\n", cmdtable), 1);
 	return (0);
 }
 

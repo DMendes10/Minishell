@@ -98,10 +98,12 @@ int main(int ac, char **av, char **env)
 		exit (1);
 	master_struct_init(&mstr);
 	env_init(mstr, env);
+	init_sign();
+	signals();
 	while(1)
 	{
 		// prompt = getcwd(NULL, 0);
-		input = get_input ("@Minishell> ");
+		input = get_input (mstr, "@Minishell> ");
 		if (input && input[0])
 		{
 			if (!parser(mstr, input, &mstr->cmd))

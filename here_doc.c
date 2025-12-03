@@ -8,14 +8,18 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 
 	hdoc = NULL;
 	fd = hdoc_opener (mstr, cmd);
+	sign()->fd = fd;
+	sign()->sig_flag = 2;
+	signals();
 	if (fd == -1)
 		return (1);
 	while(1)
 	{
 		line = readline ("> ");
-		if (line == NULL)
+		if (write (fd, 0, 0) == -1)
+			return (1);
+		if (!line)
 			return (free(hdoc), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
-			// ou perror()?
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
 		hdoc = hdoc_wr_helper(mstr, hdoc, line);
@@ -41,6 +45,8 @@ char	*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line)
 		alloc_error (&mstr);
 	}
 	free (line);
+	if (cmd->hdoc_flag == 0)
+		expand();
 	return (hdoc);
 }
 
@@ -73,18 +79,26 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 
 	i = 0;
 	ptr = cmd;
+	// sign()->sig_flag = 2;
+	// signals();
 	while (ptr->input[i])
 	{
 		if (!ft_strncmp (ptr->input[i], "<<", 3))
 		{
 			if (hdoc_rdwr(mstr, ptr, ptr->input[i + 1]))
+			{
+				sign()->sig_flag = 1;
+				signals();
 				return (1);
+			}
 			if (ptr->input[i + 2])
 				unlink(cmd->filename);
 			// pensar melhor nisto (no return)
 		}
 		i++;
 	}
+	// sign()->sig_flag = 1;
+	// signals();
 	return (0);
 }
 

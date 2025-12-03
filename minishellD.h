@@ -58,6 +58,14 @@ typedef struct s_edata
 // 	t_envlst	*next;
 // }t_envlst;
 
+typedef struct s_sig
+{
+	int	exit_code;
+	int	sig_flag;
+	int	fd;
+}t_sig;
+
+
 typedef struct s_master
 {
 	t_envlst	*env;
@@ -152,7 +160,7 @@ int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 char		*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line);
 
 //-----------------iniciator-----------------------------------------------//
-char		*get_input (char *prompt);
+char		*get_input (t_master *mstr, char *prompt);
 void		env_populator (t_master *mstr, char **env);
 void		env_init(t_master *mstr, char **env);
 void		update_shlvl (t_master *mstr);
@@ -169,7 +177,12 @@ int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_cmdlist *node);
 void		rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
-char		*get_varkey(char *s);
+
+void	signals();
+t_sig	*sign(void);
+void	init_sign(void);
+
+
 
 size_t	ft_count_words(const char *a, char c);
 

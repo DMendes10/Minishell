@@ -8,8 +8,10 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	char *path;
 
 	paths = NULL;
+	sign()->sig_flag = 3;
+	signals();
 	redir_handler(mstr, cmd);
-	// if (!cmd->command[0])
+	// if (!*cmd->command[0])
 	// 	invalid_command (&mstr, cmd->command[0]);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, mstr->exit);
@@ -195,7 +197,13 @@ int	output_redirect(t_master *mstr, t_cmdlist *cmd)
 void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 {
 	if (cmd->input)
-		hdoc_handler(mstr, cmd);
+	{
+		if( hdoc_handler(mstr, cmd))
+		{
+			dup2 (mstr->data->last_fd, STDIN_FILENO);
+			return ;
+		}
+	}
 	if (cmd->next)
 	{
 		if (pipe (mstr->data->pipefd) == -1)

@@ -1,4 +1,3 @@
-
 #include "parser.h"
 
 int	quotes_check(char c, int quotes)
@@ -34,21 +33,20 @@ char	**split_args(char *input)
 			input[i] = SEP;
 		else if (input[i] == '\'' || input[i] == '\"')
 			quotes = quotes_check(input[i], quotes);
-	i++;
+		i++;
 	}
 	res = ft_split(input, SEP);
 	return (res);
 }
 
-char *get_input (char *prompt)
+char	*get_input(t_master *mstr, char *prompt)
 {
-	char *input;
+	char	*input;
+
 	input = readline (prompt);
 	if (input && input[0])
 		add_history (input);
 	else if (!input)
-		exit (1);
+		exit_minishell (&mstr, 130);
 	return (input);
 }
-
-
