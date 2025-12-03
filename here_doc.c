@@ -22,18 +22,16 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 			return (free(hdoc), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
-		hdoc = hdoc_wr_helper(mstr, line);
+		hdoc = hdoc_wr_helper(mstr, cmd, line);
 		if (hdoc == NULL)
 			break ;
 	}
-	// sign()->sig_flag = 1;
-	// signals();
 	write (fd, hdoc, ft_strlen(hdoc));
 	close (fd);
 	return (free(line), free(hdoc), 0);
 }
 
-char	*hdoc_wr_helper(t_master *mstr, char *line)
+char	*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, char *line)
 {
 	char *hdoc;
 
@@ -48,6 +46,8 @@ char	*hdoc_wr_helper(t_master *mstr, char *line)
 		alloc_error (&mstr);
 	}
 	free (line);
+	if (cmd->hdoc_flag == 0)
+		expand();
 	return (hdoc);
 }
 
