@@ -25,7 +25,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 		last = NULL;
 		i++;
 	}
-	return (mstr->exit = 0, 0);
+	return (sign()->exit_code = 0, 0);
 }
 
 int	ft_exit(char **cmd, t_master *mstr)
@@ -36,7 +36,7 @@ int	ft_exit(char **cmd, t_master *mstr)
 	if (!cmd[1])
 	{
 		ft_putstr_fd("exit\n", 2);
-		exit_minishell (&mstr, mstr->exit);
+		exit_minishell (&mstr, sign()->exit_code);
 	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
@@ -46,7 +46,7 @@ int	ft_exit(char **cmd, t_master *mstr)
 	}
 	if (cmd[2])
 	{
-		mstr->exit = 1;
+		sign()->exit_code = 1;
 		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
 	}
 	ft_putstr_fd("exit\n", 2);

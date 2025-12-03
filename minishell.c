@@ -106,7 +106,7 @@ int main(int ac, char **av, char **env)
 		input = get_input (mstr, "@Minishell> ");
 		if (input && input[0])
 		{
-			if (!parser(mstr, input, &mstr->cmd))
+			if (!parser(input, &mstr->cmd))
 			{
 				expansion (mstr);
 				reshaping(mstr);
@@ -116,6 +116,6 @@ int main(int ac, char **av, char **env)
 			reset_master (&mstr);
 		}
 		else
-			mstr->exit = 130;
+			sign()->exit_code = 130;
 	}
 }

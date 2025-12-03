@@ -14,7 +14,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	// if (!*cmd->command[0])
 	// 	invalid_command (&mstr, cmd->command[0]);
 	if (!exec_built (cmd, mstr))
-		exit_minishell (&mstr, mstr->exit);
+		exit_minishell (&mstr, sign()->exit_code);
 	if (env_finder(mstr->env, "PATH"))
 		paths = ft_split (env_finder(mstr->env, "PATH"), ':');
 	path = path_finder(cmd->command, paths);
@@ -24,7 +24,6 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	{
 		perror (cmd->command[0]);
 		free_array(env);
-		free_array(paths);
 		exit_minishell(&mstr, errno);
 	}
 }
@@ -102,7 +101,7 @@ int	redir_expansion(t_master *mstr, char **redir, int i)
 					{
 						tmp = env_finder(mstr->env, key);
 						if (ft_count_words(tmp, ' ') > 1)
-							return (mstr->exit = 1, free (key), 1);
+							return (sign()->exit_code = 1, free (key), 1);
 						free (key);
 					}
 					else
@@ -110,7 +109,7 @@ int	redir_expansion(t_master *mstr, char **redir, int i)
 						free (key);
 						key = get_varkey(&redir[i][j + 1]);
 						if (!key)
-							return (mstr->exit = 1, 1);
+							return (sign()->exit_code = 1, 1);
 					}
 				}
 				j++;

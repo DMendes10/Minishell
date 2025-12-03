@@ -21,7 +21,7 @@ int	simple_export(t_master *mstr)
 	export_sorter (exp);
 	print_export (exp, mstr);
 	free_array (exp);
-	mstr->exit = 0;
+	sign()->exit_code = 0;
 	return (0);
 }
 
@@ -96,6 +96,6 @@ int	add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit)
 			i++;
 		}
 	}
-	mstr->exit = (super_exit > 0);
+	sign()->exit_code = (super_exit > 0);
 	return (0);
 }

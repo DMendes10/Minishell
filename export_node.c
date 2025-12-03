@@ -18,14 +18,14 @@ void	exp_full(t_master *mstr ,char *cmd)
 	if (change_env_var(splited, mstr) == 1)
 	{
 		free_array (splited);
-		mstr->exit = 0;
+		sign()->exit_code = 0;
 		return;
 	}
 	node = export_new_env(splited);
 	if (!node)
 		alloc_error_exit(mstr, splited);
 	ft_envlst_add_back (&mstr, node);
-	mstr->exit = 0;
+	sign()->exit_code = 0;
 	free_array(splited);
 }
 
@@ -82,7 +82,7 @@ int	export_append(char **cmd, t_master *mstr)
 		if (!ft_strncmp(ptr->token, cmd[0], ft_strchar_int (cmd[0], '+')))
 		{
 			ptr->var = ft_strjoin_gnl (ptr->var, cmd[1]);
-			mstr->exit = 0;
+			sign()->exit_code = 0;
 			return (1);
 		}
 		ptr = ptr->next;

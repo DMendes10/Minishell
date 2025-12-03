@@ -20,7 +20,7 @@ void chdir_env_pwd(t_master *mstr, char *directory)
 	}
 	if (!ptr)
 		reset_oldpwd(mstr);
-	mstr->exit = chdir(directory);
+	sign()->exit_code = chdir(directory);
 	if (!getcwd(str, PATH_MAX))
 		printf ("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
 	update_pwd (mstr);
@@ -76,10 +76,10 @@ int find_home(t_master *mstr)
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, "HOME", 5))
-			return(mstr->exit = 0, chdir_env_pwd(mstr, ptr->var), 0);
+			return(sign()->exit_code = 0, chdir_env_pwd(mstr, ptr->var), 0);
 		ptr = ptr->next;
 	}
-	mstr->exit = 1;
+	sign()->exit_code = 1;
 	return(ft_putstr_fd ("cd: HOME not set\n", 2), 1);
 }
 

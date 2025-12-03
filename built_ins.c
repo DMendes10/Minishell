@@ -8,21 +8,21 @@ int ft_cd(char **command, t_master *mstr)
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
-			return (mstr->exit = 1, invalid_path(command[1]), 0);
+			return (sign()->exit_code = 1, invalid_path(command[1]), 0);
 		else if (access (command[1], X_OK) != 0)
-			return(mstr->exit = 1, no_perms_path (command[1]), 0);
+			return(sign()->exit_code = 1, no_perms_path (command[1]), 0);
 		else
 			chdir_env_pwd(mstr, command[1]);
 	}
 	else
 	{
-		mstr->exit = 1;
+		sign()->exit_code = 1;
 		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
 	}
 	return (0);
 }
 
-int ft_env(t_master *mstr, t_envlst *list)
+int ft_env(t_envlst *list)
 {
 	t_envlst *ptr;
 
@@ -33,7 +33,7 @@ int ft_env(t_master *mstr, t_envlst *list)
 			printf ("%s=%s\n", ptr->token, ptr->var);
 		ptr = ptr->next;
 	}
-	mstr->exit = 0;
+	sign()->exit_code = 0;
 	return (0);
 }
 
@@ -61,11 +61,11 @@ int ft_pwd(t_master *mstr)
 		printf ("%s\n", path);
 		free (path);
 	}
-	mstr->exit = 0;
+	sign()->exit_code = 0;
 	return (0);
 }
 
-int ft_echo(t_master *mstr, char **command, int flag, int i)
+int ft_echo(char **command, int flag, int i)
 {
 	char *line;
 		
@@ -91,7 +91,7 @@ int ft_echo(t_master *mstr, char **command, int flag, int i)
 	}
 	if (!flag)
 		printf ("\n");
-	return (mstr->exit = 0, 0);
+	return (sign()->exit_code = 0, 0);
 }
 
 int	ft_export(t_master *mstr, t_cmdlist *cmdlst)

@@ -41,7 +41,7 @@ static int	syntax_checker(char **cmdtable)
 	return (0);
 }
 
-int	parser(t_master *mstr, char *input, t_cmdlist **cmdlist)
+int	parser(char *input, t_cmdlist **cmdlist)
 {
 	char	**cmdtable;
 	char	*temp;
@@ -54,7 +54,7 @@ int	parser(t_master *mstr, char *input, t_cmdlist **cmdlist)
 	cmdtable = split_args(temp);
 	free (temp);
 	if (syntax_checker(cmdtable))
-		return(mstr->exit = 2, free (input), 1);
+		return(sign()->exit_code = 2, free (input), 1);
 	ft_cmd_add_back(cmdlist, new_cmd(cmdtable, i));
 	while (cmdtable[i])
 	{

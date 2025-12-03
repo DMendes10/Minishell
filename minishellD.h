@@ -77,12 +77,12 @@ typedef struct s_master
 
 //--------------------built_ins-------------------------------------------//
 //echo
-int			ft_echo (t_master *mstr,char **command, int flag, int i);
+int			ft_echo (char **command, int flag, int i);
 int			valid_flag(char *flag);
 //pwd
 int			ft_pwd(t_master *mstr);
 //env
-int			ft_env(t_master *mstr, t_envlst *list);
+int			ft_env(t_envlst *list);
 //export
 int			ft_export(t_master *mstr, t_cmdlist *cmdlst);
 int			simple_export(t_master *mstr);
@@ -168,7 +168,7 @@ void		update_shlvl (t_master *mstr);
 char		**custom_env_builder(t_master *mstr);
 
 //---------------------parsing---------------------------------------------//
-int			parser(t_master *mstr, char *input, t_cmdlist **cmdlist);
+int			parser(char *input, t_cmdlist **cmdlist);
 void		get_varkey_cmd(t_cmdlist *node,t_master *master);
 void		get_varkey_input(t_master *master, int i);
 void		get_varkey_output(t_master *master);

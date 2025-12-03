@@ -26,7 +26,8 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 		if (hdoc == NULL)
 			break ;
 	}
-	write (fd, hdoc, ft_strlen(hdoc));
+	if (hdoc)
+		write (fd, hdoc, ft_strlen(hdoc));
 	close (fd);
 	free (hdoc);
 	return (free(line), 0);
