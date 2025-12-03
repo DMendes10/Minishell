@@ -22,8 +22,7 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 			return (free(hdoc), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
-		hdoc = hdoc_wr_helper(mstr, hdoc, line);
-		// free (line);
+		hdoc = hdoc_wr_helper(mstr, cmd, hdoc, line);
 		if (hdoc == NULL)
 			break ;
 	}
@@ -33,7 +32,7 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 	return (free(line), 0);
 }
 
-char	*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line)
+char	*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, char *hdoc, char *line)
 {
 	line = ft_strjoin_gnl (line, "\n");
 	if (!line)
@@ -46,8 +45,26 @@ char	*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line)
 	}
 	free (line);
 	if (cmd->hdoc_flag == 0)
-		expand();
+		expand_hdoc(mstr, &hdoc);
 	return (hdoc);
+}
+
+void	expand_hdoc(t_master *mstr, char **redir)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	key = NULL;
+	key = get_varkey(*redir);
+	while (key)
+	{
+		if (check_exp(redir, &key, mstr))
+		{
+			search_and_replace(redir, key, mstr, 0, 0);
+		}
+		key = get_varkey(*redir);
+	}
 }
 
 int	hdoc_opener(t_master *mstr, t_cmdlist *cmd)

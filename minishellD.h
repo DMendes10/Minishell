@@ -157,7 +157,8 @@ int			redir_expansion(t_master *mstr, char **redir, int i);
 int			hdoc_opener(t_master *mstr, t_cmdlist *cmd);
 int			hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del);
 int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
-char		*hdoc_wr_helper(t_master *mstr, char *hdoc, char *line);
+char		*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, char *hdoc, char *line);
+void	expand_hdoc(t_master *mstr, char **redir);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input (t_master *mstr, char *prompt);
@@ -177,6 +178,8 @@ int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_cmdlist *node);
 void		rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
+void	expand_redir(t_master *mstr, char **redir);
+char	*get_varkey(char *s);
 
 void	signals();
 t_sig	*sign(void);

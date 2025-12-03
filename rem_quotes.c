@@ -82,8 +82,8 @@ void	rem_quotes(t_master *master)
 		while (node->input && node->input[i])
 		{
 			quote_to_sep(&node->input[i]);
-			if (strchr(node->input[i], -1) && \
-			node->input[i + 1] && ft_strncmp(node->input[i - 1], "<<", ft_strlen(node->input[i])))
+			if (ft_strchr(node->input[i], -1) && \
+			!node->input[i + 1] && !ft_strncmp(node->input[i - 1], "<<", 3))
 				node->hdoc_flag = 1;
 			split_quotes(&node->input[i++]);
 		}
