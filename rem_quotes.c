@@ -80,7 +80,13 @@ void	rem_quotes(t_master *master)
 			split_quotes(&node->command[i++]);
 		i = 0;
 		while (node->input && node->input[i])
+		{
+			quote_to_sep(&node->input[i]);
+			if (strchr(node->input[i], -1) && \
+			node->input[i + 1] && ft_strncmp(node->input[i - 1], "<<", ft_strlen(node->input[i])))
+				node->hdoc_flag = 1;
 			split_quotes(&node->input[i++]);
+		}
 		i = 0;
 		while (node->output && node->output[i])
 			split_quotes(&node->output[i++]);

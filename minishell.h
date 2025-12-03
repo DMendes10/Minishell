@@ -22,6 +22,7 @@ typedef struct s_cmdlist
 	char				**output;
 	char				*filename;
 	struct s_cmdlist	*next;
+	int					hdoc_flag;
 }t_cmdlist;
 
 typedef struct s_envlst

@@ -16,7 +16,7 @@ void	populate_input(char **cmd, t_cmdlist *node, int i)
 {
 	int	j;
 
-	j  = 0;
+	j = 0;
 	while (cmd[i] && cmd[i][0] != '|')
 	{
 		if (cmd[i][0] == '<')
@@ -34,7 +34,7 @@ void	populate_output(char **cmd, t_cmdlist *node, int i)
 {
 	int	j;
 
-	j  = 0;
+	j = 0;
 	while (cmd[i] && cmd[i][0] != '|')
 	{
 		if (cmd[i][0] == '>')
@@ -56,18 +56,18 @@ void	get_redir(char **cmd, t_cmdlist *node, int i)
 	n_input = 0;
 	n_output = 0;
 	count_redir(cmd, &n_input, &n_output, i);
-	if(n_input)
+	if (n_input)
 	{
 		node->input = malloc((n_input * 2 + 1) * sizeof(char *));
-		if(!node->input)
+		if (!node->input)
 			return ;
 		populate_input(cmd, node, i);
 	}
-	if(n_output)
+	if (n_output)
 	{
 		node->output = malloc((n_output * 2 + 1) * sizeof(char *));
-		if(!node->output)
-			return ; 
-		populate_output(cmd, node , i);
+		if (!node->output)
+			return ;
+		populate_output(cmd, node, i);
 	}
 }

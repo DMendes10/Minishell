@@ -104,7 +104,7 @@ int main(int ac, char **av, char **env)
 	{
 		// prompt = getcwd(NULL, 0);
 		input = get_input (mstr, "@Minishell> ");
-		if (input && input[0] && input[0] != '\n')
+		if (input && input[0])
 		{
 			if (!parser(mstr, input, &mstr->cmd))
 			{

@@ -73,6 +73,7 @@ t_cmdlist *new_cmd(char **cmd, int i)
 	new->input = NULL;
 	new->output = NULL;
 	new->filename = NULL;
+	new->hdoc_flag = 0;
 	new->command = final_cmd(cmd, i);
 	get_redir(cmd, new, i);
 	new->next = NULL;
