@@ -62,7 +62,7 @@ void	expand_hdoc(t_master *mstr, char **redir)
 	{
 		if (check_exp(redir, &key, mstr))
 		{
-			search_and_replace(redir, key, mstr, 0, 0);
+			search_and_replace(redir, key, mstr);
 		}
 		key = get_varkey(*redir);
 	}

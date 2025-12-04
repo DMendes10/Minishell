@@ -20,10 +20,10 @@ int	check_exp(char **s, char **key, t_master *master)
 	}
 	else
 	{
-		while((*s)[i] && (*s)[i] != '$')
+		while ((*s)[i] && (*s)[i] != '$')
 			i++;
 		if ((*s)[i] && (*s)[i] == '$')
-			(*s)[i]= -1;
+			(*s)[i] = -1;
 		free (*key);
 		return (0);
 	}
@@ -41,7 +41,7 @@ void	restore_cmd(t_cmdlist *node)
 	while (node->command[i])
 	{
 		j = 0;
-		while(node->command[i][j])
+		while (node->command[i][j])
 		{
 			if (node->command[i][j] == -1 && quotes)
 				node->command[i][j] = '$';
@@ -52,4 +52,3 @@ void	restore_cmd(t_cmdlist *node)
 		i++;
 	}
 }
-

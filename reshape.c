@@ -1,24 +1,24 @@
 #include "minishellD.h"
 
-int		check_spaces(char **s)
+int	check_spaces(char **s)
 {
 	int	i;
 	int	quotes;
 
 	i = 0;
 	quotes = 0;
-	while((*s)[i])
+	while ((*s)[i])
 	{
-		if((*s)[i] == ' ' && quotes == 0)
+		if ((*s)[i] == ' ' && quotes == 0)
 			(*s)[i] = SEP;
-		else if((*s)[i] == '\'' || (*s)[i] == '\"')
+		else if ((*s)[i] == '\'' || (*s)[i] == '\"')
 			quotes = quotes_check((*s)[i], quotes);
 		i++;
 	}
 	i = 0;
-	while((*s)[i])
+	while ((*s)[i])
 	{
-		if((*s)[i] == SEP)
+		if ((*s)[i] == SEP)
 			return (1);
 		i++;
 	}
@@ -63,7 +63,7 @@ void	reshape_split(char **s, char ***cmd, int j, int k)
 	{
 		new_arr[i++] = ft_strdup((*cmd)[k++]);
 	}
-	while(temp[j])
+	while (temp[j])
 		new_arr[i++] = ft_strdup(temp[j++]);
 	k++;
 	while ((*cmd)[k])

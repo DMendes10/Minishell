@@ -134,7 +134,7 @@ void	expand_redir(t_master *mstr, char **redir)
 		{
 			if (check_exp(&redir[i], &key, mstr))
 			{
-				search_and_replace(&redir[i], key, mstr, 0, 0);
+				search_and_replace(&redir[i], key, mstr);
 			}
 			key = get_varkey(redir[i]);
 		}

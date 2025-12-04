@@ -22,11 +22,12 @@ static int	syntax_checker(char **cmdtable)
 		return (free_array (cmdtable), 1);
 	i = 0;
 	if (!ft_strncmp(cmdtable[i], "|", 1))
-		return (print_err("syntax error near unexpected token\n", cmdtable), 1);
+		return (print_err(SYNTAX_ERR, cmdtable), 1);
 	while (cmdtable[i])
 	{
-		if (!ft_strncmp(cmdtable[i], "|", 1) && !ft_strncmp(cmdtable[i - 1], "|", 1))
-			return (print_err("syntax error near unexpected token\n", cmdtable), 1);
+		if (!ft_strncmp(cmdtable[i], "|", 1) && \
+!ft_strncmp(cmdtable[i - 1], "|", 1))
+			return (print_err(SYNTAX_ERR, cmdtable), 1);
 		else if (cmdtable[i][0] == '<' || cmdtable[i][0] == '>')
 		{
 			if (redir_checker(cmdtable[i + 1]))
@@ -35,9 +36,10 @@ static int	syntax_checker(char **cmdtable)
 		i++;
 	}
 	i--;
-	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) || !ft_strncmp(cmdtable[i], "<<", 3) || \
-		!ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
-			return (print_err("syntax error near unexpected token\n", cmdtable), 1);
+	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) \
+|| !ft_strncmp(cmdtable[i], "<<", 3) || \
+!ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
+		return (print_err(SYNTAX_ERR, cmdtable), 1);
 	return (0);
 }
 
@@ -50,11 +52,11 @@ int	parser(char *input, t_cmdlist **cmdlist)
 	i = 0;
 	temp = lexer(input);
 	if (!temp)
-		return (ft_putstr_fd ("ERROR: unclosed quotes found\n", 2), free(input), 1);
+		return (ft_putstr_fd ("ERROR: unclosed quotes\n", 2), free(input), 1);
 	cmdtable = split_args(temp);
 	free (temp);
 	if (syntax_checker(cmdtable))
-		return(sign()->exit_code = 2, free (input), 1);
+		return (sign()->exit_code = 2, free (input), 1);
 	ft_cmd_add_back(cmdlist, new_cmd(cmdtable, i));
 	while (cmdtable[i])
 	{

@@ -24,7 +24,7 @@ char	*quote_to_sep(char	**s)
 			quotes = quotes_check((*s)[i], quotes);
 			(*s)[i] = -1;
 		}
-		else if((*s)[i] == '\"' && (quotes == 0 || quotes == 2))
+		else if ((*s)[i] == '\"' && (quotes == 0 || quotes == 2))
 		{
 			quotes = quotes_check((*s)[i], quotes);
 			(*s)[i] = -1;
@@ -34,13 +34,11 @@ char	*quote_to_sep(char	**s)
 	return (*s);
 }
 
-void	split_quotes(char **s)
+void	split_quotes(char **s, int i)
 {
-	int	i;
 	char	**temp;
 	char	*to_free;
 
-	i = 1;
 	if (!ft_strncmp(*s, "", ft_strlen(*s)))
 		return ;
 	temp = ft_split(quote_to_sep(s), -1);
@@ -64,11 +62,9 @@ void	split_quotes(char **s)
 	free_array(temp);
 }
 
-
-
 void	rem_quotes(t_master *master)
 {
-	int	i;
+	int			i;
 	t_cmdlist	*node;
 
 	i = 0;
@@ -77,19 +73,19 @@ void	rem_quotes(t_master *master)
 	{
 		i = 0;
 		while (node->command && node->command[i])
-			split_quotes(&node->command[i++]);
+			split_quotes(&node->command[i++], 1);
 		i = 0;
 		while (node->input && node->input[i])
 		{
 			quote_to_sep(&node->input[i]);
 			if (ft_strchr(node->input[i], -1) && \
-			!node->input[i + 1] && !ft_strncmp(node->input[i - 1], "<<", 3))
+!node->input[i + 1] && !ft_strncmp(node->input[i - 1], "<<", 3))
 				node->hdoc_flag = 1;
-			split_quotes(&node->input[i++]);
+			split_quotes(&node->input[i++], 1);
 		}
 		i = 0;
 		while (node->output && node->output[i])
-			split_quotes(&node->output[i++]);
+			split_quotes(&node->output[i++], 1);
 		i = 0;
 		node = node->next;
 	}

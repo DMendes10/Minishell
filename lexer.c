@@ -1,6 +1,5 @@
 #include "parser.h"
 
-
 static char	*seperator(char *input, int pos)
 {
 	int		i;
@@ -11,7 +10,7 @@ static char	*seperator(char *input, int pos)
 	j = 0;
 	ret = malloc(ft_strlen(input) + 3);
 	if (!ret)
-		return(NULL);
+		return (NULL);
 	while (i < pos)
 		ret[j++] = input[i++];
 	ret[j++] = SEP;
@@ -32,7 +31,7 @@ char	*lexer(char *input)
 	int		quotes;
 	char	*temp;
 	char	*cmdtable;
-	
+
 	i = 0;
 	quotes = 0;
 	temp = ft_strdup(input);
@@ -48,7 +47,7 @@ char	*lexer(char *input)
 		i++;
 	}
 	if (quotes)
-		return(free(temp), NULL);
+		return (free(temp), NULL);
 	cmdtable = ft_strdup(temp);
 	free(temp);
 	return (cmdtable);

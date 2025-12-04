@@ -5,7 +5,6 @@
 # include "minishell.h"
 # include "src/Libft/libft.h"
 
-
 # define SEP -1
 
 // int		parser(t_master *mstr,char *input, t_cmdlist **cmdlist);
@@ -24,7 +23,5 @@ char		**split_args(char *input);
 // int			get_varkey_input(t_master master, int i);
 // int			get_varkey_output(t_master master);
 // void		search_and_replace(char *s, char *key, t_master master);
-
-
 
 #endif
