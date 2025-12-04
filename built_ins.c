@@ -1,30 +1,29 @@
-
 #include "minishellD.h"
 
-int ft_cd(char **command, t_master *mstr)
+int	ft_cd(char **command, t_master *mstr)
 {
 	if (!command [1])
-		return(find_home(mstr));
+		return (find_home(mstr));
 	else if (!command[2])
 	{
 		if (access (command[1], F_OK) != 0)
 			return (sign()->exit_code = 1, invalid_path(command[1]), 0);
 		else if (access (command[1], X_OK) != 0)
-			return(sign()->exit_code = 1, no_perms_path (command[1]), 0);
+			return (sign()->exit_code = 1, no_perms_path (command[1]), 0);
 		else
 			chdir_env_pwd(mstr, command[1]);
 	}
 	else
 	{
 		sign()->exit_code = 1;
-		return(ft_putstr_fd ("cd: too many arguments\n", 2), 1);
+		return (ft_putstr_fd ("cd: too many arguments\n", 2), 1);
 	}
 	return (0);
 }
 
-int ft_env(t_envlst *list)
+int	ft_env(t_envlst *list)
 {
-	t_envlst *ptr;
+	t_envlst	*ptr;
 
 	ptr = list;
 	while (ptr)
@@ -37,13 +36,12 @@ int ft_env(t_envlst *list)
 	return (0);
 }
 
-int ft_pwd(t_master *mstr)
+int	ft_pwd(t_master *mstr)
 {
-	char *path;
-	char str[PATH_MAX];
+	char	*path;
+	char	str[PATH_MAX];
 
 	path = NULL;
-	
 	if (!getcwd(str, PATH_MAX) && ft_strlen(env_finder(mstr->env, "PWD")) == 0)
 	{
 		path = ft_strjoin (env_finder(mstr->env, "OLDPWD"), "/..");
@@ -52,7 +50,7 @@ int ft_pwd(t_master *mstr)
 	}
 	else if (!env_finder (mstr->env, "PWD"))
 	{
-		path = getcwd(str, PATH_MAX);
+		path = getcwd (str, PATH_MAX);
 		printf ("%s\n", path);
 	}
 	else
@@ -65,10 +63,10 @@ int ft_pwd(t_master *mstr)
 	return (0);
 }
 
-int ft_echo(char **command, int flag, int i)
+int	ft_echo(char **command, int flag, int i)
 {
-	char *line;
-		
+	char	*line;
+
 	line = NULL;
 	if (command[i] && !ft_strncmp (command[i], "-n", 2))
 	{
@@ -86,7 +84,7 @@ int ft_echo(char **command, int flag, int i)
 	}
 	if (line)
 	{
-		printf ("%s",line);
+		printf ("%s", line);
 		free (line);
 	}
 	if (!flag)
@@ -101,4 +99,3 @@ int	ft_export(t_master *mstr, t_cmdlist *cmdlst)
 	else
 		return (add_export(mstr, cmdlst, SUPER_EXIT));
 }
-

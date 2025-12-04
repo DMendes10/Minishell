@@ -22,13 +22,12 @@ void	delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr)
 	free(ptr->token);
 	if (ptr->var)
 		free(ptr->var);
-	// free(ptr->next);
 	free(ptr);
 }
 
-int key_check(char *key)
+int	key_check(char *key)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!ft_isalpha(key[0]) && key[0] != '_')
@@ -36,7 +35,7 @@ int key_check(char *key)
 	while (key[i] && key[i] != '=')
 	{
 		if (!ft_isalnum (key[i]) && key[0] != '_')
-			break;
+			break ;
 		i++;
 	}
 	if (key[i] && key[i] == '+')
@@ -51,29 +50,29 @@ int key_check(char *key)
 	return (1);
 }
 
-int str_valid_nbr(char *str)
+int	str_valid_nbr(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (!ft_isdigit(str[i]))
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 char	**envlst_to_char(t_master *mstr)
 {
 	t_envlst	*ptr;
-	char 		**env;
-	int 		i;
+	char		**env;
+	int			i;
 
 	ptr = mstr->env;
 	i = 0;
-	while(ptr)
+	while (ptr)
 	{
 		if (ptr->var)
 			i++;
@@ -84,7 +83,7 @@ char	**envlst_to_char(t_master *mstr)
 		alloc_error (&mstr);
 	i = 0;
 	ptr = mstr->env;
-	while(ptr)
+	while (ptr)
 	{
 		if (ptr->var)
 			env[i++] = ft_strjoin_gnl (ft_strjoin(ptr->token, "="), ptr->var);

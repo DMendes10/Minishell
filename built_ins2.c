@@ -2,9 +2,9 @@
 
 int	ft_unset(char **cmd, t_master *mstr)
 {
-	int i;
-	t_envlst *ptr;
-	t_envlst *last;
+	int			i;
+	t_envlst	*ptr;
+	t_envlst	*last;
 
 	i = 1;
 	ptr = mstr->env;
@@ -17,7 +17,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 			{
 				delete_env_node (ptr, last, &mstr);
 				ptr = mstr->env;
-				break;
+				break ;
 			}
 			last = ptr;
 			ptr = ptr->next;
@@ -30,7 +30,7 @@ int	ft_unset(char **cmd, t_master *mstr)
 
 int	ft_exit(char **cmd, t_master *mstr)
 {
-	long long nbr;
+	long long	nbr;
 
 	nbr = 0;
 	if (!cmd[1])
@@ -84,7 +84,7 @@ bool	atoll_parser(char *str, long long *nbr)
 
 int	exit_converter(long long nbr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (nbr < 0)
