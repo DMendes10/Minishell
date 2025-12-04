@@ -112,4 +112,3 @@ O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
 	return (0);
 }
-

@@ -23,6 +23,7 @@
 # define ECHO_FLAG 0
 # define ECHO_INDEX 1
 # define PATH_INDEX 0
+# define ECHO_LINE 0
 # define SYNTAX_ERR "syntax error near unexpected token\n"
 
 // typedef struct s_redir
@@ -74,7 +75,7 @@ typedef struct s_master
 
 //--------------------built_ins-------------------------------------------//
 //echo
-int			ft_echo(char **command, int flag, int i);
+int			ft_echo(char **command, int flag, int i, char *line);
 int			valid_flag(char *flag);
 //pwd
 int			ft_pwd(t_master *mstr);
@@ -160,6 +161,7 @@ int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
 char		*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, \
 char *hdoc, char *line);
 void		expand_hdoc(t_master *mstr, char **redir);
+int			hdoc_signal_setup(int fd);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input(t_master *mstr, char *prompt);

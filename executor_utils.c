@@ -28,7 +28,7 @@ int	exec_built(t_cmdlist *cmd, t_master *mstr)
 	if (!cmd->command[0])
 		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
-		return (ft_echo(cmd->command, ECHO_FLAG, ECHO_INDEX));
+		return (ft_echo(cmd->command, ECHO_FLAG, ECHO_INDEX, ECHO_LINE));
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
 		return (ft_exit (cmd->command, mstr), 0);
 	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
