@@ -144,6 +144,8 @@ char		**envlst_to_char(t_master *mstr);
 void		built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 int			is_built_in(t_cmdlist *cmd);
 int			cmdlist_size(t_cmdlist *cmd);
+int			pipe_operator2(t_cmdlist *cmd, t_master *mstr);
+int			redir_expand_helper(t_master *mstr, char **redir, int i, int j);
 
 //------------------redirection_hub------------------------------------------//
 int			input_redirect (t_master *mstr, t_cmdlist *cmd);

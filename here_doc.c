@@ -17,9 +17,9 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 	{
 		line = readline ("> ");
 		if (write (fd, 0, 0) == -1)
-			return (1);
+			return (unlink(cmd->filename), 1);
 		if (!line)
-			return (free(hdoc), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
+			return (free(hdoc), close (fd), unlink(cmd->filename), printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
 		hdoc = hdoc_wr_helper(mstr, cmd, hdoc, line);
@@ -72,12 +72,15 @@ int	hdoc_opener(t_master *mstr, t_cmdlist *cmd)
 {
 	int i;
 	int fd;
+	char	*tmp;
 
 	i = 0;
 	while (1)
 	{
 		free (cmd->filename);
-		cmd->filename = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		tmp = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
+		cmd->filename = ft_strjoin_gnl(ft_strdup("src/"), tmp);
+		free (tmp);
 		if (!cmd->filename)
 			alloc_error (&mstr);
 		if (access(cmd->filename, F_OK) == -1)
@@ -97,8 +100,6 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 
 	i = 0;
 	ptr = cmd;
-	// sign()->sig_flag = 2;
-	// signals();
 	while (ptr->input[i])
 	{
 		if (!ft_strncmp (ptr->input[i], "<<", 3))
@@ -115,8 +116,6 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 		}
 		i++;
 	}
-	// sign()->sig_flag = 1;
-	// signals();
 	return (0);
 }
 

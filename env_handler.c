@@ -2,27 +2,27 @@
 
 void	env_init(t_master *mstr, char **env)
 {
-	char **new_env;
+	char	**new_env;
 
 	new_env = NULL;
 	if (!env[0])
 	{
 		new_env = custom_env_builder (mstr);
-		env_populator(mstr, new_env);
+		env_populator (mstr, new_env);
 		free_array (new_env);
 	}
 	else
 	{
-		env_populator(mstr, env);
-		update_shlvl(mstr);
+		env_populator (mstr, env);
+		update_shlvl (mstr);
 	}
 }
 
 void	update_shlvl(t_master *mstr)
 {
-	t_envlst *ptr;
-	int	lvl;
-	char *new_lvl;
+	t_envlst	*ptr;
+	int			lvl;
+	char		*new_lvl;
 
 	ptr = mstr->env;
 	while (ptr)
@@ -43,14 +43,14 @@ void	update_shlvl(t_master *mstr)
 
 char	**custom_env_builder(t_master *mstr)
 {
-	char str[PATH_MAX];
-	char *pwd;
-	char **new_env;
+	char	str[PATH_MAX];
+	char	*pwd;
+	char	**new_env;
 
 	pwd = getcwd(str, PATH_MAX);
 	new_env = malloc (4 * sizeof(char *));
 	if (!new_env)
-		alloc_error(&mstr);
+		alloc_error (&mstr);
 	new_env[0] = ft_strjoin ("PWD=", pwd);
 	if (!new_env[0])
 		alloc_error_exit (mstr, new_env);

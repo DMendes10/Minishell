@@ -2,13 +2,13 @@
 
 int	simple_export(t_master *mstr)
 {
-	char **exp;
-	int i;
-	t_envlst *ptr;
+	char		**exp;
+	int			i;
+	t_envlst	*ptr;
 
 	i = 0;
 	ptr = mstr->env;
-	exp = malloc (((ft_envlst_size(ptr)) + 1) * sizeof(char*));
+	exp = malloc(((ft_envlst_size(ptr)) + 1) * sizeof(char *));
 	if (!exp)
 		alloc_error (&mstr);
 	while (i < ft_envlst_size(mstr->env))
@@ -27,9 +27,9 @@ int	simple_export(t_master *mstr)
 
 void	export_sorter(char **exp)
 {
-	int i;
-	int j;
-	char *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	while (exp[i])
@@ -63,9 +63,9 @@ void	print_export(char **exp, t_master *mstr)
 			if (!ft_strncmp(ptr->token, "_", 2))
 				;
 			else if (ptr->var != NULL)
-				printf("declare -x %s=\"%s\"\n",ptr->token ,ptr->var);
+				printf ("declare -x %s=\"%s\"\n", ptr->token, ptr->var);
 			else
-				printf("declare -x %s\n",ptr->token);
+				printf ("declare -x %s\n", ptr->token);
 			i++;
 		}
 		ptr = ptr->next;
@@ -76,14 +76,15 @@ void	print_export(char **exp, t_master *mstr)
 
 int	add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (cmdlst->command[i])
 	{
 		if (key_check(cmdlst->command[i]))
 		{
-			printf("export: `%s': not a valid identifier\n", cmdlst->command[i]);
+			printf("export: `%s': not a valid \
+				identifier\n", cmdlst->command[i]);
 			super_exit = 1;
 			i++;
 		}

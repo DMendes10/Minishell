@@ -13,9 +13,9 @@ void	free_master(t_master **master)
 	}
 }
 
-void free_envlst(t_envlst *envlst)
+void	free_envlst(t_envlst *envlst)
 {
-	t_envlst *ptr;
+	t_envlst	*ptr;
 
 	ptr = envlst;
 	while (ptr)
@@ -28,9 +28,9 @@ void free_envlst(t_envlst *envlst)
 	}
 }
 
-void free_cmdlst(t_cmdlist *cmdlst)
+void	free_cmdlst(t_cmdlist *cmdlst)
 {
-	t_cmdlist *ptr;
+	t_cmdlist	*ptr;
 
 	ptr = cmdlst;
 	while (ptr)
@@ -45,7 +45,7 @@ void free_cmdlst(t_cmdlist *cmdlst)
 	}
 }
 
-void exit_minishell(t_master **mstr, int exit_code)
+void	exit_minishell(t_master **mstr, int exit_code)
 {
 	free_master(mstr);
 	free (*mstr);
