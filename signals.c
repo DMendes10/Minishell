@@ -1,12 +1,9 @@
 #include "minishellD.h"
 
-
-
 void	signal_handler(int signal, siginfo_t *sig, void *content)
 {
 	(void)sig;
 	(void)content;
-
 	if (signal == SIGINT)
 	{
 		rl_replace_line("", 0);
@@ -56,9 +53,9 @@ void	signal_handler_here_parent(int signum)
 	sign()->exit_code = 130;
 }
 
-void	signals()
+void	signals(void)
 {
-	static struct sigaction sig;
+	static struct sigaction	sig;
 
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_SIGINFO | SA_RESTART;

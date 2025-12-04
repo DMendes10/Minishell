@@ -1,4 +1,3 @@
-
 int	quote_checker(char c, int quotes)
 {
 	if (c == '\'')

@@ -1,4 +1,3 @@
-
 #include "minishellD.h"
 
 char	*ft_makestring(const char *s, char c, size_t *i)

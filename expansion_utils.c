@@ -53,7 +53,7 @@ void	get_varkey_cmd(t_cmdlist *node, t_master *master)
 		{
 			if (check_exp(&node->command[i], &key, master))
 			{
-				search_and_replace(&node->command[i], key, master, 0, 0);
+				search_and_replace(&node->command[i], key, master);
 				if (i == 0 && !*node->command[i])
 				{
 					free(node->command[i]);
@@ -64,66 +64,5 @@ void	get_varkey_cmd(t_cmdlist *node, t_master *master)
 			key = get_varkey(node->command[i]);
 		}
 		i++;
-	}
-}
-
-void	get_varkey_input(t_master *master, int i)
-{
-	char		*key;
-	t_cmdlist	*cmd;
-
-	cmd = master->cmd;
-	key = NULL;
-	while (cmd)
-	{
-		i = 0;
-		while (cmd->input && cmd->input[i])
-		{
-			if (!ft_strncmp(cmd->input[i], "<<", 3))
-				i++;
-			else
-			{
-				key = get_varkey(cmd->input[i]);
-				while (key)
-				{
-					if (check_exp(&cmd->input[i], &key, master))
-					{
-						search_and_replace(&cmd->input[i], key, master, 0, 0);
-					}
-					key = get_varkey(cmd->input[i]);
-				}
-			}
-			i++;
-		}
-		cmd = cmd->next;
-	}
-}
-
-void	get_varkey_output(t_master *master)
-{
-	int			i;
-	char		*key;
-	t_cmdlist	*cmd;
-
-	cmd = master->cmd;
-	i = 0;
-	key = NULL;
-	while (cmd)
-	{
-		i = 0;
-		while (cmd->output && cmd->output[i])
-		{
-			key = get_varkey(cmd->output[i]);
-			while (key)
-			{
-				if (check_exp(&cmd->output[i], &key, master))
-				{
-					search_and_replace(&cmd->output[i], key, master, 0, 0);
-				}
-				key = get_varkey(cmd->output[i]);
-			}
-			i++;
-		}
-		cmd = cmd->next;
 	}
 }

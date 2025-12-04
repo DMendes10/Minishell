@@ -1,0 +1,61 @@
+#include "minishellD.h"
+#include "parser.h"
+
+void	hdoc_del_prep(t_master *mstr)
+{
+	t_cmdlist	*node;
+	int			i;
+	int			j;
+
+	i = 0;
+	j = 0;
+	node = mstr->cmd;
+	while (node)
+	{
+		while (node->input[i])
+		{
+			j = 0;
+			if (ft_strchr(node->input[i], '$'))
+				dollar_search (mstr, i, j);
+			i++;
+		}
+		node = node->next;
+	}
+}
+
+void	dollar_search(t_master *mstr, int i, int j)
+{
+	t_cmdlist	*node;
+
+	node = mstr->cmd;
+	while (node->input[i][j])
+	{
+		if (node->input[i][j] == '$')
+		{
+			if (!ft_strncmp(node->input[i - 1], "<<", 3))
+			{
+				if (node->input[i][j + 1] && (node->input[i][j + 1] == '\'' \
+|| node->input[i][j + 1] == '\"'))
+					remove_dollar (&node->input[i]);
+			}
+		}
+		j++;
+	}
+}
+
+void	remove_dollar(char **input)
+{
+	int		i;
+	char	*tmp;
+	char	*tmp2;
+	char	*new;
+
+	i = 0;
+	i = ft_strchar_int (*input, '$');
+	tmp = ft_substr (*input, 0, i);
+	tmp2 = ft_substr (*input, i + 1, ft_strlen(ft_strchr(*input, '$') + 1));
+	new = ft_strjoin_gnl (tmp, tmp2);
+	free (*input);
+	*input = new;
+	free (tmp2);
+}

@@ -1,4 +1,3 @@
-
 #ifndef MINISHELLD_H
 # define MINISHELLD_H
 
@@ -24,6 +23,7 @@
 # define ECHO_FLAG 0
 # define ECHO_INDEX 1
 # define PATH_INDEX 0
+# define SYNTAX_ERR "syntax error near unexpected token\n"
 
 // typedef struct s_redir
 // {
@@ -39,17 +39,16 @@
 // 	struct s_cmdlist	*next;
 // }t_cmdlist;
 
-
 typedef struct s_edata
 {
-	int last_fd;
-	int fdout;
-	int fdin;
-	int pipefd[2];
-	int *pid;
-	int i;
-	int built_in_flag;
-}t_edata;
+	int	last_fd;
+	int	fdout;
+	int	fdin;
+	int	pipefd[2];
+	int	*pid;
+	int	i;
+	int	built_in_flag;
+}	t_edata;
 
 // typedef struct s_envlst
 // {
@@ -63,8 +62,7 @@ typedef struct s_sig
 	int	exit_code;
 	int	sig_flag;
 	int	fd;
-}t_sig;
-
+}	t_sig;
 
 typedef struct s_master
 {
@@ -72,12 +70,11 @@ typedef struct s_master
 	t_cmdlist	*cmd;
 	t_edata		*data;
 	int			exit;
-}t_master;
-
+}	t_master;
 
 //--------------------built_ins-------------------------------------------//
 //echo
-int			ft_echo (char **command, int flag, int i);
+int			ft_echo(char **command, int flag, int i);
 int			valid_flag(char *flag);
 //pwd
 int			ft_pwd(t_master *mstr);
@@ -86,28 +83,28 @@ int			ft_env(t_envlst *list);
 //export
 int			ft_export(t_master *mstr, t_cmdlist *cmdlst);
 int			simple_export(t_master *mstr);
-void		export_sorter (char **exp);
+void		export_sorter(char **exp);
 void		print_export(char **exp, t_master *mstr);
 int			add_export(t_master *mstr, t_cmdlist *cmdlst, int super_exit);
-void		exp_key (t_master *mstr ,char *cmd);
-void		exp_full (t_master *mstr ,char *cmd);
-int			change_env_var (char **cmd, t_master *mstr);
-int			export_append (char **cmd, t_master *mstr);
+void		exp_key(t_master *mstr, char *cmd);
+void		exp_full(t_master *mstr, char *cmd);
+int			change_env_var(char **cmd, t_master *mstr);
+int			export_append(char **cmd, t_master *mstr);
 t_envlst	*export_new_env(char **env);
 int			key_check(char *key);
-int			str_valid_nbr (char *str);
+int			str_valid_nbr(char *str);
 int			ft_strchar_int(const char *s, int c);
 t_envlst	*ft_new_env_key(char *env);
 t_envlst	*ft_envlstnew(char *env);
 int			ft_envlst_size(t_envlst *lst);
 void		ft_envlst_add_back(t_master **mstr, t_envlst *new);
-char		*env_finder (t_envlst *lst ,char *cmd);
+char		*env_finder(t_envlst *lst, char *cmd);
 //cd
 int			ft_cd(char **command, t_master *mstr);
 void		chdir_env_pwd(t_master *mstr, char *directory);
 int			find_home(t_master *mstr);
 void		update_pwd(t_master *mstr);
-void		reset_oldpwd (t_master *mstr);
+void		reset_oldpwd(t_master *mstr);
 //unset
 int			ft_unset(char **cmd, t_master *mstr);
 void		delete_env_node(t_envlst *ptr, t_envlst *last, t_master **mstr);
@@ -120,7 +117,7 @@ void		exit_minishell(t_master **mstr, int exit_code);
 //--------------------free_hub---------------------------------------//
 void		free_array(char **s);
 void		free_array(char **s);
-void		free_envlst (t_envlst *envlst);
+void		free_envlst(t_envlst *envlst);
 void		free_master(t_master **master);
 void		free_cmdlst(t_cmdlist *cmdlst);
 void		reset_master(t_master **master);
@@ -139,7 +136,7 @@ int			ft_wait(pid_t *pid, int cmd_count);
 char		*path_finder(char **command, char **paths);
 void		path_checker(t_master **mstr, char *path, t_cmdlist *cmd, int i);
 void		pipe_operator(t_cmdlist *cmd, t_master *mstr);
-int			exec_built (t_cmdlist *cmd, t_master *mstr);
+int			exec_built(t_cmdlist *cmd, t_master *mstr);
 char		**envlst_to_char(t_master *mstr);
 void		built_in_single_exec(t_master *mstr, t_cmdlist *cmd);
 int			is_built_in(t_cmdlist *cmd);
@@ -148,10 +145,11 @@ int			pipe_operator2(t_cmdlist *cmd, t_master *mstr);
 int			redir_expand_helper(t_master *mstr, char **redir, int i, int j);
 
 //------------------redirection_hub------------------------------------------//
-int			input_redirect (t_master *mstr, t_cmdlist *cmd);
+int			input_redirect(t_master *mstr, t_cmdlist *cmd);
 int			output_redirect(t_master *mstr, t_cmdlist *cmd);
 void		redir_handler(t_master *mstr, t_cmdlist *cmd);
-int			built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, int saved_out);
+int			built_in_redir(t_master *mstr, t_cmdlist *cmd, int saved_in, \
+int saved_out);
 int			h_doc_redir(t_master *mstr, t_cmdlist *cmd, int i);
 int			redir_expansion(t_master *mstr, char **redir, int i);
 
@@ -159,51 +157,48 @@ int			redir_expansion(t_master *mstr, char **redir, int i);
 int			hdoc_opener(t_master *mstr, t_cmdlist *cmd);
 int			hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del);
 int			hdoc_handler(t_master *mstr, t_cmdlist *cmd);
-char		*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, char *hdoc, char *line);
-void	expand_hdoc(t_master *mstr, char **redir);
+char		*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, \
+char *hdoc, char *line);
+void		expand_hdoc(t_master *mstr, char **redir);
 
 //-----------------iniciator-----------------------------------------------//
-char		*get_input (t_master *mstr, char *prompt);
-void		env_populator (t_master *mstr, char **env);
+char		*get_input(t_master *mstr, char *prompt);
+void		env_populator(t_master *mstr, char **env);
 void		env_init(t_master *mstr, char **env);
-void		update_shlvl (t_master *mstr);
+void		update_shlvl(t_master *mstr);
 char		**custom_env_builder(t_master *mstr);
 
 //---------------------parsing---------------------------------------------//
 int			parser(char *input, t_cmdlist **cmdlist);
-void		get_varkey_cmd(t_cmdlist *node,t_master *master);
-void		get_varkey_input(t_master *master, int i);
-void		get_varkey_output(t_master *master);
-void		search_and_replace(char **s, char *key, t_master *master, int i, int j);
+void		get_varkey_cmd(t_cmdlist *node, t_master *master);
+void		search_and_replace(char **s, char *key, t_master *master);
 void		expansion(t_master *master);
 int			check_exp(char **s, char **key, t_master *master);
 void		restore_cmd(t_cmdlist *node);
 void		rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
-void	expand_redir(t_master *mstr, char **redir);
-char	*get_varkey(char *s);
+void		expand_redir(t_master *mstr, char **redir);
+char		*get_varkey(char *s);
 
-void	signals();
-t_sig	*sign(void);
-void	init_sign(void);
+void		signals(void);
+t_sig		*sign(void);
+void		init_sign(void);
 
+size_t		ft_count_words(const char *a, char c);
 
+void		expand_redir(t_master *mstr, char **redir);
+void		hdoc_del_prep(t_master *mstr);
+void		remove_dollar(char **input);
+void		dollar_search(t_master *mstr, int i, int j);
 
-size_t	ft_count_words(const char *a, char c);
-
-void	expand_redir(t_master *mstr, char **redir);
-void	hdoc_del_prep(t_master *mstr);
-void	remove_dollar(char **input);
-void	dollar_search(t_master *mstr, int i, int j);
-
-int		end_quote_check(const char *s, int i);
-size_t	ft_count_words_pipex(const char *a, char c, int i);
-char	*ft_makestring(const char *s, char c, size_t *i);
-char	*ft_makestring_quote(const char *s, size_t *i);
-char	**ft_minisplit(char **a, char const *s, char c);
-char	**ft_split_pipex(char const *s, char c);
-int		end_quote_check(const char *s, int i);
-size_t	ft_strlcpy_quotes(char *dst, const char *src, size_t size);
-char	**ft_split(char const *s, char c);
+int			end_quote_check(const char *s, int i);
+size_t		ft_count_words_pipex(const char *a, char c, int i);
+char		*ft_makestring(const char *s, char c, size_t *i);
+char		*ft_makestring_quote(const char *s, size_t *i);
+char		**ft_minisplit(char **a, char const *s, char c);
+char		**ft_split_pipex(char const *s, char c);
+int			end_quote_check(const char *s, int i);
+size_t		ft_strlcpy_quotes(char *dst, const char *src, size_t size);
+char		**ft_split(char const *s, char c);
 
 #endif
