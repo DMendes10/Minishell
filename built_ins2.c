@@ -46,7 +46,8 @@ int	ft_exit(char **cmd, t_master *mstr)
 	}
 	if (cmd[2])
 	{
-		sign()->exit_code = 1;
+		if (sign()->exit_code < 1)
+			sign()->exit_code = 1;
 		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
 	}
 	ft_putstr_fd("exit\n", 2);

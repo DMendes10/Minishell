@@ -52,7 +52,8 @@ int	parser(char *input, t_cmdlist **cmdlist)
 	i = 0;
 	temp = lexer(input);
 	if (!temp)
-		return (ft_putstr_fd ("ERROR: unclosed quotes\n", 2), free(input), 1);
+		return (ft_putstr_fd ("ERROR: unclosed quo\
+tes\n", 2), sign()->exit_code = 2, free(input), 1);
 	cmdtable = split_args(temp);
 	free (temp);
 	if (syntax_checker(cmdtable))
@@ -68,8 +69,7 @@ int	parser(char *input, t_cmdlist **cmdlist)
 		i++;
 	}
 	free_array(cmdtable);
-	free (input);
-	return (0);
+	return (free (input), 0);
 }
 
 // int main ()

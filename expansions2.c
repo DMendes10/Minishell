@@ -12,7 +12,7 @@ void	hdoc_del_prep(t_master *mstr)
 	node = mstr->cmd;
 	while (node)
 	{
-		while (node->input[i])
+		while (node->input && node->input[i])
 		{
 			j = 0;
 			if (ft_strchr(node->input[i], '$'))
@@ -32,7 +32,7 @@ void	dollar_search(t_master *mstr, int i, int j)
 	{
 		if (node->input[i][j] == '$')
 		{
-			if (!ft_strncmp(node->input[i - 1], "<<", 3))
+			if (!ft_strncmp(node->input[i - 1], "<<", 2))
 			{
 				if (node->input[i][j + 1] && (node->input[i][j + 1] == '\'' \
 || node->input[i][j + 1] == '\"'))

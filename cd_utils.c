@@ -88,7 +88,10 @@ int	valid_flag(char *flag)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
+	if (flag[i] != '-')
+		return (1);
+	i++;
 	while (flag[i])
 	{
 		if (flag[i] != 'n')

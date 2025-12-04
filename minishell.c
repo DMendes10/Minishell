@@ -54,13 +54,13 @@ int	cmdlist_size(t_cmdlist *cmd)
 	return (i);
 }
 
-void	initiator(int ac, char **av, char **env, t_master *mstr)
+void	initiator(int ac, char **av, char **env, t_master **mstr)
 {
 	(void)av;
 	if (ac > 1)
 		exit (1);
-	master_struct_init(&mstr);
-	env_init(mstr, env);
+	master_struct_init(mstr);
+	env_init(*mstr, env);
 	init_sign();
 	signals();
 }
@@ -70,10 +70,9 @@ int	main(int ac, char **av, char **env)
 	char		*input;
 	t_master	*mstr;
 
-	(void)av;
 	input = NULL;
 	mstr = NULL;
-	initiator (ac, av, env, mstr);
+	initiator (ac, av, env, &mstr);
 	while (1)
 	{
 		input = get_input (mstr, "@Minishell> ");
@@ -88,7 +87,5 @@ int	main(int ac, char **av, char **env)
 			}
 			reset_master (&mstr);
 		}
-		else
-			sign()->exit_code = 130;
 	}
 }

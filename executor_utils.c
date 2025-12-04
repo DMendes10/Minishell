@@ -17,7 +17,7 @@ void	executor(t_master *mstr, int cmd_count)
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
-	if (mstr->data->built_in_flag != 1)
+	if (cmd_count != 1 || mstr->data->built_in_flag != 1)
 		sign()->exit_code = ft_wait (mstr->data->pid, cmd_count);
 	close(mstr->data->last_fd);
 	return ;

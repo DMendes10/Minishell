@@ -71,6 +71,19 @@ int	input_redirect(t_master *mstr, t_cmdlist *cmd)
 	return (0);
 }
 
+int	output_redir_helper(t_master *mstr, t_cmdlist *cmd, int i)
+{
+	if (redir_expansion (mstr, cmd->output, i + 1))
+		return (printf("%s: ambiguous redirect\n", cmd->output[i + 1]), 1);
+	mstr->data->fdout = open (cmd->output[i + 1], \
+O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (mstr->data->fdout == -1)
+		return (perror(cmd->output[i + 1]), 1);
+	dup2 (mstr->data->fdout, STDOUT_FILENO);
+	close (mstr->data->fdout);
+	return (0);
+}
+
 int	output_redirect(t_master *mstr, t_cmdlist *cmd)
 {
 	int	i;
@@ -100,15 +113,3 @@ O_WRONLY | O_CREAT | O_APPEND, 0644);
 	return (0);
 }
 
-int	output_redir_helper(t_master *mstr, t_cmdlist *cmd, int i)
-{
-	if (redir_expansion (mstr, cmd->output, i + 1))
-		return (printf("%s: ambiguous redirect\n", cmd->output[i + 1]), 1);
-	mstr->data->fdout = open (cmd->output[i + 1], \
-O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (mstr->data->fdout == -1)
-		return (perror(cmd->output[i + 1]), 1);
-	dup2 (mstr->data->fdout, STDOUT_FILENO);
-	close (mstr->data->fdout);
-	return (0);
-}
