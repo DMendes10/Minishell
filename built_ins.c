@@ -77,8 +77,9 @@ int	ft_echo(char **command, int flag, int i, char *line)
 	{
 		if (command [i][0] != -2)
 			line = ft_strjoin_gnl (line, command[i]);
-		if (command[1 + i++] && command [i][0] != -2)
+		if (command [i][0] != -2 && command[1 + i])
 			line = ft_strjoin_gnl (line, " ");
+		i++;
 	}
 	if (line)
 	{

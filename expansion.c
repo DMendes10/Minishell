@@ -56,7 +56,7 @@ void	search_and_replace(char **s, char *key, t_master *master)
 	char	*var;
 
 	var = NULL;
-	if (!ft_strncmp(key, "?", 1))
+	if (!ft_strncmp(key, "?", 2))
 		var = ft_itoa(sign()->exit_code);
 	else
 		var = env_finder(master->env, key);
