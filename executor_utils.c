@@ -1,9 +1,8 @@
-
 #include "minishellD.h"
 
 void	executor(t_master *mstr, int cmd_count)
 {
-	t_cmdlist *ptr;
+	t_cmdlist	*ptr;
 
 	if ((!mstr->cmd->command[0] && (!mstr->cmd->input && !mstr->cmd->output)))
 		return ;
@@ -18,7 +17,7 @@ void	executor(t_master *mstr, int cmd_count)
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
-	if (mstr->data->built_in_flag != 1)
+	if (cmd_count != 1 || mstr->data->built_in_flag != 1)
 		sign()->exit_code = ft_wait (mstr->data->pid, cmd_count);
 	close(mstr->data->last_fd);
 	return ;
@@ -29,7 +28,7 @@ int	exec_built(t_cmdlist *cmd, t_master *mstr)
 	if (!cmd->command[0])
 		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
-		return(ft_echo(cmd->command, ECHO_FLAG, ECHO_INDEX));
+		return (ft_echo(cmd->command, ECHO_FLAG, ECHO_INDEX, ECHO_LINE));
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
 		return (ft_exit (cmd->command, mstr), 0);
 	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
@@ -41,7 +40,7 @@ int	exec_built(t_cmdlist *cmd, t_master *mstr)
 	else if (ft_strncmp (cmd->command[0], "unset", 6) == 0)
 		return (ft_unset(cmd->command, mstr));
 	else if (ft_strncmp (cmd->command[0], "env", 4) == 0)
-		return(ft_env(mstr->env));
+		return (ft_env(mstr->env));
 	else
 		return (1);
 }
@@ -50,7 +49,7 @@ int	ft_wait(pid_t *proc_id, int cmd_count)
 {
 	int	status;
 	int	exit_code;
-	int i;
+	int	i;
 
 	status = 0;
 	i = 0;
@@ -75,7 +74,7 @@ int	is_built_in(t_cmdlist *cmd)
 	if (!cmd->command[0])
 		return (0);
 	if (ft_strncmp (cmd->command[0], "echo", 5) == 0)
-		return(1);
+		return (1);
 	else if (ft_strncmp (cmd->command[0], "exit", 5) == 0)
 		return (1);
 	else if (ft_strncmp (cmd->command[0], "cd", 3) == 0)
@@ -87,7 +86,7 @@ int	is_built_in(t_cmdlist *cmd)
 	else if (ft_strncmp (cmd->command[0], "unset", 6) == 0)
 		return (1);
 	else if (ft_strncmp (cmd->command[0], "env", 4) == 0)
-		return(1);
+		return (1);
 	else
 		return (0);
 }

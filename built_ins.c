@@ -63,11 +63,8 @@ int	ft_pwd(t_master *mstr)
 	return (0);
 }
 
-int	ft_echo(char **command, int flag, int i)
+int	ft_echo(char **command, int flag, int i, char *line)
 {
-	char	*line;
-
-	line = NULL;
 	if (command[i] && !ft_strncmp (command[i], "-n", 2))
 	{
 		while (!valid_flag(command[i]))
@@ -78,8 +75,9 @@ int	ft_echo(char **command, int flag, int i)
 	}
 	while (command[i])
 	{
-		line = ft_strjoin_gnl (line, command[i]);
-		if (command[1 + i++] && *line && command[1 + i++])
+		if (command [i][0] != -2)
+			line = ft_strjoin_gnl (line, command[i]);
+		if (command[1 + i++] && command [i][0] != -2)
 			line = ft_strjoin_gnl (line, " ");
 	}
 	if (line)

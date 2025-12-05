@@ -1,9 +1,9 @@
 #include "minishellD.h"
 
-void	exp_full(t_master *mstr ,char *cmd)
+void	exp_full(t_master *mstr, char *cmd)
 {
-	t_envlst *node;
-	char **splited;
+	t_envlst	*node;
+	char		**splited;
 
 	splited = malloc (3 * sizeof(char *));
 	if (!splited)
@@ -19,7 +19,7 @@ void	exp_full(t_master *mstr ,char *cmd)
 	{
 		free_array (splited);
 		sign()->exit_code = 0;
-		return;
+		return ;
 	}
 	node = export_new_env(splited);
 	if (!node)
@@ -29,7 +29,7 @@ void	exp_full(t_master *mstr ,char *cmd)
 	free_array(splited);
 }
 
-t_envlst *export_new_env(char **env)
+t_envlst	*export_new_env(char **env)
 {
 	t_envlst	*node;
 
@@ -54,7 +54,7 @@ t_envlst *export_new_env(char **env)
 
 int	change_env_var(char **cmd, t_master *mstr)
 {
-	t_envlst *ptr;
+	t_envlst	*ptr;
 
 	ptr = mstr->env;
 	if (ft_strchr (cmd[0], '+'))
@@ -74,7 +74,7 @@ int	change_env_var(char **cmd, t_master *mstr)
 
 int	export_append(char **cmd, t_master *mstr)
 {
-	t_envlst *ptr;
+	t_envlst	*ptr;
 
 	ptr = mstr->env;
 	while (ptr)
@@ -90,16 +90,16 @@ int	export_append(char **cmd, t_master *mstr)
 	return (0);
 }
 
-void	exp_key(t_master *mstr ,char *cmd)
+void	exp_key(t_master *mstr, char *cmd)
 {
-	t_envlst *node;
-	t_envlst *ptr;
+	t_envlst	*node;
+	t_envlst	*ptr;
 
 	ptr = mstr->env;
 	while (ptr)
 	{
 		if (!ft_strncmp(ptr->token, cmd, ft_strlen(cmd) + 1))
-			return;
+			return ;
 		ptr = ptr->next;
 	}
 	node = ft_new_env_key(cmd);
@@ -107,19 +107,3 @@ void	exp_key(t_master *mstr ,char *cmd)
 		alloc_error(&mstr);
 	ft_envlst_add_back (&mstr, node);
 }
-
-// char *key_alloc(char *key)
-// {
-// 	char *new_key;
-
-// 	if (!ft_strchr (key, '+'))
-// 		return (ft_strdup(key));
-// 	else
-// 	{
-// 		new_key = ft_substr(key, 0, ft_strchar_int (key, '+'));
-// 		if (!new_key)
-// 			alloc_error(&mstr);
-// 		return (new_key);
-// 	}
-// }
-

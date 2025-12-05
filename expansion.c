@@ -47,6 +47,8 @@ void	replace(char **s, char *key, char *var)
 	while (temp[j])
 		(*s)[i++] = (temp[j++]);
 	free_keyvar(temp, &key, var);
+	if (!ft_strncmp(*s, "", ft_strlen(*s)))
+		(*s)[0] = -2;
 }
 
 void	search_and_replace(char **s, char *key, t_master *master)

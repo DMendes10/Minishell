@@ -1,33 +1,4 @@
-
 #include "minishellD.h"
-
-void	path_checker(t_master **mstr, char *path, t_cmdlist *cmd, int i)
-{
-	if (!path)
-		invalid_command (mstr, cmd->command[0]);
-	if (access (path, F_OK) != 0)
-		invalid_command (mstr, cmd->command[0]);
-	if (access (path, X_OK) != 0)
-		no_perms_command (mstr, cmd->command[0]);
-	if (path[0] == '.' && !path[1])
-	{
-		ft_putstr_fd (cmd->command[0], 2);
-		ft_putstr_fd (": filename argument required\n", 2);
-		ft_putstr_fd (cmd->command[0], 2);
-		ft_putstr_fd (": usage: . filename [arguments]\n", 2);
-		exit_minishell (mstr, 2);
-	}
-	if (path[0] == '.' && path[1] == '.')
-		invalid_command (mstr, cmd->command[0]);
-	while (path[i] == '.' || path[i] == '/')
-		i++;
-	if (!path[i])
-	{
-		ft_putstr_fd (cmd->command[0], 2);
-		ft_putstr_fd (": Is a directory\n", 2);
-		exit_minishell (mstr, 126);
-	}
-}
 
 void	master_struct_init(t_master **master)
 {
@@ -50,12 +21,10 @@ void	master_struct_init(t_master **master)
 	(*master)->exit = 0;
 }
 
-char	*env_finder(t_envlst *lst ,char *cmd)
+char	*env_finder(t_envlst *lst, char *cmd)
 {
 	t_envlst	*ptr;
-	// int	i;
 
-	// i = 0;
 	ptr = lst;
 	if (!*cmd)
 		return (NULL);
@@ -70,8 +39,8 @@ char	*env_finder(t_envlst *lst ,char *cmd)
 
 int	cmdlist_size(t_cmdlist *cmd)
 {
-	t_cmdlist *ptr;
-	int i;
+	t_cmdlist	*ptr;
+	int			i;
 
 	if (!cmd)
 		return (0);
@@ -85,24 +54,27 @@ int	cmdlist_size(t_cmdlist *cmd)
 	return (i);
 }
 
-int main(int ac, char **av, char **env)
+void	initiator(int ac, char **av, char **env, t_master **mstr)
 {
-	char *input;
-	(void) av;
-	t_master *mstr;
-	// char	*prompt;
+	(void)av;
+	if (ac > 1)
+		exit (1);
+	master_struct_init(mstr);
+	env_init(*mstr, env);
+	init_sign();
+	signals();
+}
+
+int	main(int ac, char **av, char **env)
+{
+	char		*input;
+	t_master	*mstr;
 
 	input = NULL;
 	mstr = NULL;
-	if (ac > 1)
-		exit (1);
-	master_struct_init(&mstr);
-	env_init(mstr, env);
-	init_sign();
-	signals();
-	while(1)
+	initiator (ac, av, env, &mstr);
+	while (1)
 	{
-		// prompt = getcwd(NULL, 0);
 		input = get_input (mstr, "@Minishell> ");
 		if (input && input[0])
 		{
@@ -115,7 +87,5 @@ int main(int ac, char **av, char **env)
 			}
 			reset_master (&mstr);
 		}
-		else
-			sign()->exit_code = 130;
 	}
 }

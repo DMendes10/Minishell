@@ -1,4 +1,3 @@
-
 #include "minishellD.h"
 
 int	ft_strchar_int(const char *s, int c)
@@ -26,8 +25,9 @@ t_envlst	*ft_envlstnew(char *env)
 	node = malloc(sizeof(t_envlst));
 	if (!node)
 		return (NULL);
-	node->token = ft_substr(env, 0, ft_strchar_int (env, '=') );
-	node->var = ft_substr(env, ft_strchar_int (env, '=') + 1, ft_strlen (ft_strchr (env, '=')) - 1);
+	node->token = ft_substr (env, 0, ft_strchar_int (env, '='));
+	node->var = ft_substr (env, ft_strchar_int (env, '=') + 1, ft_strlen
+			(ft_strchr (env, '=')) - 1);
 	node->next = NULL;
 	return (node);
 }
@@ -54,16 +54,16 @@ void	ft_envlst_add_back(t_master **mstr, t_envlst *new)
 
 void	env_populator(t_master *mstr, char **env)
 {
-	int i;
-	t_envlst *node;
+	int			i;
+	t_envlst	*node;
 
 	node = NULL;
 	i = 0;
 	while (env[i])
 	{
-		node = ft_envlstnew(env[i]);
+		node = ft_envlstnew (env[i]);
 		if (!node)
-			alloc_error(&mstr);
+			alloc_error (&mstr);
 		ft_envlst_add_back (&mstr, node);
 		i++;
 	}
@@ -72,8 +72,8 @@ void	env_populator(t_master *mstr, char **env)
 
 int	ft_envlst_size(t_envlst *lst)
 {
-	int i;
-	t_envlst *ptr;
+	int			i;
+	t_envlst	*ptr;
 
 	i = 0;
 	if (!lst)
