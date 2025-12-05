@@ -3,7 +3,7 @@
 void	invalid_command(t_master **mstr, char *cmd)
 {
 	ft_putstr_fd (cmd, 2);
-	ft_putstr_fd (": Command not found \n", 2);
+	ft_putstr_fd (": command not found\n", 2);
 	exit_minishell (mstr, 127);
 }
 

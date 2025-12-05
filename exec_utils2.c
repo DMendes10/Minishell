@@ -21,9 +21,16 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
-		perror (cmd->command[0]);
+		if (path && path[0] == '/')
+		{
+			ft_putstr_fd (cmd->command[0], 2);
+			ft_putstr_fd (": Is a directory", 2);
+			sign()->exit_code = 126;
+		}
+		else
+			perror (cmd->command[0]);
 		free_array(env);
-		exit_minishell(&mstr, errno);
+		exit_minishell(&mstr, sign()->exit_code);
 	}
 }
 
