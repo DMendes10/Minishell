@@ -198,7 +198,6 @@ size_t		ft_count_words_pipex(const char *a, char c, int i);
 char		*ft_makestring(const char *s, char c, size_t *i);
 char		*ft_makestring_quote(const char *s, size_t *i);
 char		**ft_minisplit(char **a, char const *s, char c);
-char		**ft_split_pipex(char const *s, char c);
 int			end_quote_check(const char *s, int i);
 size_t		ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 char		**ft_split(char const *s, char c);

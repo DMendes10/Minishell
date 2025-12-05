@@ -69,7 +69,7 @@ void	reshape_split(char **s, char ***cmd, int j, int k)
 	while ((*cmd)[k])
 		new_arr[i++] = ft_strdup((*cmd)[k++]);
 	free_cmd (*cmd);
-	free (temp[j]);
+	free_cmd (temp);
 	*cmd = new_arr;
 }
 

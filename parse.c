@@ -5,10 +5,9 @@ static int	redir_checker(char *cmd)
 {
 	if (!cmd)
 		return (0);
-	if (!ft_strncmp(cmd, "<", 2) && !ft_strncmp(cmd, ">", 2) \
-&& !ft_strncmp(cmd, "<<", 3) && !ft_strncmp(cmd, ">>", 3))
+	if (cmd[0] == '<' || cmd[0] == '>')
 	{
-		ft_putstr_fd("syntax error near unexpected token `>'\n", 2);
+		ft_putstr_fd(SYNTAX_ERR, 2);
 		return (1);
 	}
 	return (0);
