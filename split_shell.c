@@ -1,6 +1,6 @@
-#include "minishell.h"
+#include "minishellD.h"
 
-static size_t	ft_count_words(char const *s, char c)
+static size_t	split_count_words(char const *s, char c)
 {
 	size_t	i;
 	size_t	isword;
@@ -23,14 +23,14 @@ static size_t	ft_count_words(char const *s, char c)
 	return (words);
 }
 
-static void	free_all(char **res, int i)
+void	free_all(char **res, int i)
 {
 	while (i >= 0)
 		free(res[i--]);
 	free(res);
 }
 
-static size_t	ft_wordlen(char const *s, char c)
+size_t	ft_wordlen(char const *s, char c)
 {
 	size_t	len;
 
@@ -49,7 +49,7 @@ char	**ft_split(char const *s, char c)
 
 	j = 0;
 	i = 0;
-	words = ft_count_words(s, c);
+	words = split_count_words(s, c);
 	res = ft_calloc(words + 1, sizeof(char *));
 	if (!res)
 		return (NULL);

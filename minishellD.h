@@ -13,11 +13,12 @@
 # include <linux/limits.h>
 # include "src/Libft/libft.h"
 # include <stdbool.h>
-# include "minishell.h"
-# include "parser.h"
+// # include "minishell.h"
+// # include "parser.h"
 
 // typedef struct s_envlst t_envlst;
 
+# define SEP -1
 # define EXIT_CODE 0
 # define SUPER_EXIT 0
 # define ECHO_FLAG 0
@@ -26,19 +27,15 @@
 # define ECHO_LINE 0
 # define SYNTAX_ERR "syntax error near unexpected token\n"
 
-// typedef struct s_redir
-// {
-// 	char	**token;
-// 	char	**file;
-// }t_redir;
-
-// typedef struct s_cmdlist
-// {
-// 	char				**command;
-// 	char				**input;
-// 	char				**output;
-// 	struct s_cmdlist	*next;
-// }t_cmdlist;
+typedef struct s_cmdlist
+{
+	char				**command;
+	char				**input;
+	char				**output;
+	char				*filename;
+	struct s_cmdlist	*next;
+	int					hdoc_flag;
+}	t_cmdlist;
 
 typedef struct s_edata
 {
@@ -51,12 +48,12 @@ typedef struct s_edata
 	int	built_in_flag;
 }	t_edata;
 
-// typedef struct s_envlst
-// {
-// 	char		*token;
-// 	char		*var;
-// 	t_envlst	*next;
-// }t_envlst;
+typedef struct s_envlst
+{
+	char			*token;
+	char			*var;
+	struct s_envlst	*next;
+}	t_envlst;
 
 typedef struct s_sig
 {
@@ -131,7 +128,7 @@ void		invalid_path(char *cmd);
 void		no_perms_path(char *cmd);
 void		alloc_error(t_master **mstr);
 void		alloc_error_exit(t_master *master, char **array);
-void	exec_error_handler(t_master *mstr, t_cmdlist *cmd, char *path, \
+void		exec_error_handler(t_master *mstr, t_cmdlist *cmd, char *path, \
 char **env);
 
 //------------------executor------------------------------------------------//
@@ -184,6 +181,7 @@ void		rem_quotes(t_master *master);
 void		reshaping(t_master *mstr);
 void		expand_redir(t_master *mstr, char **redir);
 char		*get_varkey(char *s);
+int			quotes_check(char c, int quotes);
 
 void		signals(void);
 t_sig		*sign(void);
@@ -196,13 +194,7 @@ void		hdoc_del_prep(t_master *mstr);
 void		remove_dollar(char **input);
 void		dollar_search(t_master *mstr, int i, int j);
 
-int			end_quote_check(const char *s, int i);
-size_t		ft_count_words_pipex(const char *a, char c, int i);
-char		*ft_makestring(const char *s, char c, size_t *i);
-char		*ft_makestring_quote(const char *s, size_t *i);
 char		**ft_minisplit(char **a, char const *s, char c);
-int			end_quote_check(const char *s, int i);
-size_t		ft_strlcpy_quotes(char *dst, const char *src, size_t size);
 char		**ft_split(char const *s, char c);
 
 #endif
