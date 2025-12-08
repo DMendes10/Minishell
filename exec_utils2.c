@@ -12,7 +12,6 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	redir_handler(mstr, cmd);
 	if (cmd->command[0] && !*cmd->command[0])
 		invalid_command (&mstr, cmd->command[0]);
-		// exit_minishell(&mstr, 0);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, sign()->exit_code);
 	if (env_finder(mstr->env, "PATH"))
@@ -22,16 +21,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
-		if (path && (path[0] == '/' || path[0] == '.'))
-		{
-			ft_putstr_fd (cmd->command[0], 2);
-			ft_putstr_fd (": Is a directory\n", 2);
-			sign()->exit_code = 126;
-		}
-		else
-			perror (cmd->command[0]);
-		free_array(env);
-		exit_minishell(&mstr, sign()->exit_code);
+		exec_error_handler (mstr, cmd, path, env);
 	}
 }
 
@@ -84,6 +74,15 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 	{
 		if (hdoc_handler(mstr, cmd))
 		{
+			if (cmd->next && sign()->hdoc_flag == 1)
+			{
+				pipe (mstr->data->pipefd);
+				close (mstr->data->pipefd[1]);
+				dup2 (mstr->data->pipefd[0], mstr->data->last_fd);
+				close (mstr->data->pipefd[0]);
+				sign()->hdoc_flag = 0;
+				return ;
+			}
 			dup2 (mstr->data->last_fd, STDIN_FILENO);
 			return ;
 		}
@@ -91,10 +90,7 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 	if (cmd->next)
 	{
 		if (pipe (mstr->data->pipefd) == -1)
-		{
-			perror("pipe: ");
 			exit_minishell (&mstr, 1);
-		}
 	}
 	if (pipe_operator2 (cmd, mstr))
 		return ;

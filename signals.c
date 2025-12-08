@@ -21,11 +21,11 @@ void	signal_handler_pipe(int signal, siginfo_t *sig, void *content)
 {
 	(void)sig;
 	(void)content;
-	// if (signal == SIGINT)
-	// {
-	// 	ft_putstr_fd("\n", STDOUT_FILENO);
-	// 	sign()->exit_code = 130;
-	// }
+	if (signal == SIGINT)
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		sign()->exit_code = 130;
+	}
 	if (signal == SIGQUIT)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);

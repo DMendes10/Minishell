@@ -11,4 +11,5 @@ void	init_sign(void)
 {
 	sign()->exit_code = 0;
 	sign()->sig_flag = 1;
+	sign()->hdoc_flag = 0;
 }

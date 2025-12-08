@@ -63,6 +63,7 @@ typedef struct s_sig
 	int	exit_code;
 	int	sig_flag;
 	int	fd;
+	int	hdoc_flag;
 }	t_sig;
 
 typedef struct s_master
@@ -130,6 +131,8 @@ void		invalid_path(char *cmd);
 void		no_perms_path(char *cmd);
 void		alloc_error(t_master **mstr);
 void		alloc_error_exit(t_master *master, char **array);
+void	exec_error_handler(t_master *mstr, t_cmdlist *cmd, char *path, \
+char **env);
 
 //------------------executor------------------------------------------------//
 void		executor(t_master *mstr, int cmd_count);

@@ -16,8 +16,8 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 		if (write (fd, 0, 0) == -1)
 			return (unlink(cmd->filename), 1);
 		if (!line)
-			return (free(hdoc), close (fd), unlink(cmd->filename), \
-printf("here-document delimeted by end-of-file (wanted `%s')\n", del), 1);
+			return (free(hdoc), close (fd), unlink(cmd->filename), printf("here-document \
+delimeted by end-of-file (wanted `%s')\n", del), sign()->hdoc_flag = 1, 1);
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
 		hdoc = hdoc_wr_helper(mstr, cmd, hdoc, line);

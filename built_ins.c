@@ -84,7 +84,6 @@ int	ft_echo(char **command, int flag, int i, char *line)
 	if (line)
 	{
 		ft_putstr_fd (line, STDOUT_FILENO);
-		// printf ("%s", line); 
 		free (line);
 	}
 	if (!flag)

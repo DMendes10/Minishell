@@ -14,6 +14,8 @@ void	executor(t_master *mstr, int cmd_count)
 	while (ptr)
 	{
 		pipe_operator(ptr, mstr);
+		if (sign()->exit_code == 130)
+			break ;
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
