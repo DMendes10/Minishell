@@ -11,7 +11,7 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	signals();
 	redir_handler(mstr, cmd);
 	if (cmd->command[0] && cmd->command[0][0] == -2)
-		exit_minishell (&mstr, 0);
+		exit_minishell(&mstr, 0);
 		// invalid_command (&mstr, cmd->command[0]);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, sign()->exit_code);
@@ -22,9 +22,16 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
-		perror (cmd->command[0]);
+		if (path && (path[0] == '/' || path[0] == '.'))
+		{
+			ft_putstr_fd (cmd->command[0], 2);
+			ft_putstr_fd (": Is a directory\n", 2);
+			sign()->exit_code = 126;
+		}
+		else
+			perror (cmd->command[0]);
 		free_array(env);
-		exit_minishell(&mstr, errno);
+		exit_minishell(&mstr, sign()->exit_code);
 	}
 }
 
@@ -33,6 +40,7 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 	int	saved_stdin;
 	int	saved_stdout;
 
+	mstr->data->built_in_flag = 1;
 	saved_stdin = dup (STDIN_FILENO);
 	saved_stdout = dup (STDOUT_FILENO);
 	dup2 (mstr->data->last_fd, STDIN_FILENO);
@@ -49,7 +57,6 @@ void	built_in_single_exec(t_master *mstr, t_cmdlist *cmd)
 	dup2 (saved_stdout, STDOUT_FILENO);
 	close (saved_stdin);
 	close (saved_stdout);
-	mstr->data->built_in_flag = 1;
 }
 
 size_t	ft_count_words(const char *a, char c)
@@ -95,7 +102,7 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 
 int	pipe_operator2(t_cmdlist *cmd, t_master *mstr)
 {
-	if (is_built_in(cmd) && cmdlist_size(cmd) == 1)
+	if (is_built_in(cmd) && cmdlist_size(mstr->cmd) == 1)
 	{
 		built_in_single_exec(mstr, cmd);
 		close (mstr->data->last_fd);

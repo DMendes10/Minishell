@@ -9,7 +9,7 @@ int	check_spaces(char **s)
 	quotes = 0;
 	while ((*s)[i])
 	{
-		if ((*s)[i] == ' ' && quotes == 0)
+		if (((*s)[i] == ' ' || (*s)[i] == -2) && quotes == 0)
 			(*s)[i] = SEP;
 		else if ((*s)[i] == '\'' || (*s)[i] == '\"')
 			quotes = quotes_check((*s)[i], quotes);
@@ -18,7 +18,7 @@ int	check_spaces(char **s)
 	i = 0;
 	while ((*s)[i])
 	{
-		if ((*s)[i] == SEP)
+		if ((*s)[i] == SEP || (*s)[i] == -2)
 			return (1);
 		i++;
 	}
@@ -73,6 +73,34 @@ void	reshape_split(char **s, char ***cmd, int j, int k)
 	*cmd = new_arr;
 }
 
+void	reshape_split2(char **s, char ***cmd, int j, int k)
+{
+	char	**temp;
+	char	**new_arr;
+	int		size;
+	int		i;
+
+	new_arr = NULL;
+	i = 0;
+	temp = ft_split(*s, -2);
+	size = arr_size(*cmd) + arr_size(temp) - 1;
+	new_arr = ft_calloc(size + 1, sizeof(char *));
+	if (!new_arr)
+		return ;
+	while ((*cmd)[k] && (*cmd)[k] != *s)
+	{
+		new_arr[i++] = ft_strdup((*cmd)[k++]);
+	}
+	while (temp[j])
+		new_arr[i++] = ft_strdup(temp[j++]);
+	k++;
+	while ((*cmd)[k])
+		new_arr[i++] = ft_strdup((*cmd)[k++]);
+	free_cmd (*cmd);
+	free_cmd (temp);
+	*cmd = new_arr;
+}
+
 void	reshaping(t_master *mstr)
 {
 	int			i;
@@ -87,8 +115,11 @@ void	reshaping(t_master *mstr)
 			if (check_spaces(&node->command[i]))
 			{
 				reshape_split(&node->command[i], &node->command, 0, 0);
+				// reshape_split2(&node->command[i], &node->command, 0, 0);
 			}
-			i++;
+			else
+				i++;
+			// falha com >ola echo $o --- invalid read na linha 113
 		}
 		node = node->next;
 	}

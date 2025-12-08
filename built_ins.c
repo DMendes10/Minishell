@@ -83,11 +83,12 @@ int	ft_echo(char **command, int flag, int i, char *line)
 	}
 	if (line)
 	{
-		printf ("%s", line);
+		ft_putstr_fd (line, STDOUT_FILENO);
+		// printf ("%s", line); 
 		free (line);
 	}
 	if (!flag)
-		printf ("\n");
+		ft_putstr_fd ("\n", STDOUT_FILENO);
 	return (sign()->exit_code = 0, 0);
 }
 

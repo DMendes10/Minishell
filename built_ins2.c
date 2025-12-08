@@ -35,22 +35,24 @@ int	ft_exit(char **cmd, t_master *mstr)
 	nbr = 0;
 	if (!cmd[1])
 	{
-		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 1);
 		exit_minishell (&mstr, sign()->exit_code);
 	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
-		ft_putstr_fd("exit\nexit: ", 2);
-		printf ("%s: numeric argument required", cmd[1]);
+		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd(cmd[1], 2);
+		ft_putstr_fd("exit: numeric argument required\n", 2);
 		exit_minishell (&mstr, 2);
 	}
 	if (cmd[2])
 	{
 		if (sign()->exit_code < 1)
 			sign()->exit_code = 1;
-		return (ft_putstr_fd("exit\nexit: too many arguments\n", 2), 1);
+		ft_putstr_fd("exit\n", 1);
+		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
 	}
-	ft_putstr_fd("exit\n", 2);
+	ft_putstr_fd("exit\n", 1);
 	exit_minishell (&mstr, exit_converter(nbr));
 	return (1);
 }
