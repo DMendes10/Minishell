@@ -10,9 +10,9 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	sign()->sig_flag = 3;
 	signals();
 	redir_handler(mstr, cmd);
-	if (cmd->command[0] && cmd->command[0][0] == -2)
-		exit_minishell(&mstr, 0);
-		// invalid_command (&mstr, cmd->command[0]);
+	if (cmd->command[0] && !*cmd->command[0])
+		invalid_command (&mstr, cmd->command[0]);
+		// exit_minishell(&mstr, 0);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, sign()->exit_code);
 	if (env_finder(mstr->env, "PATH"))
