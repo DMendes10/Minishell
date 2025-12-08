@@ -10,8 +10,9 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	sign()->sig_flag = 3;
 	signals();
 	redir_handler(mstr, cmd);
-	if (cmd->command[0] && !*cmd->command[0])
-		invalid_command (&mstr, cmd->command[0]);
+	if (cmd->command[0] && cmd->command[0][0] == -2)
+		exit_minishell(&mstr, 0);
+		// invalid_command (&mstr, cmd->command[0]);
 	if (!exec_built (cmd, mstr))
 		exit_minishell (&mstr, sign()->exit_code);
 	if (env_finder(mstr->env, "PATH"))
@@ -21,10 +22,10 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	env = envlst_to_char (mstr);
 	if (execve (path, cmd->command, env) == -1)
 	{
-		if (path && path[0] == '/')
+		if (path && (path[0] == '/' || path[0] == '.'))
 		{
 			ft_putstr_fd (cmd->command[0], 2);
-			ft_putstr_fd (": Is a directory", 2);
+			ft_putstr_fd (": Is a directory\n", 2);
 			sign()->exit_code = 126;
 		}
 		else
