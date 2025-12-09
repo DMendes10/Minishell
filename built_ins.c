@@ -6,7 +6,7 @@
 /*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:01:48 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:01:49 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/09 15:21:08 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_echo(char **command, int flag, int i, char *line)
 {
 	if (command[i] && !ft_strncmp (command[i], "-n", 2))
 	{
-		while (!valid_flag(command[i]))
+		while (command[i] && !valid_flag(command[i]))
 		{
 			flag++;
 			i++;
