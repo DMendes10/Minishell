@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 15:02:43 by diogo             #+#    #+#             */
+/*   Updated: 2025/12/09 15:06:29 by diogo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishellD.h"
 
 void	executor(t_master *mstr, int cmd_count)
@@ -50,25 +62,27 @@ int	exec_built(t_cmdlist *cmd, t_master *mstr)
 int	ft_wait(pid_t *proc_id, int cmd_count)
 {
 	int	status;
-	int	exit_code;
 	int	i;
 
 	status = 0;
 	i = 0;
-	exit_code = 0;
 	while (i < cmd_count)
 	{
+		sign()->sig_flag = 3;
+		signals();
 		if (i == cmd_count - 1)
 		{
 			waitpid(proc_id[i], &status, 0);
 			if (WIFEXITED (status))
-				exit_code = WEXITSTATUS (status);
+				sign()->exit_code = WEXITSTATUS (status);
 		}
 		else
 			waitpid(proc_id[i], NULL, 0);
 		i++;
 	}
-	return (exit_code);
+	sign()->sig_flag = 1;
+	signals();
+	return (sign()->exit_code);
 }
 
 int	is_built_in(t_cmdlist *cmd)

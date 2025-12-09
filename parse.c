@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:26:27 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/08 15:26:28 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/09 15:04:30 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,51 +82,3 @@ tes\n", 2), sign()->exit_code = 2, free(input), 1);
 	free_array(cmdtable);
 	return (free (input), 0);
 }
-
-// int main ()
-// {
-// 	char *input;
-// 	char *prompt;
-// 	char **args;
-// 	int	i, j;
-// 	t_cmdlist	*cmdlist;
-// 	cmdlist = NULL;
-// 	input = NULL;
-// 	prompt = NULL;
-// 	args = NULL;
-// 	i = 0;
-// 	j = 0;
-// 	while(1)
-// 	{
-// 		i = 0;
-// 		prompt = getcwd(NULL, 0);
-// 		prompt = ft_strjoin_gnl (prompt, " @Minishell>$ ");
-// 		input = get_input (prompt);
-// 		parser(input, &cmdlist);
-// 		quote_search(&cmdlist);
-// 		if (input && input[0])
-// 		{
-// 			j = 0;
-// 			while(cmdlist)
-// 			{	
-// 				i = 0;
-// 				while(cmdlist->command[i])
-// 					printf("Command[%d]:%s\n", j, cmdlist->command[i++]);
-// 				i = 0;
-// 				if(cmdlist->input)
-// 				{
-// 					while(cmdlist->input[i])
-// 						printf("Input[%d]:%s\n", j, cmdlist->input[i++]);
-// 				}
-// 				i = 0;
-// 				if(cmdlist->output)
-// 				{
-// 					while(cmdlist->output[i])
-// 						printf("Output[%d]:%s\n", j, cmdlist->output[i++]);
-// 				}
-// 				cmdlist = cmdlist->next;
-// 				j++;
-// 			}
-// 		}
-// 	}
-// }

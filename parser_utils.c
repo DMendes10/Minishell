@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:26:31 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/08 15:26:32 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/09 14:49:13 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ char	*get_input(t_master *mstr, char *prompt)
 	if (input && input[0])
 		add_history (input);
 	else if (!input)
-		exit_minishell (&mstr, 130);
+	{
+		ft_putstr_fd ("Exit\n", 1);
+		exit_minishell (&mstr, sign()->exit_code);
+	}
 	return (input);
 }

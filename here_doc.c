@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 15:03:46 by diogo             #+#    #+#             */
+/*   Updated: 2025/12/09 15:05:59 by diogo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishellD.h"
 
 int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
@@ -48,10 +60,8 @@ char	*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, char *hdoc, char *line)
 
 void	expand_hdoc(t_master *mstr, char **redir)
 {
-	int		i;
 	char	*key;
 
-	i = 0;
 	key = NULL;
 	key = get_varkey(*redir);
 	while (key)
@@ -104,7 +114,8 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 			{
 				sign()->sig_flag = 1;
 				signals();
-				return (1);
+				if (!ptr->input[i + 2])
+					return (1);
 			}
 			if (ptr->input[i + 2])
 				unlink(cmd->filename);
