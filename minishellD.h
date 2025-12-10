@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:15 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 17:14:44 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:03:31 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define PATH_INDEX 0
 # define ECHO_LINE 0
 # define SYNTAX_ERR "syntax error near unexpected token\n"
+# define HDOC_EOF_ERR "here-document delimeted by end-of-file (wanted `%s')\n"
 
 typedef struct s_cmdlist
 {
