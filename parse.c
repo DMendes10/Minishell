@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:26:27 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/09 15:04:30 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 19:12:33 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "minishellD.h"
 
-static int	redir_checker(char *cmd)
+static int	redir_checker(char *cmd, char redir)
 {
 	if (!cmd)
 		return (0);
 	if (cmd[0] == '<' || cmd[0] == '>')
 	{
-		ft_putstr_fd(SYNTAX_ERR, 2);
+		if (redir == '<')
+			ft_putstr_fd(SYNTAX_ERR_IN, 2);
+		else
+			ft_putstr_fd(SYNTAX_ERR_OUT, 2);
 		return (1);
 	}
 	return (0);
@@ -33,15 +36,15 @@ static int	syntax_checker(char **cmdtable)
 		return (free_array (cmdtable), 1);
 	i = 0;
 	if (!ft_strncmp(cmdtable[i], "|", 1))
-		return (print_err(SYNTAX_ERR, cmdtable), 1);
+		return (print_err(SYNTAX_ERR_PIPE, cmdtable), 1);
 	while (cmdtable[i])
 	{
 		if (!ft_strncmp(cmdtable[i], "|", 1) && \
 !ft_strncmp(cmdtable[i - 1], "|", 1))
-			return (print_err(SYNTAX_ERR, cmdtable), 1);
+			return (print_err(SYNTAX_ERR_PIPE, cmdtable), 1);
 		else if (cmdtable[i][0] == '<' || cmdtable[i][0] == '>')
 		{
-			if (redir_checker(cmdtable[i + 1]))
+			if (redir_checker(cmdtable[i + 1], cmdtable[i][0]))
 				return (free_args(cmdtable), 1);
 		}
 		i++;
@@ -50,7 +53,7 @@ static int	syntax_checker(char **cmdtable)
 	if (!ft_strncmp(cmdtable[i], "<", 2) || !ft_strncmp(cmdtable[i], ">", 2) \
 || !ft_strncmp(cmdtable[i], "<<", 3) || \
 !ft_strncmp(cmdtable[i], ">>", 3) || !ft_strncmp(cmdtable[i], "|", 1))
-		return (print_err(SYNTAX_ERR, cmdtable), 1);
+		return (print_err(SYNTAX_ERR_NL, cmdtable), 1);
 	return (0);
 }
 
