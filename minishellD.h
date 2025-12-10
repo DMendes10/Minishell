@@ -6,7 +6,7 @@
 /*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:15 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 19:08:37 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/10 19:20:20 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,9 @@ char		*hdoc_wr_helper(t_master *mstr, t_cmdlist *cmd, \
 char *hdoc, char *line);
 void		expand_hdoc(t_master *mstr, char **redir);
 int			hdoc_signal_setup(int fd);
+void		hdoc_del_prep(t_master *mstr);
+void		remove_dollar(char **input);
+void		dollar_search(t_master *mstr, int i, int j);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input(t_master *mstr, char *prompt);
@@ -200,19 +203,13 @@ void		reshaping(t_master *mstr);
 void		expand_redir(t_master *mstr, char **redir);
 char		*get_varkey(char *s);
 int			quotes_check(char c, int quotes);
+size_t		ft_count_words(const char *a, char c);
+char		**ft_minisplit(char **a, char const *s, char c);
+char		**ft_split(char const *s, char c);
 
+//---------------------Signals-------------------------------------------//
 void		signals(void);
 t_sig		*sign(void);
 void		init_sign(void);
-
-size_t		ft_count_words(const char *a, char c);
-
-void		expand_redir(t_master *mstr, char **redir);
-void		hdoc_del_prep(t_master *mstr);
-void		remove_dollar(char **input);
-void		dollar_search(t_master *mstr, int i, int j);
-
-char		**ft_minisplit(char **a, char const *s, char c);
-char		**ft_split(char const *s, char c);
 
 #endif
