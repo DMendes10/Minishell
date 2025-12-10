@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansions2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:25:49 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/08 15:25:50 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/10 18:46:20 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	hdoc_del_prep(t_master *mstr)
 				dollar_search (mstr, i, j);
 			i++;
 		}
+		i = 0;
 		node = node->next;
 	}
 }
