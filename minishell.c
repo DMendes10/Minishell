@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:08 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:04:09 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 16:21:01 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	master_struct_init(t_master **master)
 		exit (1);
 	}
 	(*master)->data = ft_memset ((*master)->data, 0, sizeof (t_edata));
+	(*master)->data->svd_stdin = -1;
 	(*master)->cmd = NULL;
 	(*master)->env = NULL;
 	(*master)->exit = 0;

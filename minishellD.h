@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishellD.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:15 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:04:16 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:14:44 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_edata
 	int	*pid;
 	int	i;
 	int	built_in_flag;
+	int	svd_stdin;
 }	t_edata;
 
 typedef struct s_envlst
@@ -156,6 +157,7 @@ int			is_built_in(t_cmdlist *cmd);
 int			cmdlist_size(t_cmdlist *cmd);
 int			pipe_operator2(t_cmdlist *cmd, t_master *mstr);
 int			redir_expand_helper(t_master *mstr, char **redir, int i, int j);
+void		reset_stdin(t_master *mstr);
 
 //------------------redirection_hub------------------------------------------//
 int			input_redirect(t_master *mstr, t_cmdlist *cmd);

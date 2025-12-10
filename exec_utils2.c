@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:34 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:05:44 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:24:43 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	child_process(t_master *mstr, t_cmdlist *cmd)
 	char	*path;
 
 	paths = NULL;
+	close (mstr->data->svd_stdin);
+	mstr->data->svd_stdin = -1;
 	sign()->sig_flag = 3;
 	signals();
 	redir_handler(mstr, cmd);
@@ -92,10 +94,10 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 				close (mstr->data->pipefd[1]);
 				dup2 (mstr->data->pipefd[0], mstr->data->last_fd);
 				close (mstr->data->pipefd[0]);
-				sign()->hdoc_flag = 0;
 				return ;
 			}
-			dup2 (mstr->data->last_fd, STDIN_FILENO);
+			else if (sign()->exit_code == 130 && sign()->hdoc_flag != 1)
+				dup2 (mstr->data->svd_stdin, STDIN_FILENO);
 			return ;
 		}
 	}

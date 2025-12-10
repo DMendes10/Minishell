@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdlist_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:25:11 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/08 15:25:15 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/10 14:35:50 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	**final_cmd(char **cmd, int i)
 
 	j = 0;
 	cmd_size = final_cmd_size(cmd, i);
-	final_cmd = ft_calloc((cmd_size + 1), sizeof(char *));
+	final_cmd = ft_calloc((cmd_size + 2), sizeof(char *));
 	while (cmd[i] && cmd[i][0] != '|')
 	{
 		if (cmd[i][0] == '<' || cmd[i][0] == '>')

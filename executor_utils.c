@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:43 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:06:29 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:21:57 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,21 @@ void	executor(t_master *mstr, int cmd_count)
 	mstr->data->pid = ft_calloc(cmd_count, sizeof(pid_t));
 	if (!mstr->data->pid)
 		exit_minishell (&mstr, 1);
-	mstr->data->last_fd = dup(STDIN_FILENO);
+	mstr->data->svd_stdin = dup (STDIN_FILENO);
+	mstr->data->last_fd = dup(mstr->data->svd_stdin);
 	ptr = mstr->cmd;
 	while (ptr)
 	{
 		pipe_operator(ptr, mstr);
-		if (sign()->exit_code == 130)
+		if (sign()->exit_code == 130 && sign()->hdoc_flag != 1)
 			break ;
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
-	if (cmd_count != 1 || mstr->data->built_in_flag != 1)
+	if ((cmd_count != 1 || mstr->data->built_in_flag \
+!= 1) && sign()->exit_code != 130)
 		sign()->exit_code = ft_wait (mstr->data->pid, cmd_count);
-	close(mstr->data->last_fd);
+	reset_stdin(mstr);
 	return ;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_alloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:19 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:02:20 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:12:19 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,12 @@ void	exec_error_handler(t_master *mstr, t_cmdlist *cmd, char \
 		perror (cmd->command[0]);
 	free_array(env);
 	exit_minishell(&mstr, sign()->exit_code);
+}
+
+void	reset_stdin(t_master *mstr)
+{
+	dup2(mstr->data->svd_stdin, STDIN_FILENO);
+	close(mstr->data->svd_stdin);
+	close(mstr->data->last_fd);
+	mstr->data->svd_stdin = -1;
 }

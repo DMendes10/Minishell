@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:03:46 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:05:59 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:39:09 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 	{
 		line = readline ("> ");
 		if (write (fd, 0, 0) == -1)
-			return (unlink(cmd->filename), 1);
+			return (sign()->hdoc_flag = 0, unlink(cmd->filename), 1);
 		if (!line)
 			return (free(hdoc), close (fd), unlink(cmd->filename), printf("here-document \
 delimeted by end-of-file (wanted `%s')\n", del), sign()->hdoc_flag = 1, 1);
@@ -110,11 +110,12 @@ int	hdoc_handler(t_master *mstr, t_cmdlist *cmd)
 	{
 		if (!ft_strncmp (ptr->input[i], "<<", 3))
 		{
+			sign()->exit_code = 0;
 			if (hdoc_rdwr(mstr, ptr, ptr->input[i + 1]))
 			{
 				sign()->sig_flag = 1;
 				signals();
-				if (!ptr->input[i + 2])
+				if (!ptr->input[i + 2] || sign()->exit_code == 130)
 					return (1);
 			}
 			if (ptr->input[i + 2])

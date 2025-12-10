@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:27:15 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/09 14:29:01 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:25:19 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,10 @@ void	signal_handler_pipe(int signal, siginfo_t *sig, void *content)
 	(void)content;
 	if (signal == SIGINT)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
 		sign()->exit_code = 130;
 	}
 	if (signal == SIGQUIT)
 	{
-		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
 		sign()->exit_code = 131;
 	}
 }

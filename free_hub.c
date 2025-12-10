@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_hub.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:03:43 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:03:44 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:00:36 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	free_master(t_master **master)
 		free_envlst((*master)->env);
 	if ((*master)->data)
 	{
+		if ((*master)->data->svd_stdin >= 0)
+			close((*master)->data->svd_stdin);
 		free ((*master)->data->pid);
 		free ((*master)->data);
 	}
@@ -70,4 +72,5 @@ void	reset_master(t_master **master)
 	(*master)->cmd = NULL;
 	free ((*master)->data->pid);
 	ft_memset ((*master)->data, 0, sizeof (t_edata));
+	(*master)->data->svd_stdin = -1;
 }
