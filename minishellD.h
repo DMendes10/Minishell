@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishellD.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:15 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 19:20:20 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:07:34 by jomaia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ int			hdoc_signal_setup(int fd);
 void		hdoc_del_prep(t_master *mstr);
 void		remove_dollar(char **input);
 void		dollar_search(t_master *mstr, int i, int j);
+int			premature_eof (int fd, char *hdoc, char *del);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input(t_master *mstr, char *prompt);

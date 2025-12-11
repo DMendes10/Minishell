@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_alloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:19 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 17:12:19 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:09:08 by jomaia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,12 @@ void	reset_stdin(t_master *mstr)
 	close(mstr->data->svd_stdin);
 	close(mstr->data->last_fd);
 	mstr->data->svd_stdin = -1;
+}
+
+int premature_eof (int fd, char *hdoc, char *del)
+{
+	if (!hdoc)
+		return (free(hdoc), close (fd), printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
+	else
+		return (write (fd, hdoc, ft_strlen(hdoc)), free(hdoc), close (fd), printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
 }

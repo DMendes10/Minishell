@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:43 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 17:21:57 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:25:30 by jomaia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ void	executor(t_master *mstr, int cmd_count)
 	while (ptr)
 	{
 		pipe_operator(ptr, mstr);
-		if (sign()->exit_code == 130 && sign()->hdoc_flag != 1)
+		if (sign()->exit_code == 130 && sign()->hdoc_flag == 1)
 			break ;
 		ptr = ptr->next;
 		mstr->data->i++;
 	}
 	if ((cmd_count != 1 || mstr->data->built_in_flag \
-!= 1) && sign()->exit_code != 130)
+!= 1) && sign()->hdoc_flag != 1)
 		sign()->exit_code = ft_wait (mstr->data->pid, cmd_count);
 	reset_stdin(mstr);
 	return ;

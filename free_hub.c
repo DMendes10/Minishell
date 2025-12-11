@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_hub.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:03:43 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 17:00:36 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:26:21 by jomaia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ void	reset_master(t_master **master)
 	free ((*master)->data->pid);
 	ft_memset ((*master)->data, 0, sizeof (t_edata));
 	(*master)->data->svd_stdin = -1;
+	sign()->hdoc_flag = 0;
 }

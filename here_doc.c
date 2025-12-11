@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:03:46 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/10 18:10:36 by diomende         ###   ########.fr       */
+/*   Updated: 2025/12/11 12:22:28 by jomaia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ int	hdoc_rdwr(t_master *mstr, t_cmdlist *cmd, char *del)
 	{
 		line = readline ("> ");
 		if (write (fd, 0, 0) == -1)
-			return (sign()->hdoc_flag = 0, unlink(cmd->filename), 1);
+			return (sign()->hdoc_flag = 1, unlink(cmd->filename), 1);
 		if (!line)
-			return (write (fd, hdoc, ft_strlen(hdoc)), free(hdoc), close (fd), \
-printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
+			return (premature_eof (fd, hdoc, del), 0);
 		if (!ft_strncmp(del, line, ft_strlen(del) + 1))
 			break ;
 		hdoc = hdoc_wr_helper(mstr, cmd, hdoc, line);
