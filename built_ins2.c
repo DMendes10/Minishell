@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:01:54 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:01:55 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/11 13:10:10 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ int	ft_exit(char **cmd, t_master *mstr)
 	}
 	if (atoll_parser(cmd[1], &nbr) == false)
 	{
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\nexit: ", 1);
 		ft_putstr_fd(cmd[1], 2);
-		ft_putstr_fd("exit: numeric argument required\n", 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 		exit_minishell (&mstr, 2);
 	}
 	if (cmd[2])
@@ -99,17 +99,5 @@ bool	atoll_parser(char *str, long long *nbr)
 
 int	exit_converter(long long nbr)
 {
-	int	i;
-
-	i = 0;
-	while (nbr < 0)
-		nbr = nbr + 256;
-	while (nbr > 0)
-	{
-		i++;
-		nbr--;
-		if (i == 256)
-			i = 0;
-	}
-	return (i);
+	return ((int)(unsigned char)nbr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishellD.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:04:15 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/11 12:07:34 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/11 12:40:07 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@
 # include <linux/limits.h>
 # include "src/Libft/libft.h"
 # include <stdbool.h>
-// # include "minishell.h"
-// # include "parser.h"
-
-// typedef struct s_envlst t_envlst;
 
 # define SEP -1
 # define EXIT_CODE 0
@@ -183,7 +179,7 @@ int			hdoc_signal_setup(int fd);
 void		hdoc_del_prep(t_master *mstr);
 void		remove_dollar(char **input);
 void		dollar_search(t_master *mstr, int i, int j);
-int			premature_eof (int fd, char *hdoc, char *del);
+int			premature_eof(int fd, char *hdoc, char *del);
 
 //-----------------iniciator-----------------------------------------------//
 char		*get_input(t_master *mstr, char *prompt);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_alloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:19 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/11 12:09:08 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/11 12:39:46 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,12 @@ void	reset_stdin(t_master *mstr)
 	mstr->data->svd_stdin = -1;
 }
 
-int premature_eof (int fd, char *hdoc, char *del)
+int	premature_eof(int fd, char *hdoc, char *del)
 {
 	if (!hdoc)
-		return (free(hdoc), close (fd), printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
+		return (free(hdoc), close (fd), \
+printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
 	else
-		return (write (fd, hdoc, ft_strlen(hdoc)), free(hdoc), close (fd), printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
+		return (write (fd, hdoc, ft_strlen(hdoc)), \
+free(hdoc), close (fd), printf(HDOC_EOF_ERR, del), sign()->hdoc_flag = 1, 0);
 }

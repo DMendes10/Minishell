@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diomende <diomende@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:34 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/11 12:23:42 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/11 12:35:03 by diomende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,6 @@ void	pipe_operator(t_cmdlist *cmd, t_master *mstr)
 	{
 		if (hdoc_handler(mstr, cmd))
 		{
-			// if (cmd->next && sign()->hdoc_flag == 1)
-			// {
-			// 	pipe (mstr->data->pipefd);
-			// 	close (mstr->data->pipefd[1]);
-			// 	dup2 (mstr->data->pipefd[0], mstr->data->last_fd);
-			// 	close (mstr->data->pipefd[0]);
-			// 	return ;
-			// }
 			if (sign()->exit_code == 130 && sign()->hdoc_flag == 1)
 				dup2 (mstr->data->svd_stdin, STDIN_FILENO);
 			return ;
