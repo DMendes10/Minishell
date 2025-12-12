@@ -208,7 +208,7 @@ Process 1 (cat):          Process 2 (grep):         Process 3 (wc):
 stdin → file.txt          stdin ← pipe1[0]          stdin ← pipe2[0]
 stdout → pipe1[1]         stdout → pipe2[1]         stdout → terminal
 
-        pipe1                  pipe2
+        pipe1            pipe2
 [cat] --------→ [grep] --------→ [wc]
 ```
 
