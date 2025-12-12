@@ -6,7 +6,7 @@
 /*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:02:03 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/09 15:02:04 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/12 16:02:52 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	valid_flag(char *flag)
 	if (flag[i] != '-')
 		return (1);
 	i++;
+	if (!flag[i])
+		return (1);
 	while (flag[i])
 	{
 		if (flag[i] != 'n')

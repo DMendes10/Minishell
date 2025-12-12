@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reshape.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:27:03 by jomaia            #+#    #+#             */
-/*   Updated: 2025/12/08 15:27:04 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/12 16:02:18 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	reshaping(t_master *mstr)
 	node = mstr->cmd;
 	while (node)
 	{
+		i = 0;
 		while (node->command && node->command[i])
 		{
 			if (check_spaces(&node->command[i]))
