@@ -1,0 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 15:02:27 by diogo             #+#    #+#             */
+/*   Updated: 2025/12/12 16:29:20 by diogo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+void	invalid_command(t_master **mstr, char *cmd)
+{
+	if (cmd[0] == '.' || cmd[0] == '/')
+	{
+		ft_putstr_fd (cmd, 2);
+		ft_putstr_fd (": No such file or directory\n", 2);
+	}
+	else
+	{
+		ft_putstr_fd (cmd, 2);
+		ft_putstr_fd (": command not found\n", 2);
+	}
+	exit_minishell (mstr, 127);
+}
+
+void	invalid_path(char *cmd)
+{
+	ft_putstr_fd ("cd: ", 2);
+	ft_putstr_fd (cmd, 2);
+	ft_putstr_fd (": No such file or directory\n", 2);
+}
+
+void	no_perms_command(t_master **mstr, char *cmd)
+{
+	ft_putstr_fd (cmd, 2);
+	ft_putstr_fd (": Permission denied\n", 2);
+	exit_minishell (mstr, 126);
+}
+
+void	no_perms_path(char *cmd)
+{
+	ft_putstr_fd ("cd: ", 2);
+	ft_putstr_fd (cmd, 2);
+	ft_putstr_fd (": Permission denied\n", 2);
+}
+
+void	free_array(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		free (s[i]);
+		i++;
+	}
+	free (s);
+}
