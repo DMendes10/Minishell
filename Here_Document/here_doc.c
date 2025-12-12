@@ -6,7 +6,7 @@
 /*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:03:46 by diogo             #+#    #+#             */
-/*   Updated: 2025/12/12 16:29:20 by diogo            ###   ########.fr       */
+/*   Updated: 2025/12/12 17:09:07 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	hdoc_opener(t_master *mstr, t_cmdlist *cmd)
 	{
 		free (cmd->filename);
 		tmp = ft_strjoin_gnl(ft_itoa(i), "tmp_heredoc.txt");
-		cmd->filename = ft_strjoin_gnl(ft_strdup("src/"), tmp);
+		cmd->filename = ft_strjoin_gnl(ft_strdup("Auxiliary/"), tmp);
 		free (tmp);
 		if (!cmd->filename)
 			alloc_error (&mstr);
