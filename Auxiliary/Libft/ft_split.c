@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomaia <jomaia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diogo <diogo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:28:14 by diomende          #+#    #+#             */
-/*   Updated: 2025/12/08 15:10:23 by jomaia           ###   ########.fr       */
+/*   Updated: 2025/12/15 17:17:19 by diogo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**ft_split_libft(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	array = ft_calloc (sizeof(char *), ft_count_words(s, c) + 1);
+	array = ft_calloc (sizeof(char *), split_count_words(s, c) + 1);
 	if (array == NULL)
 		return (NULL);
 	ft_minisplit(array, s, c);
