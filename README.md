@@ -51,7 +51,7 @@ brew install readline
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/DMendes10/Minishell minishell
 cd minishell
 
 # Compile the project
@@ -327,4 +327,4 @@ This project is part of the 42 School common core curriculum. Successfully imple
 - FINAL GRADE : 101/100 (1 Bonus Point)
 ---
 
-**Made with a lot of coffe by [ DMendes10](https://github.com/DMendes10) and [Maiathe-b](https://github.com/Maiathe-b)**
+**Made with a lot of coffee by [ DMendes10](https://github.com/DMendes10) and [Maiathe-b](https://github.com/Maiathe-b)**
